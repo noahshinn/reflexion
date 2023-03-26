@@ -1,108 +1,97 @@
-from executor import execute_with_feedback, execute
-from test_generation import generate_internal_unit_tests
-from utils import gpt_completion, gpt_chat, write_jsonl, parse_body, build_asserts_from_human_eval
+from utils import write_jsonl, parse_body
+from executors import py_evaluate, py_execute
+from generators import py_generate_func_impl, py_generate_self_reflection, py_generate_internal_tests
 
 from typing import List
 
-SIMPLE_COMPLETION_INSTRUCTION = "# Write the body of this function only."
-REFLEXION_COMPLETION_INSTRUCTION = "You are CodexGPT. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only.\n\n-----"
-SELF_REFLECTION_COMPLETION_INSTRUCTION = "You are CodexGPT. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation.\n\n-----"
-SIMPLE_CHAT_INSTRUCTION = "You are CodexGPT. You will be given a function signature and docstring. You should fill in the following text of the missing function body. For example, the first line of the completion should have 4 spaces for the indendation so that it fits syntactically with the preceding signature."
-REFLEXION_CHAT_INSTRUCTION = "You are CodexGPT. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only. You should fill in the following text of the missing function body. For example, the first line of the completion should have 4 spaces for the indendation so that it fits syntactically with the preceding signature."
-SELF_REFLECTION_CHAT_INSTRUCTION = "You are CodexGPT. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation."
-
-def get_reflection(func: str, feedback: str, model: str) -> str:
-    if model == "gpt-4" or model == "gpt-3.5-turbo":
-        reflection = gpt_chat(model, SELF_REFLECTION_CHAT_INSTRUCTION, f'{func}\n\n{feedback}\n\nExplanation:')
-    else:
-        reflection = gpt_completion(model, f'{SELF_REFLECTION_COMPLETION_INSTRUCTION}\n{func}\n\n{feedback}\n\nExplanation:')
-
-    return reflection # type: ignore
 
 def run_reflexion(
         dataset: List[dict],
         model: str,
+        language: str,
         max_iters: int,
         pass_at_k: int,
         log_path: str,
         verbose: bool
     ) -> None:
+    # should handle more languages later
+    # someone do this but arrange it better
+    evaluate = None
+    execute = None
+    self_reflection_generator = None
+    func_impl_generator = None
+    internal_test_generator = None
+    if language == "python" or language == "py":
+        evaluate = py_evaluate
+        execute = py_execute
+        self_reflection_generator = py_generate_self_reflection
+        func_impl_generator = py_generate_func_impl
+        internal_test_generator = py_generate_internal_tests
+    else:
+        raise NotImplementedError(f"language {language} not supported")
+
+    assert not evaluate is None
+    assert not execute is None
+    assert not self_reflection_generator is None
+    assert not func_impl_generator is None
+    assert not internal_test_generator is None
+
     num_items = len(dataset)
     num_success = 0
     for i, item in enumerate(dataset):
         cur_pass = 0
         is_solved = False
-        unit_tests_static: List[str] = build_asserts_from_human_eval(item["test"], item["entry_point"])
         reflections = []
+        cur_func_impl = ""
         while cur_pass < pass_at_k and not is_solved:
-            # generate internal unit tests
-            internal_unit_tests_static: List[str] = generate_internal_unit_tests(model, item["prompt"])
+            tests_i = internal_test_generator(item["prompt"], model, 1)
 
             # first attempt
-            if model == "gpt-4" or model == "gpt-3.5-turbo":
-                soln = parse_body(gpt_chat(model, SIMPLE_CHAT_INSTRUCTION, item["prompt"]))
-            else:
-                soln = parse_body(gpt_completion(model, f'{SIMPLE_COMPLETION_INSTRUCTION}\n{item["prompt"]}'))
-            func = item["prompt"] + soln
-            _, failed_tests = execute(func, unit_tests_static)
+            cur_func_impl = parse_body(func_impl_generator(item["prompt"], model, "simple"))
+            is_passing, feedback = execute(cur_func_impl, tests_i)
 
-            # solved, exit early
-            if len(failed_tests) == 0:
-                item["solution"] = soln
+            # if solved, exit early
+            if is_passing:
                 is_solved = True
                 num_success += 1
                 break
 
-            # if not, use internal unit tests to get feedback on unit tests
-            feedback, _, _ = execute_with_feedback(func, internal_unit_tests_static)
-
             # use self-reflection to iteratively improve
             cur_iter = 1
-            cur_func = func
             cur_feedback = feedback
             while cur_iter < max_iters:
                 # get self-reflection
-                reflection = get_reflection(cur_func, cur_feedback, model)
+                reflection = self_reflection_generator(cur_func_impl, cur_feedback, model)
                 reflections += [reflection]
 
                 # apply self-reflection in the next attempt
-                if model == "gpt-4" or model == "gpt-3.5-turbo":
-                    message = f'previous implementation:\n{cur_func}\n\nunit tests:\n{cur_feedback}\n\nhint:\n{reflection}\n\n# improved implementation\n{item["prompt"]}'
-                    soln = parse_body(gpt_chat(model, REFLEXION_CHAT_INSTRUCTION, message))
-                else:
-                    prompt = f'{REFLEXION_COMPLETION_INSTRUCTION}\n{cur_func}\n\nunit tests:\n{cur_feedback}\n\nhint:\n{reflection}\n\n# improved implementation\n{item["prompt"]}'
-                    soln = parse_body(gpt_completion(model, prompt))
-                cur_func = item["prompt"] + soln
+                cur_func_impl = parse_body(func_impl_generator(
+                    func_sig=item["prompt"],
+                    model=model,
+                    strategy="reflexion",
+                    prev_func_impl=cur_func_impl,
+                    feedback=cur_feedback,
+                    self_reflection=reflection
+                ))
 
                 # check if all internal unit tests pass
-                cur_feedback, _, failed_internal_tests = execute_with_feedback(cur_func, internal_unit_tests_static)
+                is_passing, cur_feedback = execute(cur_func_impl, tests_i)
 
                 # if solved, check if it passes the real tests, exit early
-                if len(failed_internal_tests) == 0:
-                    _, failed_tests = execute(cur_func, unit_tests_static)
-                    if len(failed_tests) == 0:
-                        item["solution"] = soln
+                if is_passing or cur_iter == max_iters - 1:
+                    is_passing = evaluate(item["entry_point"], cur_func_impl, item["test"], timeout=10)
+                    if is_passing:
+                        item["solution"] = cur_func_impl
                         is_solved = True
                         num_success += 1
                     break
 
-                # if it's the last attempt, check if the current solution passes the real tests
-                if cur_iter == max_iters - 1:
-                    _, failed_tests = execute(cur_func, unit_tests_static)
-                    if len(failed_tests) == 0:
-                        item["solution"] = soln
-                        is_solved = True
-                        num_success += 1
-
                 cur_iter += 1
             cur_pass += 1
 
-        if is_solved:
-            item["is_solved"] = True
-        else:
-            item["is_solved"] = False
-            item["solution"] = ""
+        item["is_solved"] = is_solved
         item["reflections"] = reflections
+        item["solution"] = cur_func_impl
         write_jsonl(log_path, [item], append=True)
 
         if verbose:

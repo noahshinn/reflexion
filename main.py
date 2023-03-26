@@ -2,19 +2,17 @@ import os
 import argparse
 
 from simple import run_simple
-from evaluator import evaluate
 from reflexion import run_reflexion
 from utils import read_jsonl, read_jsonl_gz
-
-from typing import List, Optional
 
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--run_name", type=str, help="The name of the run")
     parser.add_argument("--root_dir", type=str, help="The root logging directory", default="root")
     parser.add_argument("--dataset_path", type=str, help="The path to the benchmark dataset", default="root")
-    parser.add_argument("--strategy", type=str, help="Strategy: `simple`, `codet`, `reflexion`")
-    parser.add_argument("--model", type=str, help="OpenAI models only for now")
+    parser.add_argument("--strategy", type=str, help="Strategy: `simple`, `reflexion`")
+    parser.add_argument("--language", type=str, help="Strategy: `py`")
+    parser.add_argument("--model", type=str, help="OpenAI models only for now. For best results, use GPT-4")
     parser.add_argument("--pass_at_k", type=int, help="Pass@k metric", default=1)
     parser.add_argument("--max_iters", type=int, help="The maximum number of self-improvement iterations", default=10)
     parser.add_argument("--verbose", action='store_true', help="To print live logs")
@@ -61,11 +59,12 @@ pass@k: {args.pass_at_k}
         raise ValueError(f"Dataset path `{args.dataset_path}` is not supported")
     
     # start the run
-    solutions: Optional[List[dict]] = None
+    # evaluate with pass@k
     if args.strategy == "simple":
         run_simple(
             dataset=dataset,
             model=args.model,
+            language=args.language,
             pass_at_k=args.pass_at_k,
             log_path=log_path,
             verbose=args.verbose
@@ -74,15 +73,12 @@ pass@k: {args.pass_at_k}
         run_reflexion(
             dataset=dataset,
             model=args.model,
+            language=args.language,
             max_iters=args.max_iters,
             pass_at_k=args.pass_at_k,
             log_path=log_path,
             verbose=args.verbose
         )
-
-    # evaluate pass@k
-    if solutions is not None:
-        evaluate(solutions, args.pass_at_k)
 
     print(f"Done! Check out the logs in `{log_path}`")
 
