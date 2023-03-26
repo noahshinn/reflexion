@@ -1,5 +1,6 @@
-from executor import execute
-from utils import gpt_completion, gpt_chat, write_jsonl, parse_body, build_asserts_from_human_eval
+from utils import write_jsonl
+from executors import py_evaluate
+from generators import py_generate_func_impl
 
 from typing import List
 
@@ -9,35 +10,40 @@ SIMPLE_CHAT_INSTRUCTION = "You are CodexGPT. You will be given a function signat
 def run_simple(
         dataset: List[dict],
         model: str,
+        language: str,
         pass_at_k: int,
         log_path: str,
         verbose: bool
     ) -> None:
+    # someone implement more languages
+    evaluate = None
+    func_impl_generator = None
+    if language == "python" or language == "py":
+        evaluate = py_evaluate
+        func_impl_generator = py_generate_func_impl
+    else:
+        raise NotImplementedError(f"language {language} not supported")
+    
+    assert not evaluate is None
+    assert not func_impl_generator is None
+
     num_items = len(dataset)
     num_success = 0
     for i, item in enumerate(dataset):
         cur_pass = 0
         is_solved = False
-        unit_tests_static = build_asserts_from_human_eval(item["test"], item["entry_point"])
+        cur_func_impl = ""
         while cur_pass < pass_at_k:
-            if model == "gpt-4" or model == "gpt-3.5-turbo":
-                soln = parse_body(gpt_chat(model, SIMPLE_CHAT_INSTRUCTION, item["prompt"]))
-            else:
-                soln = parse_body(gpt_completion(model, f'{SIMPLE_COMPLETION_INSTRUCTION}\n{item["prompt"]}'))
-            func = item["prompt"] + soln
-            _, failed_tests = execute(func, unit_tests_static)
-            if len(failed_tests) == 0:
-                item["solution"] = soln
+            cur_func_impl = func_impl_generator(item["prompt"], model, "simple")
+            is_passing = evaluate(item["entry_point"], cur_func_impl, item["test"], timeout=10)
+            if is_passing:
                 is_solved = True
                 num_success += 1
                 break
             cur_pass += 1
+        item["solution"] = cur_func_impl
         
-        if is_solved:
-            item["is_solved"] = True
-        else:
-            item["is_solved"] = False
-            item["solution"] = ""
+        item["is_solved"] = is_solved
         write_jsonl(log_path, [item], append=True)
 
         if verbose:
