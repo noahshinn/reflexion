@@ -35,6 +35,7 @@ def run_simple(
         cur_func_impl = ""
         while cur_pass < pass_at_k:
             cur_func_impl = func_impl_generator(item["prompt"], model, "simple")
+            assert isinstance(cur_func_impl, str)
             is_passing = evaluate(item["entry_point"], cur_func_impl, item["test"], timeout=10)
             if is_passing:
                 is_solved = True

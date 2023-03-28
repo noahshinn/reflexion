@@ -32,6 +32,15 @@ def py_execute(func: str, tests: List[str], timeout: int = 5) -> ExecuteResult:
             failed_tests += [f"{tests[i]} # output: {output}"]
             is_passing = False
 
+    state = []
+    for test in tests:
+        if test in success_tests:
+            state += [True]
+        else:
+            state += [False]
+
+    state = tuple(state)
+
     feedback = "Tested passed:"
     for test in success_tests:
         feedback += f"\n{test}"
@@ -39,7 +48,7 @@ def py_execute(func: str, tests: List[str], timeout: int = 5) -> ExecuteResult:
     for test in failed_tests:
         feedback += f"\n{test}"
         
-    return ExecuteResult(is_passing, feedback)
+    return ExecuteResult(is_passing, feedback, state)
 
 def py_evaluate(name: str, func: str, test: str, timeout: int = 5) -> bool:
     """

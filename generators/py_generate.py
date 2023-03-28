@@ -43,14 +43,28 @@ def py_generate_self_reflection(func: str, feedback: str, model: str) -> str:
         reflection = gpt_completion(model, f'{PY_SELF_REFLECTION_COMPLETION_INSTRUCTION}\n{func}\n\n{feedback}\n\nExplanation:')
     return reflection # type: ignore
 
+# fixes the indentation of the function body.
+# only checks if the first line is indented correctly, and if not, fixes it.
+def py_fix_indentation(func: str) -> str:
+    lines = func.splitlines()
+    if len(lines) == 0:
+        return func
+    first_line = lines[0]
+    if first_line.startswith('    '):
+        return func
+    else:
+        return '    ' + func
+
 def py_generate_func_impl(
         func_sig: str,
         model: str,
         strategy: str,
         prev_func_impl: Optional[str] = None,
         feedback: Optional[str] = None,
-        self_reflection: Optional[str] = None
-    ) -> str:
+        self_reflection: Optional[str] = None,
+        num_comps = 1,
+        temperature = 0.0,
+    ) -> str | List[str]:
     if strategy != "reflexion" and strategy != "simple":
         raise ValueError(f"Invalid strategy: given `{strategy}` but expected one of `reflexion` or `simple`")
     if strategy == "reflexion" and (prev_func_impl is None or feedback is None or self_reflection is None):
@@ -59,17 +73,23 @@ def py_generate_func_impl(
     if model == "gpt-4" or model == "gpt-3.5-turbo":
         if strategy == "reflexion":
             message = f"previous implementation:\n{prev_func_impl}\n\nunit tests:\n{feedback}\n\nhint:\n{self_reflection}\n\n# improved implementation\n{func_sig}"
-            func_body = gpt_chat(model, PY_REFLEXION_CHAT_INSTRUCTION, message)
+            # func_bodies is a really bad name, as it can also be just 1 string
+            func_bodies = gpt_chat(model, PY_REFLEXION_CHAT_INSTRUCTION, message, num_comps=num_comps, temperature=temperature)
         else:
-            func_body = gpt_chat(model, PY_SIMPLE_CHAT_INSTRUCTION if strategy == "simple" else PY_REFLEXION_CHAT_INSTRUCTION, func_sig)
+            func_bodies = gpt_chat(model, PY_SIMPLE_CHAT_INSTRUCTION if strategy == "simple" else PY_REFLEXION_CHAT_INSTRUCTION, func_sig, num_comps=num_comps, temperature=temperature)
     else:
         if strategy == "reflexion":
             prompt = f"{PY_REFLEXION_COMPLETION_INSTRUCTION}\n{prev_func_impl}\n\nunit tests:\n{feedback}\n\nhint:\n{self_reflection}\n\n# improved implementation\n{func_sig}"
-            func_body = gpt_completion(model, prompt)
+            func_bodies = gpt_completion(model, prompt, num_comps=num_comps, temperature=temperature)
         else:
             prompt = f"{PY_SIMPLE_COMPLETION_INSTRUCTION}\n{func_sig}"
-            func_body = gpt_completion(model, prompt)
-    return func_sig + func_body # type: ignore
+            func_bodies = gpt_completion(model, prompt, num_comps=num_comps, temperature=temperature)
+
+    if num_comps == 1:
+        assert isinstance(func_bodies, str)
+        return func_sig + py_fix_indentation(func_bodies)
+    else:
+        return [func_sig + py_fix_indentation(func_body) for func_body in func_bodies]
 
 def py_generate_internal_tests(func_sig: str, model: str, committee_size: int=1) -> List[str]:
     def parse_tests(tests: str) -> List[str]:
@@ -80,10 +100,10 @@ def py_generate_internal_tests(func_sig: str, model: str, committee_size: int=1)
     """
     if model == "gpt-4" or model == "gpt-3.5-turbo":
         message = f'{PY_TEST_GENERATION_FEW_SHOT}\n\nfunc signature:\n{func_sig}\nunit tests:'
-        output = gpt_chat(model, PY_TEST_GENERATION_CHAT_INSTRUCTION, message)
+        output = gpt_chat(model, PY_TEST_GENERATION_CHAT_INSTRUCTION, message, max_tokens=1024)
     else:
         prompt = f'{PY_TEST_GENERATION_COMPLETION_INSTRUCTION}\n\nfunc signature:\n{func_sig}\nunit tests:'
-        output = gpt_completion(model, prompt)
+        output = gpt_completion(model, prompt, max_tokens=1024)
     cur_tests: List[str] = parse_tests(output) # type: ignore
 
     # TODO: NOT SUPPORTED YET

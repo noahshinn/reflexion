@@ -1,0 +1,3 @@
+[submodule "lazzzy"]
+	path = lazzzy
+	url = https://github.com/gammatauai/lazzzy

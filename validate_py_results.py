@@ -1,6 +1,9 @@
 import sys
+import signal
 
 from utils import read_jsonl
+
+TIMEOUT = 5  # seconds
 
 assert len(sys.argv) == 2, "Please provide a log file"
 LOG_PATH = sys.argv[1]
@@ -26,7 +29,14 @@ def validate_py_results(log_path: str):
             code = f'{func_impl}\n\n{item["test"]}\n\ncheck({item["entry_point"]})'
             num_tests = count_test_cases(item["test"])
             try:
+                def handler(signum, frame):
+                    nonlocal i
+                    raise Exception("timeout on test case" + str(i))
+
+                signal.signal(signal.SIGALRM, handler)
+                signal.alarm(TIMEOUT)
                 exec(code, globals()) 
+                signal.alarm(0)
                 green_text_out = green_text(f"passes {num_tests}/{num_tests} test cases")
                 print(f"Test {i}: {green_text_out}")
                 num_success += 1

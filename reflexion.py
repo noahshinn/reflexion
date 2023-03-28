@@ -6,14 +6,14 @@ from typing import List
 
 
 def run_reflexion(
-        dataset: List[dict],
-        model: str,
-        language: str,
-        max_iters: int,
-        pass_at_k: int,
-        log_path: str,
-        verbose: bool
-    ) -> None:
+    dataset: List[dict],
+    model: str,
+    language: str,
+    max_iters: int,
+    pass_at_k: int,
+    log_path: str,
+    verbose: bool
+) -> None:
     # should handle more languages later
     # someone do this but arrange it better
     evaluate = None
@@ -47,8 +47,10 @@ def run_reflexion(
             tests_i = internal_test_generator(item["prompt"], model, 1)
 
             # first attempt
-            cur_func_impl = parse_body(func_impl_generator(item["prompt"], model, "simple"))
-            is_passing, feedback = execute(cur_func_impl, tests_i)
+            cur_func_impl = parse_body(
+                func_impl_generator(item["prompt"], model, "simple"))
+            assert isinstance(cur_func_impl, str)
+            is_passing, feedback, _ = execute(cur_func_impl, tests_i)
 
             # if solved, exit early
             if is_passing:
@@ -61,7 +63,8 @@ def run_reflexion(
             cur_feedback = feedback
             while cur_iter < max_iters:
                 # get self-reflection
-                reflection = self_reflection_generator(cur_func_impl, cur_feedback, model)
+                reflection = self_reflection_generator(
+                    cur_func_impl, cur_feedback, model)
                 reflections += [reflection]
 
                 # apply self-reflection in the next attempt
@@ -73,13 +76,15 @@ def run_reflexion(
                     feedback=cur_feedback,
                     self_reflection=reflection
                 ))
+                assert isinstance(cur_func_impl, str)
 
                 # check if all internal unit tests pass
-                is_passing, cur_feedback = execute(cur_func_impl, tests_i)
+                is_passing, cur_feedback, _ = execute(cur_func_impl, tests_i)
 
                 # if solved, check if it passes the real tests, exit early
                 if is_passing or cur_iter == max_iters - 1:
-                    is_passing = evaluate(item["entry_point"], cur_func_impl, item["test"], timeout=10)
+                    is_passing = evaluate(
+                        item["entry_point"], cur_func_impl, item["test"], timeout=10)
                     if is_passing:
                         item["solution"] = cur_func_impl
                         is_solved = True
@@ -95,4 +100,5 @@ def run_reflexion(
         write_jsonl(log_path, [item], append=True)
 
         if verbose:
-            print(f'completed {i+1}/{num_items}: acc = {round(num_success/(i+1), 2)}')
+            print(
+                f'completed {i+1}/{num_items}: acc = {round(num_success/(i+1), 2)}')
