@@ -94,11 +94,11 @@ def get_output(func: str, assert_statement: str, timeout: int = 5) -> str:
     except TimeoutError:
         return "TIMEOUT"
     except Exception as e:
-        return str(type(e).__name__)
+        return str(e)
 
 if __name__ == "__main__":
     pass
     # Test the function
-    # func = "def add(a, b):\n    while True:\n        x = 1\n    return a + b"
-    # tests = ["assert add(1, 2) == 3", "assert add(1, 2) == 4"]
-    # print(execute_with_feedback(func, tests, timeout=1))
+    func = "def add(a, b):\n    while True:\n        x = 1\n    return a + b"
+    tests = ["assert add(1, 2) == 3", "assert add(1, 2) == 4"]
+    print(py_execute(func, tests, timeout=1))

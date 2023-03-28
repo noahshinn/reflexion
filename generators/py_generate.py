@@ -43,17 +43,17 @@ def py_generate_self_reflection(func: str, feedback: str, model: str) -> str:
         reflection = gpt_completion(model, f'{PY_SELF_REFLECTION_COMPLETION_INSTRUCTION}\n{func}\n\n{feedback}\n\nExplanation:')
     return reflection # type: ignore
 
-# fixes the indentation of the function body.
-# only checks if the first line is indented correctly, and if not, fixes it.
-def py_fix_indentation(func: str) -> str:
-    lines = func.splitlines()
-    if len(lines) == 0:
-        return func
-    first_line = lines[0]
-    if first_line.startswith('    '):
-        return func
-    else:
-        return '    ' + func
+# # fixes the indentation of the function body.
+# # only checks if the first line is indented correctly, and if not, fixes it.
+# def py_fix_indentation(func: str) -> str:
+    # lines = func.splitlines()
+    # if len(lines) == 0:
+        # return func
+    # first_line = lines[0]
+    # if first_line.startswith('    '):
+        # return func
+    # else:
+        # return '    ' + func
 
 def py_generate_func_impl(
         func_sig: str,
@@ -62,8 +62,8 @@ def py_generate_func_impl(
         prev_func_impl: Optional[str] = None,
         feedback: Optional[str] = None,
         self_reflection: Optional[str] = None,
-        num_comps = 1,
-        temperature = 0.0,
+        num_comps: int = 1,
+        temperature: float = 0.0,
     ) -> str | List[str]:
     if strategy != "reflexion" and strategy != "simple":
         raise ValueError(f"Invalid strategy: given `{strategy}` but expected one of `reflexion` or `simple`")
@@ -116,3 +116,39 @@ def py_generate_internal_tests(func_sig: str, model: str, committee_size: int=1)
         # cur_refinement_num += 1
 
     return cur_tests
+
+DUMMY_FUNC_SIG = "def func():"
+DUMMY_FUNC_CALL = "func()"
+
+def handle_first_line_indent(func_body: str) -> str:
+    if func_body.startswith("    "):
+        return func_body
+    split = func_body.splitlines()
+    return f"    {split[0]}\n" + "\n".join(split[1:])
+
+def handle_entire_body_indent(func_body: str) -> str:
+    split = func_body.splitlines()
+    res = "\n".join(["    " + line for line in split])
+    return res
+
+def py_fix_indentation(func_body: str) -> str:
+    """
+    3 cases:
+        1. good syntax
+        2. first line not good
+        3. entire body not good
+    """
+    def parse_indent_rec(f_body: str, cur_state: int) -> str:
+        if cur_state > 1:
+            return f_body
+        code = f'{DUMMY_FUNC_SIG}\n{f_body}\n{DUMMY_FUNC_CALL}'
+        try:
+            exec(code)
+            return f_body
+        except (IndentationError, SyntaxError):
+            p_func = handle_first_line_indent if cur_state == 0 else handle_entire_body_indent
+            return parse_indent_rec(p_func(func_body), cur_state + 1)
+        except Exception:
+            return f_body
+    return parse_indent_rec(func_body, 0)
+
