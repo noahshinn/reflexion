@@ -13,6 +13,10 @@ for i in range(len(l)):
     res += l[i] * 2 ** i
 return res"""
 
+test3 = """if x == 5:
+        print("x is 5")
+    return res"""
+
 DUMMY_FUNC_SIG = "def func():"
 DUMMY_FUNC_CALL = "func()"
 
@@ -34,27 +38,29 @@ def parse_indent(func_body: str) -> str:
         2. first line not good
         3. entire body not good
     """
-    try:
-        code = f'{DUMMY_FUNC_SIG}\n{func_body}\n{DUMMY_FUNC_CALL}'
-        exec(code)
-        return func_body
-    except IndentationError:
-        split = func_body.splitlines()
-        if not split[0].endswith("    ") and not split[1].endswith("    "):
-            # likely that the entire body is not indented
-            return handle_entire_body_indent(func_body)
-        elif not split[0].startswith("    "):
-            # likely that only the first line is not indented
-            return handle_first_line_indent(func_body)
-        else:
-            # not sure what to do here
-            return func_body
-    except Exception:
-        # other syntax error likely due to missing identifier definitions
-        return func_body
+    def parse_indent_rec(f_body: str, cur_state: int) -> str:
+        if cur_state > 1:
+            return f_body
+        code = f'{DUMMY_FUNC_SIG}\n{f_body}\n{DUMMY_FUNC_CALL}'
+        try:
+            exec(code)
+            return f_body
+        except (IndentationError, SyntaxError):
+            p_func = handle_first_line_indent if cur_state == 0 else handle_entire_body_indent
+            return parse_indent_rec(p_func(func_body), cur_state + 1)
+        except Exception as e:
+            print(e.args)
+            # print kind of error
+            print(e.__class__.__name__)
+            return f_body
+    return parse_indent_rec(func_body, 0)
 
 # for testing
 if __name__ == "__main__":
     print(parse_indent(test0))
+    print("\n\n\n")
     print(parse_indent(test1))
+    print("\n\n\n")
     print(parse_indent(test2))
+    print("\n\n\n")
+    print(parse_indent(test3))
