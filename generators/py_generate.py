@@ -1,6 +1,6 @@
 from .generator_utils import gpt_chat, gpt_completion
 
-from typing import Optional, List
+from typing import Optional, List, Union
 
 PY_SIMPLE_COMPLETION_INSTRUCTION = "# Write the body of this function only."
 PY_REFLEXION_COMPLETION_INSTRUCTION = "You are PythonGPT. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only.\n\n-----"
@@ -64,7 +64,7 @@ def py_generate_func_impl(
         self_reflection: Optional[str] = None,
         num_comps: int = 1,
         temperature: float = 0.0,
-    ) -> str | List[str]:
+    ) -> Union[str, List[str]]:
     if strategy != "reflexion" and strategy != "simple":
         raise ValueError(f"Invalid strategy: given `{strategy}` but expected one of `reflexion` or `simple`")
     if strategy == "reflexion" and (prev_func_impl is None or feedback is None or self_reflection is None):

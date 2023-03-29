@@ -22,7 +22,7 @@ def gpt_completion(
         stop_strs: Optional[List[str]] = None,
         temperature: float = 0.0,
         num_comps=1,
-) -> List[str] | str:
+) -> Union[List[str], str]:
     response = openai.Completion.create(
         model=model,
         prompt=prompt,
@@ -48,7 +48,7 @@ def gpt_chat(
     max_tokens: int = 256,
     temperature: float = 0.0,
     num_comps=1,
-) -> List[str] | str:
+) -> Union[List[str], str]:
     response = openai.ChatCompletion.create(
         model=model,
         messages=[
