@@ -1,7 +1,7 @@
 python main.py \
   --run_name "simple_scratch" \
   --root_dir "root" \
-  --dataset_path ./human-eval/data/HumanEval.jsonl.gz \
+  --dataset_path ./benchmarks/human_eval_py.jsonl.gz \
   --strategy "simple" \
   --language "py" \
   --model "gpt-4" \

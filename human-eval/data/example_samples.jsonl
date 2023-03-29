@@ -1,6 +1,0 @@
-{"task_id": "test/0", "completion": "    import subprocess\n    subprocess.check_output('rm -rf tmp')"}
-{"task_id": "test/0", "completion": "    import time\n    time.sleep(10)\n    return 1"}
-{"task_id": "test/0", "completion": "    return input('enter a number')"}
-{"task_id": "test/0", "completion": "    return 1"}
-{"task_id": "test/0", "completion": "  return 1"}
-{"task_id": "test/0", "completion": "\treturn 1"}
