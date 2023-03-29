@@ -92,8 +92,9 @@ def run_reflexion_ucs(
             # if solved, exit early
             if is_passing:
                 debug_print("solved at first attempt")
-                is_solved = True
-                num_success += 1
+                code = item["prompt"] + cur_func_impl
+                is_solved = evaluate(item["prompt"], code, item["test"])
+                num_success += 1 if is_solved else 0
                 break
 
             reflection = self_reflection_generator(
