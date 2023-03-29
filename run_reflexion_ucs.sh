@@ -1,10 +1,11 @@
 python main.py \
-  --run_name "reflexion_ucs_with_output2" \
+  --run_name "reflexion_ucs_plays_with_the_ferris_crab" \
   --root_dir "root" \
   --dataset_path ./benchmarks/human_eval_py.jsonl.gz \
   --strategy "reflexion-ucs" \
-  --language "py" \
+  --language "rs" \
   --model "gpt-4" \
-  --pass_at_k "1" \
-  --max_iters "5" \
+  --pass_at_k 1 \
+  --max_iters 5 \
+  --expansion_factor 3 \
   --verbose
