@@ -1,8 +1,7 @@
 import os
-import gzip
-import json
+import ast
 import openai
-import jsonlines
+import random
 from tenacity import (
     retry,
     stop_after_attempt,  # type: ignore
@@ -76,3 +75,17 @@ def parse_body(text):
     return text
 
 
+def is_syntax_valid(code: str) -> bool:
+    try:
+        ast.parse(code)
+        return True
+    except Exception:
+        return False
+
+
+def sample_n_random(items: List[str], n: int) -> List[str]:
+    """Sample min(n, len(items)) random items from a list"""
+    assert n >= 0
+    if n >= len(items):
+        return items
+    return random.sample(items, n)

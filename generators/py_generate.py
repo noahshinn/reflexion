@@ -1,4 +1,4 @@
-from .generator_utils import gpt_chat, gpt_completion
+from .generator_utils import gpt_chat, gpt_completion, is_syntax_valid, sample_n_random
 
 from typing import Optional, List, Union
 
@@ -43,18 +43,6 @@ def py_generate_self_reflection(func: str, feedback: str, model: str) -> str:
         reflection = gpt_completion(model, f'{PY_SELF_REFLECTION_COMPLETION_INSTRUCTION}\n{func}\n\n{feedback}\n\nExplanation:')
     return reflection # type: ignore
 
-# # fixes the indentation of the function body.
-# # only checks if the first line is indented correctly, and if not, fixes it.
-# def py_fix_indentation(func: str) -> str:
-    # lines = func.splitlines()
-    # if len(lines) == 0:
-        # return func
-    # first_line = lines[0]
-    # if first_line.startswith('    '):
-        # return func
-    # else:
-        # return '    ' + func
-
 def py_generate_func_impl(
         func_sig: str,
         model: str,
@@ -91,7 +79,7 @@ def py_generate_func_impl(
     else:
         return [func_sig + py_fix_indentation(func_body) for func_body in func_bodies]
 
-def py_generate_internal_tests(func_sig: str, model: str, committee_size: int=1) -> List[str]:
+def py_generate_internal_tests(func_sig: str, model: str, committee_size: int = 1, max_num_tests: int = 5) -> List[str]:
     def parse_tests(tests: str) -> List[str]:
         return [test.strip() for test in tests.splitlines() if "assert" in test]
     """
@@ -104,7 +92,8 @@ def py_generate_internal_tests(func_sig: str, model: str, committee_size: int=1)
     else:
         prompt = f'{PY_TEST_GENERATION_COMPLETION_INSTRUCTION}\n\nfunc signature:\n{func_sig}\nunit tests:'
         output = gpt_completion(model, prompt, max_tokens=1024)
-    cur_tests: List[str] = parse_tests(output) # type: ignore
+    all_tests = parse_tests(output) # type: ignore
+    valid_tests = [test for test in all_tests if is_syntax_valid(test)]
 
     # TODO: NOT SUPPORTED YET
     # someone implement this
@@ -115,7 +104,7 @@ def py_generate_internal_tests(func_sig: str, model: str, committee_size: int=1)
 
         # cur_refinement_num += 1
 
-    return cur_tests
+    return sample_n_random(valid_tests, max_num_tests)
 
 DUMMY_FUNC_SIG = "def func():"
 DUMMY_FUNC_CALL = "func()"

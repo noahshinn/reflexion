@@ -1,3 +1,4 @@
+import warnings
 from lazzzy.ucs import ucs
 from utils import write_jsonl, parse_body
 from executors import py_evaluate, py_execute
@@ -76,8 +77,8 @@ def run_reflexion_ucs(
         while cur_pass < pass_at_k and not is_solved:
             debug_print(f"item {i} pass {cur_pass}")
             tests_i = internal_test_generator(item["prompt"], model, 1)
-            # cut off at 5 tests or less
-            tests_i = tests_i[:min(5, len(tests_i))]
+            if len(tests_i) == 0:
+                warnings.warn(f"no internal tests generated for item {i}")
 
             # first attempt
             debug_print("first attempt")
