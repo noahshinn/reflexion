@@ -1,1 +1,2 @@
-from .py_generate import py_generate_func_impl, py_generate_internal_tests, py_generate_self_reflection
+from .py_generate import py_generate_func_impl, py_generate_internal_tests, py_generate_self_reflection, py_parse_body
+from .rs_generate import rs_generate_func_impl, rs_generate_internal_tests, rs_generate_self_reflection, rs_parse_body

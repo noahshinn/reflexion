@@ -1,6 +1,6 @@
 from utils import write_jsonl
-from executors import py_evaluate
-from generators import py_generate_func_impl
+from executors import py_evaluate, rs_evaluate
+from generators import py_generate_func_impl, rs_generate_func_impl
 
 from typing import List
 
@@ -21,6 +21,9 @@ def run_simple(
     if language == "python" or language == "py":
         evaluate = py_evaluate
         func_impl_generator = py_generate_func_impl
+    elif language == "rust" or language == "rs":
+        evaluate = rs_evaluate
+        func_impl_generator = rs_generate_func_impl
     else:
         raise NotImplementedError(f"language {language} not supported")
     

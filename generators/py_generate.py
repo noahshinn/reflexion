@@ -1,6 +1,7 @@
-from .generator_utils import gpt_chat, gpt_completion, is_syntax_valid, sample_n_random
+from .generator_utils import generic_generate_func_impl, gpt_chat, gpt_completion, generic_generate_internal_tests, generic_generate_self_reflection
 
 from typing import Optional, List, Union
+import ast
 
 PY_SIMPLE_COMPLETION_INSTRUCTION = "# Write the body of this function only."
 PY_REFLEXION_COMPLETION_INSTRUCTION = "You are PythonGPT. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only.\n\n-----"
@@ -36,48 +37,43 @@ PY_TEST_GENERATION_COMPLETION_INSTRUCTION = f"""You are PythonGPT, an AI coding 
 
 PY_TEST_GENERATION_CHAT_INSTRUCTION = """You are CodexGPT, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring."""
 
+
 def py_generate_self_reflection(func: str, feedback: str, model: str) -> str:
-    if model == "gpt-4" or model == "gpt-3.5-turbo":
-        reflection = gpt_chat(model, PY_SELF_REFLECTION_CHAT_INSTRUCTION, f'{func}\n\n{feedback}\n\nExplanation:')
-    else:
-        reflection = gpt_completion(model, f'{PY_SELF_REFLECTION_COMPLETION_INSTRUCTION}\n{func}\n\n{feedback}\n\nExplanation:')
-    return reflection # type: ignore
+    return generic_generate_self_reflection(
+        func=func,
+        feedback=feedback,
+        model=model,
+        SELF_REFLECTION_CHAT_INSTRUCTION=PY_SELF_REFLECTION_CHAT_INSTRUCTION,
+        SELF_REFLECTION_COMPLETION_INSTRUCTION=PY_SELF_REFLECTION_COMPLETION_INSTRUCTION,
+    )
+
 
 def py_generate_func_impl(
-        func_sig: str,
-        model: str,
-        strategy: str,
-        prev_func_impl: Optional[str] = None,
-        feedback: Optional[str] = None,
-        self_reflection: Optional[str] = None,
-        num_comps: int = 1,
-        temperature: float = 0.0,
-    ) -> Union[str, List[str]]:
-    if strategy != "reflexion" and strategy != "simple":
-        raise ValueError(f"Invalid strategy: given `{strategy}` but expected one of `reflexion` or `simple`")
-    if strategy == "reflexion" and (prev_func_impl is None or feedback is None or self_reflection is None):
-        raise ValueError(f"Invalid arguments: given `strategy=reflexion` but `prev_func_impl`, `feedback`, or `self_reflection` is None")
+    func_sig: str,
+    model: str,
+    strategy: str,
+    prev_func_impl: Optional[str] = None,
+    feedback: Optional[str] = None,
+    self_reflection: Optional[str] = None,
+    num_comps: int = 1,
+    temperature: float = 0.0,
+) -> Union[str, List[str]]:
+    return generic_generate_func_impl(
+        func_sig=func_sig,
+        model=model,
+        strategy=strategy,
+        prev_func_impl=prev_func_impl,
+        feedback=feedback,
+        self_reflection=self_reflection,
+        num_comps=num_comps,
+        temperature=temperature,
+        REFLEXION_CHAT_INSTRUCTION=PY_REFLEXION_CHAT_INSTRUCTION,
+        SIMPLE_CHAT_INSTRUCTION=PY_SIMPLE_CHAT_INSTRUCTION,
+        REFLEXION_COMPLETION_INSTRUCTION=PY_REFLEXION_COMPLETION_INSTRUCTION,
+        SIMPLE_COMPLETION_INSTRUCTION=PY_SIMPLE_COMPLETION_INSTRUCTION,
+        fix_body=py_fix_indentation
+    )
 
-    if model == "gpt-4" or model == "gpt-3.5-turbo":
-        if strategy == "reflexion":
-            message = f"previous implementation:\n{prev_func_impl}\n\nunit tests:\n{feedback}\n\nhint:\n{self_reflection}\n\n# improved implementation\n{func_sig}"
-            # func_bodies is a really bad name, as it can also be just 1 string
-            func_bodies = gpt_chat(model, PY_REFLEXION_CHAT_INSTRUCTION, message, num_comps=num_comps, temperature=temperature)
-        else:
-            func_bodies = gpt_chat(model, PY_SIMPLE_CHAT_INSTRUCTION if strategy == "simple" else PY_REFLEXION_CHAT_INSTRUCTION, func_sig, num_comps=num_comps, temperature=temperature)
-    else:
-        if strategy == "reflexion":
-            prompt = f"{PY_REFLEXION_COMPLETION_INSTRUCTION}\n{prev_func_impl}\n\nunit tests:\n{feedback}\n\nhint:\n{self_reflection}\n\n# improved implementation\n{func_sig}"
-            func_bodies = gpt_completion(model, prompt, num_comps=num_comps, temperature=temperature)
-        else:
-            prompt = f"{PY_SIMPLE_COMPLETION_INSTRUCTION}\n{func_sig}"
-            func_bodies = gpt_completion(model, prompt, num_comps=num_comps, temperature=temperature)
-
-    if num_comps == 1:
-        assert isinstance(func_bodies, str)
-        return func_sig + py_fix_indentation(func_bodies)
-    else:
-        return [func_sig + py_fix_indentation(func_body) for func_body in func_bodies]
 
 def py_generate_internal_tests(func_sig: str, model: str, committee_size: int = 1, max_num_tests: int = 5) -> List[str]:
     def parse_tests(tests: str) -> List[str]:
@@ -86,28 +82,29 @@ def py_generate_internal_tests(func_sig: str, model: str, committee_size: int = 
     Generates tests for a function using a refinement technique with the number
     of specified commmittee members.
     """
-    if model == "gpt-4" or model == "gpt-3.5-turbo":
-        message = f'{PY_TEST_GENERATION_FEW_SHOT}\n\nfunc signature:\n{func_sig}\nunit tests:'
-        output = gpt_chat(model, PY_TEST_GENERATION_CHAT_INSTRUCTION, message, max_tokens=1024)
-    else:
-        prompt = f'{PY_TEST_GENERATION_COMPLETION_INSTRUCTION}\n\nfunc signature:\n{func_sig}\nunit tests:'
-        output = gpt_completion(model, prompt, max_tokens=1024)
-    all_tests = parse_tests(output) # type: ignore
-    valid_tests = [test for test in all_tests if is_syntax_valid(test)]
+    return generic_generate_internal_tests(
+        func_sig=func_sig,
+        model=model,
+        committee_size=committee_size,
+        max_num_tests=max_num_tests,
+        TEST_GENERATION_FEW_SHOT=PY_TEST_GENERATION_FEW_SHOT,
+        TEST_GENERATION_CHAT_INSTRUCTION=PY_TEST_GENERATION_CHAT_INSTRUCTION,
+        TEST_GENERATION_COMPLETION_INSTRUCTION=PY_TEST_GENERATION_COMPLETION_INSTRUCTION,
+        parse_tests=parse_tests,
+        is_syntax_valid=py_is_syntax_valid,
+    )
 
-    # TODO: NOT SUPPORTED YET
-    # someone implement this
-    # cur_refinement_num = 0
-    # while cur_refinement_num < committee_size:
-        # # TODO: implement
-        # cur_tests = ... # type: ignore
 
-        # cur_refinement_num += 1
-
-    return sample_n_random(valid_tests, max_num_tests)
+def py_parse_body(text: str) -> str:
+    lines = text.split('\n')
+    for i in range(len(lines)-1, -1, -1):
+        if 'return' in lines[i]:
+            return '\n'.join(lines[:i+1])
+    return text
 
 DUMMY_FUNC_SIG = "def func():"
 DUMMY_FUNC_CALL = "func()"
+
 
 def handle_first_line_indent(func_body: str) -> str:
     if func_body.startswith("    "):
@@ -115,10 +112,12 @@ def handle_first_line_indent(func_body: str) -> str:
     split = func_body.splitlines()
     return f"    {split[0]}\n" + "\n".join(split[1:])
 
+
 def handle_entire_body_indent(func_body: str) -> str:
     split = func_body.splitlines()
     res = "\n".join(["    " + line for line in split])
     return res
+
 
 def py_fix_indentation(func_body: str) -> str:
     """
@@ -141,3 +140,10 @@ def py_fix_indentation(func_body: str) -> str:
             return f_body
     return parse_indent_rec(func_body, 0)
 
+
+def py_is_syntax_valid(code: str) -> bool:
+    try:
+        ast.parse(code)
+        return True
+    except Exception:
+        return False

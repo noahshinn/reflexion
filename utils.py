@@ -20,8 +20,6 @@ def read_jsonl(path: str) -> List[dict]:
     return items
 
 def write_jsonl(path: str, data: List[dict], append: bool = False):
-    if not path.endswith(".jsonl"):
-        raise ValueError(f"File `{path}` is not a jsonl file.")
     with jsonlines.open(path, mode='a' if append else 'w') as writer:
         for item in data:
             writer.write(item)
@@ -32,10 +30,3 @@ def read_jsonl_gz(path: str) -> List[dict]:
     with gzip.open(path, "rt") as f:
         data = [json.loads(line) for line in f]
     return data
-
-def parse_body(text):
-    lines = text.split('\n')
-    for i in range(len(lines)-1, -1, -1):
-        if 'return' in lines[i]:
-            return '\n'.join(lines[:i+1])
-    return text

@@ -1,8 +1,8 @@
 import warnings
 from lazzzy.ucs import ucs
-from utils import write_jsonl, parse_body
-from executors import py_evaluate, py_execute
-from generators import py_generate_func_impl, py_generate_self_reflection, py_generate_internal_tests
+from utils import write_jsonl
+from executors import py_evaluate, py_execute, rs_evaluate, rs_execute
+from generators import py_generate_func_impl, py_generate_self_reflection, py_generate_internal_tests, py_parse_body, rs_generate_func_impl, rs_generate_self_reflection, rs_generate_internal_tests, rs_parse_body
 
 from typing import List, Set, Tuple
 
@@ -52,12 +52,21 @@ def run_reflexion_ucs(
     self_reflection_generator = None
     func_impl_generator = None
     internal_test_generator = None
+    parse_body = None
     if language == "python" or language == "py":
         evaluate = py_evaluate
         execute = py_execute
         self_reflection_generator = py_generate_self_reflection
         func_impl_generator = py_generate_func_impl
         internal_test_generator = py_generate_internal_tests
+        parse_body = py_parse_body
+    elif language == "rust" or language == "rs":
+        evaluate = rs_evaluate
+        execute = rs_execute
+        self_reflection_generator = rs_generate_self_reflection
+        func_impl_generator = rs_generate_func_impl
+        internal_test_generator = rs_generate_internal_tests
+        parse_body = rs_parse_body
     else:
         raise NotImplementedError(f"language {language} not supported")
 
@@ -114,7 +123,7 @@ def run_reflexion_ucs(
                 new_states: Set[Tuple[State, float]] = set()
 
                 debug_print(f"start expansion of: {state.state}")
-                new_funcs = func_impl_generator(
+                new_funcs = parse_body(func_impl_generator(
                     func_sig=item["prompt"],
                     model=model,
                     strategy="reflexion",
@@ -123,7 +132,7 @@ def run_reflexion_ucs(
                     self_reflection=state.reflection,
                     num_comps=expansion_factor,
                     temperature=0.75
-                )
+                ))
                 assert isinstance(new_funcs, list)
                 debug_print(f"generated num of funcs: {len(new_funcs)}")
 

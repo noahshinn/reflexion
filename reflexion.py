@@ -1,6 +1,6 @@
-from utils import write_jsonl, parse_body
-from executors import py_evaluate, py_execute
-from generators import py_generate_func_impl, py_generate_self_reflection, py_generate_internal_tests
+from utils import write_jsonl
+from executors import py_evaluate, py_execute, rs_evaluate, rs_execute
+from generators import py_generate_func_impl, py_generate_self_reflection, py_generate_internal_tests, py_parse_body, rs_generate_func_impl, rs_generate_self_reflection, rs_generate_internal_tests, rs_parse_body
 
 from typing import List
 
@@ -21,12 +21,21 @@ def run_reflexion(
     self_reflection_generator = None
     func_impl_generator = None
     internal_test_generator = None
+    parse_body = None
     if language == "python" or language == "py":
         evaluate = py_evaluate
         execute = py_execute
         self_reflection_generator = py_generate_self_reflection
         func_impl_generator = py_generate_func_impl
         internal_test_generator = py_generate_internal_tests
+        parse_body = py_parse_body
+    elif language == "rust" or language == "rs":
+        evaluate = rs_evaluate
+        execute = rs_execute
+        self_reflection_generator = rs_generate_self_reflection
+        func_impl_generator = rs_generate_func_impl
+        internal_test_generator = rs_generate_internal_tests
+        parse_body = rs_parse_body
     else:
         raise NotImplementedError(f"language {language} not supported")
 
@@ -47,9 +56,9 @@ def run_reflexion(
             tests_i = internal_test_generator(item["prompt"], model, 1)
 
             # first attempt
-            cur_func_impl = parse_body(
-                func_impl_generator(item["prompt"], model, "simple"))
+            cur_func_impl = func_impl_generator(item["prompt"], model, "simple")
             assert isinstance(cur_func_impl, str)
+            cur_func_impl = parse_body(cur_func_impl)
             is_passing, feedback, _ = execute(cur_func_impl, tests_i)
 
             # if solved, exit early
@@ -68,15 +77,16 @@ def run_reflexion(
                 reflections += [reflection]
 
                 # apply self-reflection in the next attempt
-                cur_func_impl = parse_body(func_impl_generator(
+                cur_func_impl = func_impl_generator(
                     func_sig=item["prompt"],
                     model=model,
                     strategy="reflexion",
                     prev_func_impl=cur_func_impl,
                     feedback=cur_feedback,
                     self_reflection=reflection
-                ))
+                )
                 assert isinstance(cur_func_impl, str)
+                cur_func_impl = parse_body(cur_func_impl)
 
                 # check if all internal unit tests pass
                 is_passing, cur_feedback, _ = execute(cur_func_impl, tests_i)
