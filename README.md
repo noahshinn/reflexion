@@ -8,7 +8,7 @@ Check out an interesting type-inference implementation here: [OpenTau](https://g
 
 Check out the code for the original paper [here](https://github.com/noahshinn024/reflexion)
 
-Check out a new superhuman programming agent gym [here](https://github.com/GammaTauAI/leetcode-testing-env)
+Check out a new superhuman programming agent gym [here](https://github.com/GammaTauAI/leetcode-hard-gym)
 
 If you have any questions, please contact [noahshinn024@gmail.com](noahshinn024@gmail.com)
 
