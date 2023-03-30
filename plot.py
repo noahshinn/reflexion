@@ -29,5 +29,5 @@ def plot_bar_graph(data_dict):
     plt.show()
 
 if __name__ == "__main__":
-    data_dict = {'PaLM': 0.262, 'CodeT+GPT-3.5': 0.658, 'GPT-4': 0.67, 'Reflexion+GPT-4': 0.88}
+    data_dict = {'PaLM': 0.262, 'CodeT+GPT-3.5': 0.658, 'GPT-4': 0.67, 'Reflexion+GPT-4': 0.88, 'Lazzzy Reflexion+GPT-4': 0.93}
     plot_bar_graph(data_dict)
