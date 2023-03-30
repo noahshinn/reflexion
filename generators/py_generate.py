@@ -95,13 +95,6 @@ def py_generate_internal_tests(func_sig: str, model: str, committee_size: int = 
     )
 
 
-def py_parse_body(text: str) -> str:
-    lines = text.split('\n')
-    for i in range(len(lines)-1, -1, -1):
-        if 'return' in lines[i]:
-            return '\n'.join(lines[:i+1])
-    return text
-
 DUMMY_FUNC_SIG = "def func():"
 DUMMY_FUNC_CALL = "func()"
 

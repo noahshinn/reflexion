@@ -167,13 +167,6 @@ def gpt_chat(
     return [choice.message.content for choice in response.choices]  # type: ignore
 
 
-def parse_body(text):
-    lines = text.split('\n')
-    for i in range(len(lines)-1, -1, -1):
-        if 'return' in lines[i]:
-            return '\n'.join(lines[:i+1])
-    return text
-
 
 def sample_n_random(items: List[str], n: int) -> List[str]:
     """Sample min(n, len(items)) random items from a list"""

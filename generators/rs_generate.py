@@ -97,7 +97,7 @@ def rs_generate_func_impl(
 
 def rs_generate_internal_tests(func_sig: str, model: str, committee_size: int = 1, max_num_tests: int = 5) -> List[str]:
     def parse_tests(tests: str) -> List[str]:
-        raise NotImplementedError("Figure it out for Rust")
+        return [test + ";" for test in tests.split(";")]
     """
     Generates tests for a function using a refinement technique with the number
     of specified commmittee members.
@@ -113,9 +113,6 @@ def rs_generate_internal_tests(func_sig: str, model: str, committee_size: int = 
         parse_tests=parse_tests,
         is_syntax_valid=(lambda x: True) # TODO: for now. typecheck maybe?
     )
-
-def rs_parse_body(text: str) -> str:
-    return text # TODO
 
 
 if __name__ == "__main__":

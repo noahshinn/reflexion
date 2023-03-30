@@ -1,11 +1,13 @@
 import os
 import signal
 import subprocess
+import json
 
 from .executor_utils import timeout_handler
 from .executor_types import ExecuteResult
 
-from typing import List, Tuple, NamedTuple, Optional, Union
+from typing import List, Tuple, Optional
+
 
 
 cargo_harness_dir = os.path.join(os.path.dirname(
@@ -40,6 +42,14 @@ def write_to_file(path: str, code: str):
     with open(path, "w") as f:
         f.write(code)
 
+def write_to_file_toplevel(path: str, code: str):
+    # delete the file if it exists
+    if os.path.exists(path):
+        os.remove(path)
+    # write the code to the file
+    with open(path, "w") as f:
+        f.write(code)
+
 
 def run_with_timeout(cmd: str, tmp_cargo_path: str, timeout: int = 5) -> Optional[Tuple[str, str]]:
     """
@@ -64,8 +74,6 @@ def run_with_timeout(cmd: str, tmp_cargo_path: str, timeout: int = 5) -> Optiona
     # decode the output
     out = out.decode("utf-8")
     err = err.decode("utf-8")
-    print(f"errs: {err}")
-    print(f"outs: {out}")
 
     return out, err
 
@@ -156,12 +164,20 @@ def rs_evaluate(name: str, func: str, test: str, timeout: int = 5) -> bool:
 
     TODO: do it actually
     """
-    return True
+    tmp_dir, tmp_path = create_temp_project()
+    write_to_file_toplevel(tmp_path, func + test)
+
+    # compile and run the binary
+    res = run_with_timeout("cargo run", tmp_dir, timeout=timeout)
+    os.system(f"rm -rf {tmp_dir}")
+    
+    if res is None:
+        return False
+    else:
+        errs = grab_runtime_errs(res[1])
+        return len(errs) == 0
 
 
-import json
-
-from typing import List
 
 assert_no_panic = r"""
 macro_rules! assert_eq_nopanic {
