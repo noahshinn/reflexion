@@ -2,11 +2,13 @@
 
 This is a spin-off project inspired by the paper: [Reflexion: an autonomous agent with dynamic memory and self-reflection. Noah Shinn, Beck Labash, Ashwin Gopinath. _Preprint_, 2023](https://arxiv.org/abs/2303.11366)
 
-Read more about this project in this [post](https://nanothoughts.substack.com/p/reflecting-on-reflexion).
+Read more about this project in this [post](https://nanothoughts.substack.com/p/reflecting-on-reflexion)
 
 Check out an interesting type-inference implementation here: [OpenTau](https://github.com/GammaTauAI/opentau)
 
 Check out the code for the original paper [here](https://github.com/noahshinn024/reflexion)
+
+Check out a new superhuman programming agent gym [here](https://github.com/GammaTauAI/leetcode-testing-env)
 
 If you have any questions, please contact [noahshinn024@gmail.com](noahshinn024@gmail.com)
 
