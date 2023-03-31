@@ -1,6 +1,6 @@
 from utils import write_jsonl
-from executors import py_evaluate, rs_evaluate
-from generators import py_generate_func_impl, rs_generate_func_impl
+from executors import executor_factory
+from generators import generator_factory
 
 from typing import List
 
@@ -16,20 +16,9 @@ def run_simple(
         verbose: bool
     ) -> None:
     # someone implement more languages
-    evaluate = None
-    func_impl_generator = None
-    if language == "python" or language == "py":
-        evaluate = py_evaluate
-        func_impl_generator = py_generate_func_impl
-    elif language == "rust" or language == "rs":
-        evaluate = rs_evaluate
-        func_impl_generator = rs_generate_func_impl
-    else:
-        raise NotImplementedError(f"language {language} not supported")
+    exe = executor_factory(language)
+    gen = generator_factory(language)
     
-    assert not evaluate is None
-    assert not func_impl_generator is None
-
     num_items = len(dataset)
     num_success = 0
     for i, item in enumerate(dataset):
@@ -37,9 +26,9 @@ def run_simple(
         is_solved = False
         cur_func_impl = ""
         while cur_pass < pass_at_k:
-            cur_func_impl = func_impl_generator(item["prompt"], model, "simple")
+            cur_func_impl = gen.func_impl(item["prompt"], model, "simple")
             assert isinstance(cur_func_impl, str)
-            is_passing = evaluate(item["entry_point"], cur_func_impl, item["test"], timeout=10)
+            is_passing = exe.evaluate(item["entry_point"], cur_func_impl, item["test"], timeout=10)
             if is_passing:
                 is_solved = True
                 num_success += 1

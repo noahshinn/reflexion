@@ -4,7 +4,7 @@ import subprocess
 import json
 
 from .executor_utils import timeout_handler
-from .executor_types import ExecuteResult
+from .executor_types import ExecuteResult, Executor
 
 from typing import List, Tuple, Optional
 
@@ -78,104 +78,104 @@ def run_with_timeout(cmd: str, tmp_cargo_path: str, timeout: int = 5) -> Optiona
     return out, err
 
 
-def rs_execute(func: str, tests: List[str], timeout: int = 5) -> ExecuteResult:
-    # Combine function code and assert statement
-    func_test_list = [f'{func}\n{test}' for test in tests]
+class RsExecutor(Executor):
+    def execute(self, func: str, tests: List[str], timeout: int = 5) -> ExecuteResult:
+        # Combine function code and assert statement
+        func_test_list = [f'{func}\n{test}' for test in tests]
 
-    tmp_dir, temp_file = create_temp_project()
+        tmp_dir, temp_file = create_temp_project()
 
-    # run cargo check --message-format=json
-    write_to_file(temp_file, func)
-    res = run_with_timeout(
-        "cargo check --message-format=json", tmp_dir, timeout=timeout)
-    assert res is not None, "Timeout in cargo check, wow"
+        # run cargo check --message-format=json
+        write_to_file(temp_file, func)
+        res = run_with_timeout(
+            "cargo check --message-format=json", tmp_dir, timeout=timeout)
+        assert res is not None, "Timeout in cargo check, wow"
 
-    errs = grab_compile_errs(res[0])  # (check returns stdin)
-    if len(errs) > 0:
+        errs = grab_compile_errs(res[0])  # (check returns stdin)
+        if len(errs) > 0:
+            # cleanup the temp directory
+            os.system(f"rm -rf {tmp_dir}")
+            state = tuple([False] * len(tests))
+            return ExecuteResult(False, str(errs[0]), state)
+
+        # Run the tests and collect the results
+        tests_res: List[Tuple[bool, str]] = []
+        num_tests = len(func_test_list)
+        for i in range(num_tests):
+            """
+            # use some sort of timeout limit to handle infinite loops
+            if pass, add to success tests
+            if fail, add to failed tests with the log from the compiler
+            """
+            write_to_file(temp_file, func_test_list[i])
+
+            # run cargo run
+            res = run_with_timeout("cargo run", tmp_dir, timeout=timeout)
+            if res is None:
+                tests_res.append((False, "Timeout"))
+                continue
+
+            # check if we have any failed tests
+            errs = grab_runtime_errs(res[1])
+            if len(errs) > 0:
+                tests_res.append((False, str(errs[0])))
+                continue
+
+            # if we get here, the test passed
+            tests_res.append((True, ""))
+
         # cleanup the temp directory
         os.system(f"rm -rf {tmp_dir}")
-        state = tuple([False] * len(tests))
-        return ExecuteResult(False, str(errs[0]), state)
 
-    # Run the tests and collect the results
-    tests_res: List[Tuple[bool, str]] = []
-    num_tests = len(func_test_list)
-    for i in range(num_tests):
-        """
-        # use some sort of timeout limit to handle infinite loops
-        if pass, add to success tests
-        if fail, add to failed tests with the log from the compiler
-        """
-        write_to_file(temp_file, func_test_list[i])
+        passed_str = ""
+        failed_str = ""
+        state = []
+        for i, (passed, output) in enumerate(tests_res):
+            test = tests[i]
+            if passed:
+                passed_str += f"\n{test}"
+            else:
+                failed_str += f"\n{test} // output: {output}"
+            state.append(passed)
 
-        # run cargo run
+        feedback = "Tested passed:"
+        feedback += passed_str
+        feedback += "\n\nTests failed:"
+        feedback += failed_str
+
+        is_passing = len(failed_str) == 0
+
+        return ExecuteResult(is_passing, feedback, tuple(state))
+
+    def evaluate(self, name: str, func: str, test: str, timeout: int = 5) -> bool:
+        """
+        Evaluates the implementation on Human-Eval Rust (MultiPL-E generated,
+
+        Federico Cassano, John Gouwar, Daniel Nguyen, Sydney Nguyen, Luna Phipps-Costin, Donald Pinckney, Ming-Ho Yee, Yangtian Zi, Carolyn Jane Anderson, Molly Q Feldman, Arjun Guha, Michael Greenberg, Abhinav Jangda ).
+        If you use this function please cite:
+        @misc{cassano2022multiple,
+          title={MultiPL-E: A Scalable and Extensible Approach to Benchmarking Neural Code Generation}, 
+          author={Federico Cassano and John Gouwar and Daniel Nguyen and Sydney Nguyen and Luna Phipps-Costin and Donald Pinckney and Ming-Ho Yee and Yangtian Zi and Carolyn Jane Anderson and Molly Q Feldman and Arjun Guha and Michael Greenberg and Abhinav Jangda},
+          year={2022},
+          eprint={2208.08227},
+          archivePrefix={arXiv},
+          primaryClass={cs.LG}
+        })
+
+        TODO: do it actually
+        """
+        tmp_dir, tmp_path = create_temp_project()
+        write_to_file_toplevel(tmp_path, func + test)
+
+        # compile and run the binary
         res = run_with_timeout("cargo run", tmp_dir, timeout=timeout)
+        os.system(f"rm -rf {tmp_dir}")
+        
         if res is None:
-            tests_res.append((False, "Timeout"))
-            continue
-
-        # check if we have any failed tests
-        errs = grab_runtime_errs(res[1])
-        if len(errs) > 0:
-            tests_res.append((False, str(errs[0])))
-            continue
-
-        # if we get here, the test passed
-        tests_res.append((True, ""))
-
-    # cleanup the temp directory
-    os.system(f"rm -rf {tmp_dir}")
-
-    passed_str = ""
-    failed_str = ""
-    state = []
-    for i, (passed, output) in enumerate(tests_res):
-        test = tests[i]
-        if passed:
-            passed_str += f"\n{test}"
+            return False
         else:
-            failed_str += f"\n{test} // output: {output}"
-        state.append(passed)
-
-    feedback = "Tested passed:"
-    feedback += passed_str
-    feedback += "\n\nTests failed:"
-    feedback += failed_str
-
-    is_passing = len(failed_str) == 0
-
-    return ExecuteResult(is_passing, feedback, tuple(state))
-
-
-def rs_evaluate(name: str, func: str, test: str, timeout: int = 5) -> bool:
-    """
-    Evaluates the implementation on Human-Eval Rust (MultiPL-E generated,
-
-    Federico Cassano, John Gouwar, Daniel Nguyen, Sydney Nguyen, Luna Phipps-Costin, Donald Pinckney, Ming-Ho Yee, Yangtian Zi, Carolyn Jane Anderson, Molly Q Feldman, Arjun Guha, Michael Greenberg, Abhinav Jangda ).
-    If you use this function please cite:
-    @misc{cassano2022multiple,
-      title={MultiPL-E: A Scalable and Extensible Approach to Benchmarking Neural Code Generation}, 
-      author={Federico Cassano and John Gouwar and Daniel Nguyen and Sydney Nguyen and Luna Phipps-Costin and Donald Pinckney and Ming-Ho Yee and Yangtian Zi and Carolyn Jane Anderson and Molly Q Feldman and Arjun Guha and Michael Greenberg and Abhinav Jangda},
-      year={2022},
-      eprint={2208.08227},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG}
-    })
-
-    TODO: do it actually
-    """
-    tmp_dir, tmp_path = create_temp_project()
-    write_to_file_toplevel(tmp_path, func + test)
-
-    # compile and run the binary
-    res = run_with_timeout("cargo run", tmp_dir, timeout=timeout)
-    os.system(f"rm -rf {tmp_dir}")
-    
-    if res is None:
-        return False
-    else:
-        errs = grab_runtime_errs(res[1])
-        return len(errs) == 0
+            errs = grab_runtime_errs(res[1])
+            return len(errs) == 0
 
 
 

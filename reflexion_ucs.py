@@ -1,8 +1,8 @@
 import warnings
 from lazzzy.ucs import ucs
 from utils import write_jsonl
-from executors import py_evaluate, py_execute, rs_evaluate, rs_execute
-from generators import py_generate_func_impl, py_generate_self_reflection, py_generate_internal_tests, rs_generate_func_impl, rs_generate_self_reflection, rs_generate_internal_tests
+from executors import executor_factory
+from generators import generator_factory
 
 from typing import List, Set, Tuple
 
@@ -47,31 +47,8 @@ def run_reflexion_ucs(
     verbose: bool,
     expansion_factor: int
 ) -> None:
-    evaluate = None
-    execute = None
-    self_reflection_generator = None
-    func_impl_generator = None
-    internal_test_generator = None
-    if language == "python" or language == "py":
-        evaluate = py_evaluate
-        execute = py_execute
-        self_reflection_generator = py_generate_self_reflection
-        func_impl_generator = py_generate_func_impl
-        internal_test_generator = py_generate_internal_tests
-    elif language == "rust" or language == "rs":
-        evaluate = rs_evaluate
-        execute = rs_execute
-        self_reflection_generator = rs_generate_self_reflection
-        func_impl_generator = rs_generate_func_impl
-        internal_test_generator = rs_generate_internal_tests
-    else:
-        raise NotImplementedError(f"language {language} not supported")
-
-    assert not evaluate is None
-    assert not execute is None
-    assert not self_reflection_generator is None
-    assert not func_impl_generator is None
-    assert not internal_test_generator is None
+    exe = executor_factory(language)
+    gen = generator_factory(language)
 
     num_items = len(dataset)
     num_success = 0
@@ -82,26 +59,26 @@ def run_reflexion_ucs(
         cur_func_impl = ""
         while cur_pass < pass_at_k and not is_solved:
             debug_print(f"item {i} pass {cur_pass}")
-            tests_i = internal_test_generator(item["prompt"], model, 1)
+            tests_i = gen.internal_tests(item["prompt"], model, 1)
             if len(tests_i) == 0:
                 warnings.warn(f"no internal tests generated for item {i}")
 
             # first attempt
             debug_print("first attempt")
-            cur_func_impl = func_impl_generator(item["prompt"], model, "simple")
+            cur_func_impl = gen.func_impl(item["prompt"], model, "simple")
             assert isinstance(cur_func_impl, str)  # num_comps of 1
-            is_passing, feedback, state = execute(cur_func_impl, tests_i)
+            is_passing, feedback, state = exe.execute(cur_func_impl, tests_i)
 
             debug_print(f"first attempt: \n{cur_func_impl}\n{feedback}\n{state}")
 
             # if solved, exit--pass_at_k 1 early
             if is_passing:
                 debug_print("solved at first attempt")
-                is_solved = evaluate(item["prompt"], cur_func_impl, item["test"])
+                is_solved = exe.evaluate(item["prompt"], cur_func_impl, item["test"])
                 num_success += 1 if is_solved else 0
                 break
 
-            reflection = self_reflection_generator(
+            reflection = gen.self_reflection(
                 cur_func_impl, feedback, model)
             reflections.append(reflection)
 
@@ -118,7 +95,7 @@ def run_reflexion_ucs(
                 new_states: Set[Tuple[State, float]] = set()
 
                 debug_print(f"start expansion of: {state.state}")
-                new_funcs = func_impl_generator(
+                new_funcs = gen.func_impl(
                     func_sig=item["prompt"],
                     model=model,
                     strategy="reflexion",
@@ -140,14 +117,14 @@ def run_reflexion_ucs(
 
                     already_seen.add(new_func)
 
-                    is_passing, feedback, new_state = execute(new_func, tests_i)
+                    is_passing, feedback, new_state = exe.execute(new_func, tests_i)
                     debug_print(f"expanding: \n{new_func}\n{feedback}\n{new_state}")
 
                     if is_passing:
                         # return immediately if solved
                         return set([(State(new_func, feedback, "", new_state), 0)])
 
-                    new_reflection = self_reflection_generator(new_func, feedback, model)
+                    new_reflection = gen.self_reflection(new_func, feedback, model)
                     reflections.append(new_reflection)
 
                     num_failing = len([x for x in new_state if not x])
@@ -178,7 +155,7 @@ def run_reflexion_ucs(
 
             print("BEST CODE:\n\n\n")
             print(best.code)
-            is_passing = evaluate(
+            is_passing = exe.evaluate(
                 item["entry_point"], best.code, item["test"], timeout=5)
             if is_passing:
                 item["solution"] = best.code

@@ -1,3 +1,4 @@
+from .generator_types import Generator
 from .generator_utils import generic_generate_func_impl, gpt_chat, gpt_completion, generic_generate_internal_tests, generic_generate_self_reflection
 
 from typing import Optional, List, Union
@@ -37,62 +38,63 @@ PY_TEST_GENERATION_COMPLETION_INSTRUCTION = f"""You are PythonGPT, an AI coding 
 
 PY_TEST_GENERATION_CHAT_INSTRUCTION = """You are CodexGPT, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring."""
 
-
-def py_generate_self_reflection(func: str, feedback: str, model: str) -> str:
-    return generic_generate_self_reflection(
-        func=func,
-        feedback=feedback,
-        model=model,
-        SELF_REFLECTION_CHAT_INSTRUCTION=PY_SELF_REFLECTION_CHAT_INSTRUCTION,
-        SELF_REFLECTION_COMPLETION_INSTRUCTION=PY_SELF_REFLECTION_COMPLETION_INSTRUCTION,
-    )
-
-
-def py_generate_func_impl(
-    func_sig: str,
-    model: str,
-    strategy: str,
-    prev_func_impl: Optional[str] = None,
-    feedback: Optional[str] = None,
-    self_reflection: Optional[str] = None,
-    num_comps: int = 1,
-    temperature: float = 0.0,
-) -> Union[str, List[str]]:
-    return generic_generate_func_impl(
-        func_sig=func_sig,
-        model=model,
-        strategy=strategy,
-        prev_func_impl=prev_func_impl,
-        feedback=feedback,
-        self_reflection=self_reflection,
-        num_comps=num_comps,
-        temperature=temperature,
-        REFLEXION_CHAT_INSTRUCTION=PY_REFLEXION_CHAT_INSTRUCTION,
-        SIMPLE_CHAT_INSTRUCTION=PY_SIMPLE_CHAT_INSTRUCTION,
-        REFLEXION_COMPLETION_INSTRUCTION=PY_REFLEXION_COMPLETION_INSTRUCTION,
-        SIMPLE_COMPLETION_INSTRUCTION=PY_SIMPLE_COMPLETION_INSTRUCTION,
-        fix_body=py_fix_indentation
-    )
+class PyGenerator(Generator):
+    def self_reflection(self, func: str, feedback: str, model: str) -> str:
+        return generic_generate_self_reflection(
+            func=func,
+            feedback=feedback,
+            model=model,
+            SELF_REFLECTION_CHAT_INSTRUCTION=PY_SELF_REFLECTION_CHAT_INSTRUCTION,
+            SELF_REFLECTION_COMPLETION_INSTRUCTION=PY_SELF_REFLECTION_COMPLETION_INSTRUCTION,
+        )
 
 
-def py_generate_internal_tests(func_sig: str, model: str, committee_size: int = 1, max_num_tests: int = 5) -> List[str]:
-    def parse_tests(tests: str) -> List[str]:
-        return [test.strip() for test in tests.splitlines() if "assert" in test]
-    """
-    Generates tests for a function using a refinement technique with the number
-    of specified commmittee members.
-    """
-    return generic_generate_internal_tests(
-        func_sig=func_sig,
-        model=model,
-        committee_size=committee_size,
-        max_num_tests=max_num_tests,
-        TEST_GENERATION_FEW_SHOT=PY_TEST_GENERATION_FEW_SHOT,
-        TEST_GENERATION_CHAT_INSTRUCTION=PY_TEST_GENERATION_CHAT_INSTRUCTION,
-        TEST_GENERATION_COMPLETION_INSTRUCTION=PY_TEST_GENERATION_COMPLETION_INSTRUCTION,
-        parse_tests=parse_tests,
-        is_syntax_valid=py_is_syntax_valid,
-    )
+    def func_impl(
+        self,
+        func_sig: str,
+        model: str,
+        strategy: str,
+        prev_func_impl: Optional[str] = None,
+        feedback: Optional[str] = None,
+        self_reflection: Optional[str] = None,
+        num_comps: int = 1,
+        temperature: float = 0.0,
+    ) -> Union[str, List[str]]:
+        return generic_generate_func_impl(
+            func_sig=func_sig,
+            model=model,
+            strategy=strategy,
+            prev_func_impl=prev_func_impl,
+            feedback=feedback,
+            self_reflection=self_reflection,
+            num_comps=num_comps,
+            temperature=temperature,
+            REFLEXION_CHAT_INSTRUCTION=PY_REFLEXION_CHAT_INSTRUCTION,
+            SIMPLE_CHAT_INSTRUCTION=PY_SIMPLE_CHAT_INSTRUCTION,
+            REFLEXION_COMPLETION_INSTRUCTION=PY_REFLEXION_COMPLETION_INSTRUCTION,
+            SIMPLE_COMPLETION_INSTRUCTION=PY_SIMPLE_COMPLETION_INSTRUCTION,
+            fix_body=py_fix_indentation
+        )
+
+
+    def internal_tests(self, func_sig: str, model: str, committee_size: int = 1, max_num_tests: int = 5) -> List[str]:
+        def parse_tests(tests: str) -> List[str]:
+            return [test.strip() for test in tests.splitlines() if "assert" in test]
+        """
+        Generates tests for a function using a refinement technique with the number
+        of specified commmittee members.
+        """
+        return generic_generate_internal_tests(
+            func_sig=func_sig,
+            model=model,
+            committee_size=committee_size,
+            max_num_tests=max_num_tests,
+            TEST_GENERATION_FEW_SHOT=PY_TEST_GENERATION_FEW_SHOT,
+            TEST_GENERATION_CHAT_INSTRUCTION=PY_TEST_GENERATION_CHAT_INSTRUCTION,
+            TEST_GENERATION_COMPLETION_INSTRUCTION=PY_TEST_GENERATION_COMPLETION_INSTRUCTION,
+            parse_tests=parse_tests,
+            is_syntax_valid=py_is_syntax_valid,
+        )
 
 
 DUMMY_FUNC_SIG = "def func():"

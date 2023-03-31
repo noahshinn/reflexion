@@ -1,6 +1,6 @@
 from utils import write_jsonl
-from executors import py_evaluate, py_execute, rs_evaluate, rs_execute
-from generators import py_generate_func_impl, py_generate_self_reflection, py_generate_internal_tests, rs_generate_func_impl, rs_generate_self_reflection, rs_generate_internal_tests
+from executors import executor_factory
+from generators import generator_factory
 
 from typing import List
 
@@ -14,33 +14,8 @@ def run_reflexion(
     log_path: str,
     verbose: bool
 ) -> None:
-    # should handle more languages later
-    # someone do this but arrange it better
-    evaluate = None
-    execute = None
-    self_reflection_generator = None
-    func_impl_generator = None
-    internal_test_generator = None
-    if language == "python" or language == "py":
-        evaluate = py_evaluate
-        execute = py_execute
-        self_reflection_generator = py_generate_self_reflection
-        func_impl_generator = py_generate_func_impl
-        internal_test_generator = py_generate_internal_tests
-    elif language == "rust" or language == "rs":
-        evaluate = rs_evaluate
-        execute = rs_execute
-        self_reflection_generator = rs_generate_self_reflection
-        func_impl_generator = rs_generate_func_impl
-        internal_test_generator = rs_generate_internal_tests
-    else:
-        raise NotImplementedError(f"language {language} not supported")
-
-    assert not evaluate is None
-    assert not execute is None
-    assert not self_reflection_generator is None
-    assert not func_impl_generator is None
-    assert not internal_test_generator is None
+    exe = executor_factory(language)
+    gen = generator_factory(language)
 
     num_items = len(dataset)
     num_success = 0
@@ -50,12 +25,12 @@ def run_reflexion(
         reflections = []
         cur_func_impl = ""
         while cur_pass < pass_at_k and not is_solved:
-            tests_i = internal_test_generator(item["prompt"], model, 1)
+            tests_i = gen.internal_tests(item["prompt"], model, 1)
 
             # first attempt
-            cur_func_impl = func_impl_generator(item["prompt"], model, "simple")
+            cur_func_impl = gen.func_impl(item["prompt"], model, "simple")
             assert isinstance(cur_func_impl, str)
-            is_passing, feedback, _ = execute(cur_func_impl, tests_i)
+            is_passing, feedback, _ = exe.execute(cur_func_impl, tests_i)
 
             # if solved, exit early
             if is_passing:
@@ -68,12 +43,12 @@ def run_reflexion(
             cur_feedback = feedback
             while cur_iter < max_iters:
                 # get self-reflection
-                reflection = self_reflection_generator(
+                reflection = gen.self_reflection(
                     cur_func_impl, cur_feedback, model)
                 reflections += [reflection]
 
                 # apply self-reflection in the next attempt
-                cur_func_impl = func_impl_generator(
+                cur_func_impl = gen.func_impl(
                     func_sig=item["prompt"],
                     model=model,
                     strategy="reflexion",
@@ -84,11 +59,11 @@ def run_reflexion(
                 assert isinstance(cur_func_impl, str)
 
                 # check if all internal unit tests pass
-                is_passing, cur_feedback, _ = execute(cur_func_impl, tests_i)
+                is_passing, cur_feedback, _ = exe.execute(cur_func_impl, tests_i)
 
                 # if solved, check if it passes the real tests, exit early
                 if is_passing or cur_iter == max_iters - 1:
-                    is_passing = evaluate(
+                    is_passing = exe.evaluate(
                         item["entry_point"], cur_func_impl, item["test"], timeout=10)
                     if is_passing:
                         item["solution"] = cur_func_impl
