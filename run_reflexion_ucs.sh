@@ -1,5 +1,5 @@
 python main.py \
-  --run_name "reflexion_ucs_plays_with_the_ferris_crab" \
+  --run_name "reflexion_ucs_plays_with_the_ferris_crab_2" \
   --root_dir "root" \
   --dataset_path ./benchmarks/human_eval_rs.jsonl \
   --strategy "reflexion-ucs" \
