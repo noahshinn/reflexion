@@ -1,5 +1,6 @@
-from utils import read_jsonl, write_jsonl
 import sys
+from utils import read_jsonl, write_jsonl
+
 
 def generate_dataset(input_file, output_file):
     final = []
