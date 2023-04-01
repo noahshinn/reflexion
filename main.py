@@ -39,10 +39,13 @@ def main(args):
     if not os.path.exists(args.root_dir):
         os.makedirs(args.root_dir)
 
+    # get the dataset name
+    dataset_name = os.path.basename(args.dataset_path).replace("jsonl", "")
+
     # check if log path already exists
     log_dir = os.path.join(args.root_dir, args.run_name)
     log_path = os.path.join(
-        log_dir, f"{args.strategy}_{args.max_iters}_{args.model}_pass_at_k_{args.pass_at_k}_{args.language}.jsonl")
+        log_dir, f"{dataset_name}_{args.strategy}_{args.max_iters}_{args.model}_pass_at_k_{args.pass_at_k}_{args.language}.jsonl")
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
     if os.path.exists(log_path):

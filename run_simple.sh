@@ -1,7 +1,7 @@
 python main.py \
-  --run_name "simple_rust_run" \
+  --run_name "simple_mbpp_py" \
   --root_dir "root" \
-  --dataset_path ./benchmarks/human_eval_rs.jsonl \
+  --dataset_path ./benchmarks/mbpp-py.jsonl \
   --strategy "simple" \
   --language "rs" \
   --model "gpt-4" \

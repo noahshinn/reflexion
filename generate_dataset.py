@@ -1,11 +1,16 @@
 import sys
-from utils import read_jsonl, write_jsonl
+from datasets.load import load_dataset
+from utils import write_jsonl
+
+assert len(sys.argv) == 2, "Usage: python generate_dataset.py <MultiPL-E huggingface dataset name>"
+DATASET_NAME = sys.argv[1]
 
 
-def generate_dataset(input_file, output_file):
+def download_dataset(dataset_name: str):
+    dataset = load_dataset("nuprl/MultiPL-E", dataset_name)
+
     final = []
-    data = read_jsonl(input_file)
-    for item in data:
+    for item in dataset["test"]:
         name = item["name"]
         entry = "_".join(name.split("_")[2:])
         print(entry)
@@ -14,15 +19,13 @@ def generate_dataset(input_file, output_file):
         del item["tests"]
         final.append(item)
 
-    _output_file = open(output_file, "w")
-    _output_file.close()
+    output_path = f"./benchmarks/{dataset_name}"
+    _output_file = open(output_path, "w").close()
 
-    write_jsonl(output_file, final)
+    
+    write_jsonl(output_path, final)
+    print(f"dumped to `{output_path}`")
 
 
 if __name__ == "__main__":
-    assert len(sys.argv) == 3, "Usage: python generate_dataset.py input_file output_file"
-    assert sys.argv[1].endswith(".jsonl"), "Input file must be a .jsonl file"
-    input_file = sys.argv[1]
-    output_file = sys.argv[2]
-    generate_dataset(input_file, output_file)
+    download_dataset(DATASET_NAME)

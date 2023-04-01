@@ -117,7 +117,7 @@ def generic_generate_self_reflection(
 def gpt_completion(
         model: str,
         prompt: str,
-        max_tokens: int = 256,
+        max_tokens: int = 1024,
         stop_strs: Optional[List[str]] = None,
         temperature: float = 0.0,
         num_comps=1,
@@ -144,7 +144,7 @@ def gpt_chat(
     model: str,
     system_message: str,
     user_message: str,
-    max_tokens: int = 256,
+    max_tokens: int = 1024,
     temperature: float = 0.0,
     num_comps=1,
 ) -> Union[List[str], str]:
