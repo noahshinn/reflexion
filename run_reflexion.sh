@@ -1,9 +1,9 @@
 python main.py \
-  --run_name "reflexion_mbpp_py2" \
+  --run_name "reflexion_mbpp_rs" \
   --root_dir "root" \
-  --dataset_path ./benchmarks/mbpp-py.jsonl \
+  --dataset_path ./benchmarks/mbpp-rs.jsonl \
   --strategy "reflexion" \
-  --language "py" \
+  --language "rs" \
   --model "gpt-4" \
   --pass_at_k "1" \
   --max_iters "5" \

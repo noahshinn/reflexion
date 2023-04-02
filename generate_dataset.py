@@ -19,7 +19,7 @@ def download_dataset(dataset_name: str):
         del item["tests"]
         final.append(item)
 
-    output_path = f"./benchmarks/{dataset_name}"
+    output_path = f"./benchmarks/{dataset_name}.jsonl"
     _output_file = open(output_path, "w").close()
 
     

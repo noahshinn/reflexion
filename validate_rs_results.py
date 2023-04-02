@@ -2,7 +2,7 @@ import sys
 import signal
 
 from utils import read_jsonl
-from executors.rs_executor import rs_evaluate
+from executors import RsExecutor
 
 TIMEOUT = 5  # seconds
 
@@ -30,14 +30,15 @@ def validate_rs_results(log_path: str):
             func_impl = item["solution"]
             num_tests = count_test_cases(item["test"])
 
-            res = rs_evaluate(item["entry_point"], func_impl, item["test"])   
-            if res is None:
-                red_text_out = red_text(f"failed but should have passed!")
-                print(f"Test {i}: {red_text_out}")
-            else:
+            rs_executor = RsExecutor()
+            res = rs_executor.evaluate(item["entry_point"], func_impl, item["test"])   
+            if res:
                 green_text_out = green_text(f"passes {num_tests}/{num_tests} test cases")
                 print(f"Test {i}: {green_text_out}")
                 num_success += 1
+            else:
+                red_text_out = red_text(f"failed but should have passed!")
+                print(f"Test {i}: {red_text_out}")
         else:
             red_text_out = red_text(f"failed!")
             print(f"Test {i}: {red_text_out}")
