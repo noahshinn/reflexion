@@ -15,7 +15,6 @@ def run_simple(
         log_path: str,
         verbose: bool
     ) -> None:
-    # someone implement more languages
     exe = executor_factory(language)
     gen = generator_factory(language)
     

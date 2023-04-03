@@ -74,7 +74,7 @@ def run_reflexion_ucs(
             # if solved, exit--pass_at_k 1 early
             if is_passing:
                 debug_print("solved at first attempt")
-                is_solved = exe.evaluate(item["prompt"], cur_func_impl, item["test"])
+                is_solved = exe.evaluate(item["entry_point"], cur_func_impl, item["test"])
                 num_success += 1 if is_solved else 0
                 break
 

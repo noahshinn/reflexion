@@ -34,8 +34,10 @@ def run_reflexion(
 
             # if solved, exit early
             if is_passing:
-                is_solved = True
-                num_success += 1
+                is_passing = exe.evaluate(
+                    item["entry_point"], cur_func_impl, item["test"], timeout=10)
+                is_solved = is_passing
+                num_success += int(is_passing)
                 break
 
             # use self-reflection to iteratively improve
