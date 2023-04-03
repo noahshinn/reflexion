@@ -1,9 +1,9 @@
 python main.py \
-  --run_name "simple_mbpp_rs" \
+  --run_name "simple_mbpp_py" \
   --root_dir "root" \
-  --dataset_path ./benchmarks/mbpp-rs.jsonl \
+  --dataset_path ./benchmarks/mbpp-py.jsonl \
   --strategy "simple" \
-  --language "rs" \
+  --language "py" \
   --model "gpt-4" \
   --pass_at_k "1" \
   --max_iters "1" \
