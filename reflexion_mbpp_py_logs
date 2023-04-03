@@ -12562,3 +12562,26 @@ def find_even_pair(A: List[int]) -> int:
             if (A[i] ^ A[j]) % 2 == 0:
                 count += 1
     return count
+completed 376/397: acc = 0.77
+['assert opposite_Signs(0, 0) == False', 'assert opposite_Signs(3, 8) == False', 'assert opposite_Signs(-10, 20) == True', 'assert opposite_Signs(-5, -7) == False', 'assert opposite_Signs(0, -5) == False']
+def opposite_Signs(x: int, y: int) -> bool:
+    """
+	Write a python function to check whether the given two integers have opposite sign or not.
+	"""
+    if x < 0 and y > 0:
+        return True
+    elif x > 0 and y < 0:
+        return True
+    else:
+        return False
+completed 377/397: acc = 0.77
+['assert sort_sublists([["single"], ["element"]]) == [["single"], ["element"]]', 'assert sort_sublists([["a", "c", "b"], ["z", "y", "x"]]) == [["a", "b", "c"], ["x", "y", "z"]]', 'assert sort_sublists([["hello", "world"], ["python", "java", "c++"]]) == [["hello", "world"], ["c++", "java", "python"]]', 'assert sort_sublists([[], []]) == [[], []]', 'assert sort_sublists([["one", "two", "three"], ["four", "five", "six"]]) == [["one", "three", "two"], ["five", "four", "six"]]']
+from typing import List
+
+def sort_sublists(list1: List[List[str]]) -> List[List[str]]:
+    """
+	Write a function to sort each sublist of strings in a given list of lists.
+	"""
+    for sublist in list1:
+        sublist.sort()
+    return list1
