@@ -73,7 +73,7 @@ class PyGenerator(Generator):
             SIMPLE_CHAT_INSTRUCTION=PY_SIMPLE_CHAT_INSTRUCTION,
             REFLEXION_COMPLETION_INSTRUCTION=PY_REFLEXION_COMPLETION_INSTRUCTION,
             SIMPLE_COMPLETION_INSTRUCTION=PY_SIMPLE_COMPLETION_INSTRUCTION,
-            fix_body=py_fix_indentation
+            fix_body=(lambda x: x) if strategy == "simple" else py_fix_indentation
         )
 
 
