@@ -8,6 +8,7 @@ from typing import List
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+
 def read_jsonl(path: str) -> List[dict]:
     if not os.path.exists(path):
         raise FileNotFoundError(f"File `{path}` does not exist.")
@@ -19,10 +20,12 @@ def read_jsonl(path: str) -> List[dict]:
             items += [item]
     return items
 
+
 def write_jsonl(path: str, data: List[dict], append: bool = False):
     with jsonlines.open(path, mode='a' if append else 'w') as writer:
         for item in data:
             writer.write(item)
+
 
 def read_jsonl_gz(path: str) -> List[dict]:
     if not path.endswith(".jsonl.gz"):
@@ -30,3 +33,23 @@ def read_jsonl_gz(path: str) -> List[dict]:
     with gzip.open(path, "rt") as f:
         data = [json.loads(line) for line in f]
     return data
+
+
+# generator that returns the item and the index in the dataset.
+# if the results_path exists, it will skip all items that have been processed
+# before.
+def enumerate_resume(dataset, results_path):
+    if not os.path.exists(results_path):
+        for i, item in enumerate(dataset):
+            yield i, item
+    else:
+        count = 0
+        with jsonlines.open(results_path) as reader:
+            for item in reader:
+                count += 1
+
+        for i, item in enumerate(dataset):
+            # skip items that have been processed before
+            if i < count:
+                continue
+            yield i, item

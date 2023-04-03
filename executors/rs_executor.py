@@ -176,27 +176,35 @@ class RsExecutor(Executor):
         TODO: do it actually
         """
         tmp_dir, tmp_path = create_temp_project()
+        print(f"Evaluating\n{func + test}", flush=True)
         write_to_file_toplevel(tmp_path, func + test)
 
         res = run_with_timeout(
-            "cargo check --message-format=json", tmp_dir, timeout=timeout)
+            "cargo check --message-format=json", tmp_dir, timeout=timeout, print_debug=True)
         assert res is not None, "Timeout in cargo check, wow"
 
         errs = grab_compile_errs(res[0])  # (check returns stdin)
         if len(errs) > 0:
             # cleanup the temp directory
             os.system(f"rm -rf {tmp_dir}")
+            print("Compile errors. Failed eval", flush=True)
             return False
 
         # compile and run the binary
         res = run_with_timeout("cargo run", tmp_dir,
-                               timeout=timeout, print_debug=False)
+                               timeout=timeout, print_debug=True)
         os.system(f"rm -rf {tmp_dir}")
 
         if res is None:
+            print("Timeout?. Failed eval", flush=True)
             return False
         else:
             errs = grab_runtime_errs(res[1])
+            if len(errs) > 0:
+                print("Runtime errors. Failed eval", flush=True)
+                return False
+
+            print("Passed eval", flush=True)
             return len(errs) == 0
 
 
@@ -295,16 +303,26 @@ def grab_runtime_errs(inp: str) -> List[RuntimeErr]:
     curr_left = None
     panic_reason = None
     for line in split:
-        if "panicked at" in line:
+        if "fatal runtime" in line:
+            # we have a panic
+            panic_idx = line.index("fatal runtime")
+            panic_reason = line[panic_idx + len("fatal runtime") + 1:]
+        elif "panicked at" in line:
             panic_idx = line.index("panicked at")
             # strip source line if it exists
             if "src/main.rs" in line:
                 line = line[:line.index("src/main.rs")]
             panic_reason = line[panic_idx + len("panicked at") + 1:]
         elif "left:" in line:
-            curr_left = line.split("`")[1]
+            split = line.split("`")
+            if len(split) < 2:
+                continue
+            curr_left = split[1]
         elif "right:" in line:
-            curr_right = line.split("`")[1]
+            split = line.split("`")
+            if len(split) < 2:
+                continue
+            curr_right = split[1]
             # get the line and column number
             fileinto = line.split(",")[-1]
             line = int(fileinto.split(":")[1])

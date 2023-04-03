@@ -16,6 +16,7 @@ def download_dataset(dataset_name: str):
         print(entry)
         item["entry_point"] = entry
         item["test"] = item["tests"]
+        item["test"] = item["test"][1:] # there is some garbage at the start
         del item["tests"]
         final.append(item)
 
