@@ -1,0 +1,648 @@
+
+Starting run with the following parameters:
+strategy: reflexion
+pass@k: 1
+
+Loading the dataset...
+Loaded 164 examples
+['assert has_close_elements([1.0], 0.5) == False', 'assert has_close_elements([1.0, 1.5, 2.0, 2.5, 3.0], 0.5) == True', 'assert has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3) == True', 'assert has_close_elements([1.0, 2.0, 3.9, 4.0, 5.0, 2.2], 0.3) == True', 'assert has_close_elements([1.0, 2.0, 3.0], 0.5) == False']
+from typing import List
+
+
+def has_close_elements(numbers: List[float], threshold: float) -> bool:
+    """ Check if in given list of numbers, are any two numbers closer to each other than
+    given threshold.
+    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)
+    False
+    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
+    True
+    """
+    for i in range(len(numbers)):
+        for j in range(i + 1, len(numbers)):
+            if abs(numbers[i] - numbers[j]) < threshold:
+                return True
+    return False
+The implementation is incorrect because it checks if the difference between two numbers is strictly less than the threshold. However, the problem statement asks if any two numbers are closer to each other than the given threshold, which means the difference can be equal to the threshold as well. The condition in the if statement should be changed to include the case when the difference is equal to the threshold.
+from typing import List
+
+
+def has_close_elements(numbers: List[float], threshold: float) -> bool:
+    """ Check if in given list of numbers, are any two numbers closer to each other than
+    given threshold.
+    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)
+    False
+    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
+    True
+    """
+    for i in range(len(numbers)):
+        for j in range(i + 1, len(numbers)):
+            if abs(numbers[i] - numbers[j]) <= threshold:
+                return True
+    return False
+completed 1/164: acc = 1.0
+["assert separate_paren_groups('(( ))( )( )') == ['(())', '()', '()']", "assert separate_paren_groups('( ) (( )) (( )( ))') == ['()', '(())', '(()())']", "assert separate_paren_groups('(( ))(( ))') == ['(())', '(())']", "assert separate_paren_groups('(( ))( )(( ))( )(( ))') == ['(())', '()', '(())', '()', '(())']", "assert separate_paren_groups('(( ))( )(( ))( )(( ))( )') == ['(())', '()', '(())', '()', '(())', '()']"]
+from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
+    """ Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separate_paren_groups('( ) (( )) (( )( ))')
+    ['()', '(())', '(()())']
+    """
+    result = []
+    stack = []
+    current_group = ""
+
+    for char in paren_string:
+        if char == " ":
+            continue
+        elif char == "(":
+            if not stack:
+                current_group = ""
+            stack.append(char)
+            current_group += char
+        elif char == ")":
+            if stack:
+                stack.pop()
+                current_group += char
+                if not stack:
+                    result.append(current_group)
+
+    return result
+completed 2/164: acc = 1.0
+['assert truncate_number(0.0) == 0.0', 'assert truncate_number(5.678) == 0.678', 'assert truncate_number(2.123) == 0.123', 'assert truncate_number(1.0) == 0.0', 'assert truncate_number(3.5) == 0.5']
+
+
+def truncate_number(number: float) -> float:
+    """ Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncate_number(3.5)
+    0.5
+    """
+    integer_part = int(number)
+    decimal_part = number - integer_part
+    return decimal_part
+The implementation is incorrect because it returns the decimal part with floating-point inaccuracies. Due to the way floating-point numbers are represented in computers, the subtraction operation can result in small errors, causing the returned decimal part to be slightly off from the expected value.
+
+
+def truncate_number(number: float) -> float:
+    """ Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncate_number(3.5)
+    0.5
+    """
+    integer_part = int(number)
+    decimal_part = round(number - integer_part, 15)
+    return decimal_part
+completed 3/164: acc = 1.0
+['assert below_zero([1, 2, -4, 5]) == True', 'assert below_zero([1, 2, -3, -2, 4]) == True', 'assert below_zero([1, -1, 2, -2, 3, -3]) == False', 'assert below_zero([1, -2, 3, -4]) == False', 'assert below_zero([1, 2, 3]) == False']
+from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """ You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """
+    balance = 0
+    for operation in operations:
+        balance += operation
+        if balance < 0:
+            return True
+    return False
+The implementation is incorrect because it returns True as soon as the balance goes below zero, even if the balance becomes positive again later in the list of operations. The function should only return True if the balance remains below zero after all operations are processed.
+from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """ You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """
+    balance = 0
+    below_zero_flag = False
+    for operation in operations:
+        balance += operation
+        if balance < 0:
+            below_zero_flag = True
+        elif below_zero_flag and balance >= 0:
+            below_zero_flag = False
+    return below_zero_flag
+The implementation is incorrect because it resets the below_zero_flag to False when the balance becomes non-negative again. This causes the function to return False even if the balance has fallen below zero at some point in the past. The function should return True as soon as the balance falls below zero and not change the flag back to False.
+from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """ You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """
+    balance = 0
+    for operation in operations:
+        balance += operation
+        if balance < 0:
+            return True
+    return False
+The implementation is incorrect because it returns True as soon as the balance goes below zero, even if the balance becomes positive again later in the list of operations. The function should only return True if the balance remains below zero after all operations are processed.
+from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """ You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """
+    balance = 0
+    below_zero_flag = False
+    for operation in operations:
+        balance += operation
+        if balance < 0:
+            below_zero_flag = True
+        elif below_zero_flag and balance >= 0:
+            below_zero_flag = False
+    return below_zero_flag
+The implementation is incorrect because it only returns True if the balance is below zero at the end of the operations. It does not account for cases where the balance goes below zero and then recovers to a non-negative value. The below_zero_flag should return True as soon as the balance goes below zero, without resetting it back to False.
+from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """ You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """
+    balance = 0
+    for operation in operations:
+        balance += operation
+        if balance < 0:
+            return True
+    return False
+completed 4/164: acc = 1.0
+['assert mean_absolute_deviation([1.1, 2.2, 3.3, 4.4, 5.5]) == 1.32', 'assert mean_absolute_deviation([1.0, 2.0, 3.0, 4.0]) == 1.0', 'assert mean_absolute_deviation([1.5, 2.5, 3.5, 4.5]) == 1.0', 'assert mean_absolute_deviation([-1.0, 0.0, 1.0]) == 0.6666666666666666', 'assert mean_absolute_deviation([1.0, 1.0, 1.0, 1.0]) == 0.0']
+from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """ For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """
+    n = len(numbers)
+    mean = sum(numbers) / n
+    absolute_deviations = [abs(x - mean) for x in numbers]
+    mad = sum(absolute_deviations) / n
+    return mad
+completed 5/164: acc = 1.0
+['assert intersperse([1, 2, 3], 4) == [1, 4, 2, 4, 3]', 'assert intersperse([1, 2, 3], 0) == [1, 0, 2, 0, 3]', 'assert intersperse([1, 1, 1, 1], 2) == [1, 2, 1, 2, 1, 2, 1]', 'assert intersperse([], 4) == []', 'assert intersperse([5, 10, 15], 3) == [5, 3, 10, 3, 15]']
+from typing import List
+
+
+def intersperse(numbers: List[int], delimeter: int) -> List[int]:
+    """ Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    >>> intersperse([], 4)
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """
+    result = []
+    for i, num in enumerate(numbers):
+        if i > 0:
+            result.append(delimeter)
+        result.append(num)
+    return result
+completed 6/164: acc = 1.0
+["assert parse_nested_parens('((())()) (())') == [3, 2]", "assert parse_nested_parens('()') == [1]", "assert parse_nested_parens('()()()()') == [1, 1, 1, 1]", "assert parse_nested_parens('((())()())') == [3]", "assert parse_nested_parens('((()))') == [3]"]
+from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """ Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """
+    result = []
+    for group in paren_string.split():
+        level = 0
+        max_level = 0
+        for char in group:
+            if char == '(':
+                level += 1
+                max_level = max(max_level, level)
+            elif char == ')':
+                level -= 1
+        result.append(max_level)
+    return result
+The implementation is incorrect because it treats the entire input string as a single group of parentheses, rather than considering each space-separated group individually. As a result, it only returns the maximum nesting level for the entire input string, rather than for each individual group.
+from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """ Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """
+    result = []
+    groups = paren_string.split()
+    for group in groups:
+        level = 0
+        max_level = 0
+        for char in group:
+            if char == '(':
+                level += 1
+                max_level = max(max_level, level)
+            elif char == ')':
+                level -= 1
+        result.append(max_level)
+    return result
+The current implementation does not handle separate groups of parentheses correctly when they are not separated by spaces. It treats them as a single group, leading to incorrect results for cases like '()()()()'.
+from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """ Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """
+    result = []
+    groups = paren_string.split()
+    for group in groups:
+        level = 0
+        max_level = 0
+        current_group = []
+        for char in group:
+            if char == '(':
+                level += 1
+                max_level = max(max_level, level)
+                current_group.append(char)
+            elif char == ')':
+                level -= 1
+                current_group.append(char)
+                if level == 0:
+                    result.append(max_level)
+                    max_level = 0
+                    current_group = []
+    return result
+completed 7/164: acc = 1.0
+["assert filter_by_substring(['cat', 'dog', 'fish', 'bird'], 'z') == []", "assert filter_by_substring(['this', 'is', 'a', 'test'], 't') == ['this', 'test']", "assert filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a') == ['abc', 'bacd', 'array']", "assert filter_by_substring(['apple', 'banana', 'cherry', 'grape'], 'p') == ['apple', 'grape']", "assert filter_by_substring([], 'a') == []"]
+from typing import List
+
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """ Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """
+    return [s for s in strings if substring in s]
+completed 8/164: acc = 1.0
+['assert sum_product([0, 1, 2, 3]) == (6, 0)', 'assert sum_product([1, 1, 1, 1]) == (4, 1)', 'assert sum_product([1, 2, 3, 4]) == (10, 24)', 'assert sum_product([]) == (0, 1)', 'assert sum_product([-1, 2, -3, 4]) == (2, 24)']
+from typing import List, Tuple
+
+
+def sum_product(numbers: List[int]) -> Tuple[int, int]:
+    """ For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+    Empty sum should be equal to 0 and empty product should be equal to 1.
+    >>> sum_product([])
+    (0, 1)
+    >>> sum_product([1, 2, 3, 4])
+    (10, 24)
+    """
+    total_sum = 0
+    total_product = 1
+
+    for number in numbers:
+        total_sum += number
+        total_product *= number
+
+    return (total_sum, total_product)
+completed 9/164: acc = 1.0
+['assert rolling_max([1, 3, 5, 7, 9]) == [1, 3, 5, 7, 9]', 'assert rolling_max([-5, -3, -1, 1, 3, 5]) == [-5, -3, -1, 1, 3, 5]', 'assert rolling_max([1, 2, 3, 2, 3, 4, 2]) == [1, 2, 3, 3, 3, 4, 4]', 'assert rolling_max([-1, -2, -3, -4, -5]) == [-1, -1, -1, -1, -1]', 'assert rolling_max([1, 4, 2, 8, 5, 7]) == [1, 4, 4, 8, 8, 8]']
+from typing import List, Tuple
+
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    result = []
+    current_max = float('-inf')
+
+    for num in numbers:
+        current_max = max(current_max, num)
+        result.append(current_max)
+
+    return result
+completed 10/164: acc = 1.0
+['assert make_palindrome("madam") == "madam"', 'assert is_palindrome("") == True', 'assert make_palindrome("hello") == "helloolleh"', 'assert is_palindrome("racecar") == True', 'assert make_palindrome("cat") == "catac"']
+
+
+def is_palindrome(string: str) -> bool:
+    """ Test if given string is a palindrome """
+    return string == string[::-1]
+
+
+def make_palindrome(string: str) -> str:
+    """ Find the shortest palindrome that begins with a supplied string.
+    Algorithm idea is simple:
+    - Find the longest postfix of supplied string that is a palindrome.
+    - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.
+    >>> make_palindrome('')
+    ''
+    >>> make_palindrome('cat')
+    'catac'
+    >>> make_palindrome('cata')
+    'catac'
+    """
+    if is_palindrome(string):
+        return string
+
+    for i in range(len(string) - 1, 0, -1):
+        if is_palindrome(string[i:]):
+            return string + string[:i][::-1]
+
+    return string + string[:-1][::-1]
+The implementation is incorrect because it finds the longest palindromic suffix and appends the reversed prefix before it to the original string. However, it should find the longest palindromic prefix and append the reversed suffix after it to form the shortest palindrome. This causes the function to return incorrect results for certain input strings, such as "hello".
+
+
+def is_palindrome(string: str) -> bool:
+    """ Test if given string is a palindrome """
+    return string == string[::-1]
+
+
+def make_palindrome(string: str) -> str:
+    """ Find the shortest palindrome that begins with a supplied string.
+    Algorithm idea is simple:
+    - Find the longest postfix of supplied string that is a palindrome.
+    - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.
+    >>> make_palindrome('')
+    ''
+    >>> make_palindrome('cat')
+    'catac'
+    >>> make_palindrome('cata')
+    'catac'
+    """
+    if is_palindrome(string):
+        return string
+
+    for i in range(len(string), 0, -1):
+        if is_palindrome(string[:i]):
+            return string + string[i:][::-1]
+
+    return string + string[1:][::-1]
+The implementation of the `make_palindrome` function is incorrect because it finds the longest palindromic prefix instead of the longest palindromic suffix. This causes the function to append the wrong characters to the input string, resulting in an incorrect palindrome.
+
+
+def is_palindrome(string: str) -> bool:
+    """ Test if given string is a palindrome """
+    return string == string[::-1]
+
+
+def make_palindrome(string: str) -> str:
+    """ Find the shortest palindrome that begins with a supplied string.
+    Algorithm idea is simple:
+    - Find the longest postfix of supplied string that is a palindrome.
+    - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.
+    >>> make_palindrome('')
+    ''
+    >>> make_palindrome('cat')
+    'catac'
+    >>> make_palindrome('cata')
+    'catac'
+    """
+    if is_palindrome(string):
+        return string
+
+    for i in range(len(string), 0, -1):
+        if is_palindrome(string[-i:]):
+            return string + string[:-i][::-1]
+
+    return string + string[:-1][::-1]
+The implementation of the make_palindrome function is incorrect because it finds the longest palindromic suffix and appends the reversed prefix to the end of the string. However, it should find the longest palindromic prefix and append the reversed suffix to the end of the string. This causes the function to produce incorrect results for certain input strings, such as "hello".
+
+
+def is_palindrome(string: str) -> bool:
+    """ Test if given string is a palindrome """
+    return string == string[::-1]
+
+
+def make_palindrome(string: str) -> str:
+    """ Find the shortest palindrome that begins with a supplied string.
+    Algorithm idea is simple:
+    - Find the longest postfix of supplied string that is a palindrome.
+    - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.
+    >>> make_palindrome('')
+    ''
+    >>> make_palindrome('cat')
+    'catac'
+    >>> make_palindrome('cata')
+    'catac'
+    """
+    if is_palindrome(string):
+        return string
+
+    for i in range(len(string), 0, -1):
+        if is_palindrome(string[:i]):
+            return string + string[i:][::-1]
+
+    return string + string[1:][::-1]
+The implementation of the `make_palindrome` function is incorrect because it finds the longest palindromic prefix instead of the longest palindromic suffix. As a result, it appends the reversed prefix instead of the reversed non-palindromic part of the string, leading to incorrect outputs for some test cases.
+
+
+def is_palindrome(string: str) -> bool:
+    """ Test if given string is a palindrome """
+    return string == string[::-1]
+
+
+def make_palindrome(string: str) -> str:
+    """ Find the shortest palindrome that begins with a supplied string.
+    Algorithm idea is simple:
+    - Find the longest postfix of supplied string that is a palindrome.
+    - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.
+    >>> make_palindrome('')
+    ''
+    >>> make_palindrome('cat')
+    'catac'
+    >>> make_palindrome('cata')
+    'catac'
+    """
+    if is_palindrome(string):
+        return string
+
+    for i in range(len(string), 0, -1):
+        if is_palindrome(string[-i:]):
+            return string + string[:-i][::-1]
+
+    return string + string[:-1][::-1]
+completed 11/164: acc = 1.0
+["assert string_xor('1001', '0110') == '1111'", "assert string_xor('111', '111') == '000'", "assert string_xor('010', '110') == '100'", "assert string_xor('000', '000') == '000'", "assert string_xor('101010', '010101') == '111111'"]
+from typing import List
+
+
+def string_xor(a: str, b: str) -> str:
+    """ Input are two strings a and b consisting only of 1s and 0s.
+    Perform binary XOR on these inputs and return result also as a string.
+    >>> string_xor('010', '110')
+    '100'
+    """
+    result = ""
+
+    for i in range(len(a)):
+        if a[i] == b[i]:
+            result += "0"
+        else:
+            result += "1"
+
+    return result
+completed 12/164: acc = 1.0
+["assert longest(['abc', 'def', 'ghi']) == 'abc'", "assert longest(['apple', 'banana', 'cherry']) == 'banana'", 'assert longest([]) == None', "assert longest(['a', 'b', 'c']) == 'a'", "assert longest(['abcd', 'efgh', 'ijkl', 'mnop']) == 'abcd'"]
+from typing import List, Optional
+
+
+def longest(strings: List[str]) -> Optional[str]:
+    """ Out of list of strings, return the longest one. Return the first one in case of multiple
+    strings of the same length. Return None in case the input list is empty.
+    >>> longest([])
+
+    >>> longest(['a', 'b', 'c'])
+    'a'
+    >>> longest(['a', 'bb', 'ccc'])
+    'ccc'
+    """
+    if not strings:
+        return None
+
+    longest_string = strings[0]
+    for string in strings:
+        if len(string) > len(longest_string):
+            longest_string = string
+
+    return longest_string
+completed 13/164: acc = 1.0
+['assert greatest_common_divisor(21, 14) == 7', 'assert greatest_common_divisor(25, 15) == 5', 'assert greatest_common_divisor(3, 5) == 1', 'assert greatest_common_divisor(100, 45) == 5', 'assert greatest_common_divisor(14, 28) == 14']
+
+
+def greatest_common_divisor(a: int, b: int) -> int:
+    """ Return a greatest common divisor of two integers a and b
+    >>> greatest_common_divisor(3, 5)
+    1
+    >>> greatest_common_divisor(25, 15)
+    5
+    """
+    while b:
+        a, b = b, a % b
+    return a
+completed 14/164: acc = 1.0
+["assert all_prefixes('abc') == ['a', 'ab', 'abc']", "assert all_prefixes('test') == ['t', 'te', 'tes', 'test']", "assert all_prefixes('hello') == ['h', 'he', 'hel', 'hell', 'hello']", "assert all_prefixes('a') == ['a']", "assert all_prefixes('xyz') == ['x', 'xy', 'xyz']"]
+from typing import List
+
+
+def all_prefixes(string: str) -> List[str]:
+    """ Return list of all prefixes from shortest to longest of the input string
+    >>> all_prefixes('abc')
+    ['a', 'ab', 'abc']
+    """
+    prefixes = []
+    for i in range(1, len(string) + 1):
+        prefixes.append(string[:i])
+    return prefixes
+completed 15/164: acc = 1.0
+["assert string_sequence(0) == '0'", "assert string_sequence(1) == '0 1'", "assert string_sequence(3) == '0 1 2 3'", "assert string_sequence(7) == '0 1 2 3 4 5 6 7'", "assert string_sequence(5) == '0 1 2 3 4 5'"]
+
+
+def string_sequence(n: int) -> str:
+    """ Return a string containing space-delimited numbers starting from 0 upto n inclusive.
+    >>> string_sequence(0)
+    '0'
+    >>> string_sequence(5)
+    '0 1 2 3 4 5'
+    """
+    return " ".join(str(i) for i in range(n+1))
+completed 16/164: acc = 1.0
+["assert count_distinct_characters('1234567890') == 10", "assert count_distinct_characters('Jerry') == 4", "assert count_distinct_characters('!@#$%^&*()') == 10", "assert count_distinct_characters('') == 0", "assert count_distinct_characters('HelloWorld') == 7"]
+
+
+def count_distinct_characters(string: str) -> int:
+    """ Given a string, find out how many distinct characters (regardless of case) does it consist of
+    >>> count_distinct_characters('xyzXYZ')
+    3
+    >>> count_distinct_characters('Jerry')
+    4
+    """
+    lower_string = string.lower()
+    distinct_chars = set(lower_string)
+    return len(distinct_chars)
+completed 17/164: acc = 1.0
+["assert parse_music('o o| o| .| .| .| o o|') == [4, 2, 2, 1, 1, 1, 4, 2]", "assert parse_music('.| .| .| .|') == [1, 1, 1, 1]", "assert parse_music('o| o| o| o|') == [2, 2, 2, 2]", "assert parse_music('o o o o') == [4, 4, 4, 4]", "assert parse_music('o| .| .| o o| o|') == [2, 1, 1, 4, 2, 2]"]
+from typing import List
+
+
+def parse_music(music_string: str) -> List[int]:
+    """ Input to this function is a string representing musical notes in a special ASCII format.
+    Your task is to parse this string and return list of integers corresponding to how many beats does each
+    not last.
+
+    Here is a legend:
+    'o' - whole note, lasts four beats
+    'o|' - half note, lasts two beats
+    '.|' - quater note, lasts one beat
+
+    >>> parse_music('o o| .| o| o| .| .| .| .| o o')
+    [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
+    """
+    beats = []
+    notes = music_string.split()
+
+    for note in notes:
+        if note == 'o':
+            beats.append(4)
+        elif note == 'o|':
+            beats.append(2)
+        elif note == '.|':
+            beats.append(1)
+
+    return beats
+completed 18/164: acc = 1.0
