@@ -59,9 +59,9 @@ class PyExecutor(Executor):
         """
         code = f"""{func}
 
-    {test}
+{test}
 
-    check({name})
+check({name})
     """
         try:
             # Set the alarm
