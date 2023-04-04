@@ -76,6 +76,10 @@ check({name})
         except Exception:
             return False
 
+class PyLeetExecutor(PyExecutor):
+    def evaluate(self, name: str, func: str, test: str, timeout: int = 5) -> bool:
+        raise NotImplementedError
+
 def get_call_str(assert_statement: str) -> str:
     call_str = ast.parse(assert_statement).body[0].test.left # type: ignore
     return astunparse.unparse(call_str).strip()
