@@ -1,6 +1,6 @@
 import warnings
 from lazzzy.ucs import ucs
-from utils import write_jsonl
+from utils import enumerate_resume, write_jsonl
 from executors import executor_factory
 from generators import generator_factory
 
@@ -52,7 +52,7 @@ def run_reflexion_ucs(
 
     num_items = len(dataset)
     num_success = 0
-    for i, item in enumerate(dataset):
+    for i, item in enumerate_resume(dataset, log_path):
         cur_pass = 0
         is_solved = False
         reflections = []
@@ -74,7 +74,7 @@ def run_reflexion_ucs(
             # if solved, exit--pass_at_k 1 early
             if is_passing:
                 debug_print("solved at first attempt")
-                is_solved = exe.evaluate(item["prompt"], cur_func_impl, item["test"])
+                is_solved = exe.evaluate(item["entry_point"], cur_func_impl, item["test"])
                 num_success += 1 if is_solved else 0
                 break
 

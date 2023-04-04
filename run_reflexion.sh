@@ -1,7 +1,7 @@
 python main.py \
-  --run_name "reflexion_human_eval_py_logging" \
+  --run_name "reflexion_mbpp_py" \
   --root_dir "root" \
-  --dataset_path ./benchmarks/humaneval-py.jsonl.gz \
+  --dataset_path ./benchmarks/mbpp-py.jsonl \
   --strategy "reflexion" \
   --language "py" \
   --model "gpt-4" \

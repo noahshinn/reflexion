@@ -1,7 +1,7 @@
 python main.py \
-  --run_name "simple_human_eval_py_logging" \
+  --run_name "simple_mbpp_py2" \
   --root_dir "root" \
-  --dataset_path ./benchmarks/humaneval-py.jsonl.gz \
+  --dataset_path ./benchmarks/mbpp-py.jsonl \
   --strategy "simple" \
   --language "py" \
   --model "gpt-4" \

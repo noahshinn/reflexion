@@ -1,4 +1,4 @@
-from utils import write_jsonl
+from utils import enumerate_resume, write_jsonl
 from executors import executor_factory
 from generators import generator_factory
 
@@ -15,13 +15,12 @@ def run_simple(
         log_path: str,
         verbose: bool
     ) -> None:
-    # someone implement more languages
     exe = executor_factory(language)
     gen = generator_factory(language)
     
     num_items = len(dataset)
     num_success = 0
-    for i, item in enumerate(dataset):
+    for i, item in enumerate_resume(dataset, log_path):
         cur_pass = 0
         is_solved = False
         cur_func_impl = ""

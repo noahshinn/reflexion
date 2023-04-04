@@ -48,9 +48,6 @@ def main(args):
         log_dir, f"{dataset_name}_{args.strategy}_{args.max_iters}_{args.model}_pass_at_k_{args.pass_at_k}_{args.language}.jsonl")
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
-    if os.path.exists(log_path):
-        raise ValueError(
-            f"Log path `{log_path}` already exists in `{log_dir}`")
 
     # check if the strategy is valid
     if args.strategy not in ["simple", "reflexion", "reflexion-ucs"]:

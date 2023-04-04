@@ -1,4 +1,4 @@
-from utils import write_jsonl
+from utils import enumerate_resume, write_jsonl
 from executors import executor_factory
 from generators import generator_factory
 
@@ -19,7 +19,7 @@ def run_reflexion(
 
     num_items = len(dataset)
     num_success = 0
-    for i, item in enumerate(dataset):
+    for i, item in enumerate_resume(dataset, log_path):
         cur_pass = 0
         is_solved = False
         reflections = []
@@ -34,8 +34,10 @@ def run_reflexion(
 
             # if solved, exit early
             if is_passing:
-                is_solved = True
-                num_success += 1
+                is_passing = exe.evaluate(
+                    item["entry_point"], cur_func_impl, item["test"], timeout=10)
+                is_solved = is_passing
+                num_success += int(is_passing)
                 break
 
             # use self-reflection to iteratively improve

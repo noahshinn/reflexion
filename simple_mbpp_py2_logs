@@ -1,0 +1,5164 @@
+
+Starting run with the following parameters:
+strategy: simple
+pass@k: 1
+
+Loading the dataset...
+Loaded 397 examples
+def volume_cube(l: int) -> int:
+    """
+	Write a function to find the volume of a cube given its side length.
+	"""
+    return l ** 3
+completed 1/397: acc = 1.0
+def closest_num(N: int) -> int:
+    """
+	Write a function to find the closest smaller number than n.
+	"""
+    if N <= 1:
+        return 0
+    else:
+        return N - 1
+completed 2/397: acc = 1.0
+from typing import List
+
+def max_sum(arr: List[int]) -> int:
+    """
+	Write a function that takes an array and finds the maximum sum of a bitonic subsequence for the given array, where a sequence is bitonic if it is first increasing and then decreasing.
+	"""
+    n = len(arr)
+
+    # Initialize increasing and decreasing subsequences
+    inc_subseq = [arr[i] for i in range(n)]
+    dec_subseq = [arr[i] for i in range(n)]
+
+    # Calculate increasing subsequence
+    for i in range(1, n):
+        for j in range(i):
+            if arr[i] > arr[j] and inc_subseq[i] < inc_subseq[j] + arr[i]:
+                inc_subseq[i] = inc_subseq[j] + arr[i]
+
+    # Calculate decreasing subsequence
+    for i in range(n-2, -1, -1):
+        for j in range(n-1, i, -1):
+            if arr[i] > arr[j] and dec_subseq[i] < dec_subseq[j] + arr[i]:
+                dec_subseq[i] = dec_subseq[j] + arr[i]
+
+    # Calculate maximum sum of bitonic subsequence
+    max_sum = inc_subseq[0] + dec_subseq[0] - arr[0]
+    for i in range(1, n):
+        max_sum = max(max_sum, inc_subseq[i] + dec_subseq[i] - arr[i])
+
+    return max_sum
+completed 3/397: acc = 1.0
+from typing import List, Tuple, Dict
+
+def check_occurences(test_list: List[Tuple[int, int]]) -> Dict[Tuple[int, int], int]:
+    """
+	Write a function that takes in a list of tuples and returns a dictionary mapping each unique tuple to the number of times it occurs in the list.
+	"""
+    result = {}
+    for tup in test_list:
+        if tup in result:
+            result[tup] += 1
+        else:
+            result[tup] = 1
+    return result
+completed 4/397: acc = 0.75
+def is_Diff(n: int) -> bool:
+    """
+	Write a python function to find whether a number is divisible by 11.
+	"""
+    if n % 11 == 0:
+        return True
+    else:
+        return False
+completed 5/397: acc = 0.8
+def amicable_numbers_sum(limit: int) -> int:
+    """
+	Write a function to sum all amicable numbers from 1 to a specified number.
+	"""
+    def sum_of_divisors(n: int) -> int:
+        divisors = [1]
+        for i in range(2, int(n**0.5) + 1):
+            if n % i == 0:
+                divisors.append(i)
+                if i != n // i:
+                    divisors.append(n // i)
+        return sum(divisors)
+
+    amicable_sum = 0
+    for num in range(1, limit):
+        temp = sum_of_divisors(num)
+        if num != temp and sum_of_divisors(temp) == num:
+            amicable_sum += num
+
+    return amicable_sum
+completed 6/397: acc = 0.83
+def cube_Sum(n: int) -> int:
+    """
+	Write a python function to find the cube sum of first n even natural numbers.
+	"""
+    return sum([(2 * i) ** 3 for i in range(1, n + 1)])
+completed 7/397: acc = 0.86
+from typing import List, Dict, Union
+
+def expensive_items(items: List[Dict[str, Union[str, float]]], n: int) -> List[Dict[str, Union[str, float]]]:
+    """
+	Write a function to find the n most expensive items in a given dataset.
+	"""
+    # Sort the items by price in descending order
+    sorted_items = sorted(items, key=lambda x: x['price'], reverse=True)
+
+    # Return the n most expensive items
+    return sorted_items[:n]
+completed 8/397: acc = 0.88
+def is_woodall(x: int) -> bool:
+    """
+	Write a function to check if the given number is woodball or not.
+	"""
+    i = 1
+    while True:
+        woodall = i * (2 ** i) - 1
+        if woodall == x:
+            return True
+        elif woodall > x:
+            return False
+        i += 1
+completed 9/397: acc = 0.89
+from typing import List
+
+def max_sum_list(lists: List[List[int]]) -> List[int]:
+    """
+	Write a function that returns the list in a list of lists whose sum of elements is the highest.
+	"""
+    max_sum = float('-inf')
+    max_sum_list = []
+
+    for lst in lists:
+        current_sum = sum(lst)
+        if current_sum > max_sum:
+            max_sum = current_sum
+            max_sum_list = lst
+
+    return max_sum_list
+completed 10/397: acc = 0.9
+def max_run_uppercase(test_str: str) -> int:
+    """
+	Write a function to find maximum run of uppercase characters in the given string.
+	"""
+    max_run = 0
+    current_run = 0
+
+    for char in test_str:
+        if char.isupper():
+            current_run += 1
+            max_run = max(max_run, current_run)
+        else:
+            current_run = 0
+
+    return max_run
+completed 11/397: acc = 0.91
+def check_monthnumb_number(monthnum2: int) -> bool:
+    """
+	Write a function to check whether the given month number contains 31 days or not.
+	"""
+    if monthnum2 in [1, 3, 5, 7, 8, 10, 12]:
+        return True
+    else:
+        return False
+completed 12/397: acc = 0.92
+def last_Digit_Factorial(n: int) -> int:
+    """
+	Write a python function to find the last digit in factorial of a given number.
+	"""
+    if n == 0 or n == 1:
+        return 1
+
+    last_digit = [1, 1, 2, 6, 4, 2, 2, 4, 2, 8]
+
+    return last_digit[n % 10]
+completed 13/397: acc = 0.85
+def difference(n: int) -> int:
+    """
+	Write a python function to find the difference between the sum of cubes of the first n natural numbers and the sum of the first n natural numbers.
+	"""
+    sum_of_cubes = sum([i**3 for i in range(1, n+1)])
+    sum_of_numbers = sum(range(1, n+1))
+    
+    return sum_of_cubes - sum_of_numbers
+completed 14/397: acc = 0.86
+from typing import List
+
+def reverse_string_list(stringlist: List[str]) -> List[str]:
+    """
+	Write a function to reverse each string in a given list of string values.
+	"""
+    reversed_list = []
+    for string in stringlist:
+        reversed_list.append(string[::-1])
+    return reversed_list
+completed 15/397: acc = 0.87
+from typing import List, Any
+
+def list_tuple(listx: List[int]) -> Any:
+    """
+	Write a function to convert a list to a tuple.
+	"""
+    return tuple(listx)
+completed 16/397: acc = 0.88
+from typing import List, Any
+
+def merge(lst: List[List[Any]]) -> List[List[Any]]:
+    """
+	Write a python function which takes a list of lists, where each sublist has two elements, and returns a list of two lists where the first list has the first element of each sublist and the second one has the second.
+	"""
+    result = [[], []]
+    for sublist in lst:
+        result[0].append(sublist[0])
+        result[1].append(sublist[1])
+    return result
+completed 17/397: acc = 0.82
+from typing import List
+
+def sort_matrix(M: List[List[int]]) -> List[List[int]]:
+    """
+	Write a function to sort a given matrix in ascending order according to the sum of its rows.
+	"""
+    M.sort(key=lambda row: sum(row))
+    return M
+completed 18/397: acc = 0.83
+def find_adverbs(text: str) -> str:
+    """
+	Write a function to find the first adverb ending with ly and its positions in a given string.
+	"""
+    import re
+
+    # Regular expression to find adverbs ending with 'ly'
+    pattern = r'\b\w+ly\b'
+
+    # Search for the first adverb in the given text
+    match = re.search(pattern, text)
+
+    if match:
+        adverb = match.group()
+        position = match.start()
+        return f"The first adverb is '{adverb}' at position {position}."
+    else:
+        return "No adverbs found in the given text."
+completed 19/397: acc = 0.79
+def centered_hexagonal_number(n: int) -> int:
+    """
+	Write a function to find nth centered hexagonal number.
+	"""
+    if n < 1:
+        return 0
+    return 1 + 6 * (n * (n - 1) // 2)
+completed 20/397: acc = 0.8
+from typing import List
+
+def max_occurrences(nums: List[int]) -> int:
+    """
+	Write a function to find the item with maximum frequency in a given list.
+	"""
+    if not nums:
+        return None
+
+    num_count = {}
+    for num in nums:
+        if num in num_count:
+            num_count[num] += 1
+        else:
+            num_count[num] = 1
+
+    max_count = 0
+    max_num = None
+    for num, count in num_count.items():
+        if count > max_count:
+            max_count = count
+            max_num = num
+
+    return max_num
+completed 21/397: acc = 0.81
+from typing import Tuple, Any
+
+def extract_even(test_tuple: Tuple[int, int, Tuple[int, int, Tuple[int, int]], int, int]) -> Any:
+    """
+	Write a function to remove uneven elements in the nested mixed tuple.
+	"""
+    def extract_even_helper(t: Tuple) -> Tuple:
+        result = ()
+        for item in t:
+            if isinstance(item, tuple):
+                result += extract_even_helper(item)
+            elif item % 2 == 0:
+                result += (item,)
+        return result
+
+    return extract_even_helper(test_tuple)
+completed 22/397: acc = 0.77
+def area_tetrahedron(side: int) -> float:
+    """
+	Write a function to caluclate the area of a tetrahedron.
+	"""
+import math
+
+def area_tetrahedron(side: int) -> float:
+    """
+    Write a function to caluclate the area of a tetrahedron.
+    """
+    return math.sqrt(3) * side**2
+completed 23/397: acc = 0.78
+from typing import List
+
+def remove_kth_element(list1: List[int], L: int) -> List[int]:
+    """
+	Write a python function which takes a list and returns a list with the same elements, but the k'th element removed.
+	"""
+    if L < 0 or L >= len(list1):
+        return list1
+
+    return list1[:L] + list1[L+1:]
+completed 24/397: acc = 0.75
+from typing import List
+
+def check_distinct(test_tup: List[int]) -> bool:
+    """
+	Write a function to check if given list contains no duplicates.
+	"""
+    return len(test_tup) == len(set(test_tup))
+completed 25/397: acc = 0.76
+from typing import List
+
+def last(arr: List[int], x: int) -> int:
+    """
+	Write a python function to find the last position of an element in a sorted array.
+	"""
+    if not arr:
+        return -1
+
+    low, high = 0, len(arr) - 1
+
+    while low <= high:
+        mid = (low + high) // 2
+
+        if arr[mid] == x:
+            if mid == len(arr) - 1 or arr[mid + 1] != x:
+                return mid
+            else:
+                low = mid + 1
+        elif arr[mid] < x:
+            low = mid + 1
+        else:
+            high = mid - 1
+
+    return -1
+completed 26/397: acc = 0.77
+from typing import List
+
+def sum_list(lst1: List[int], lst2: List[int]) -> List[int]:
+    """
+	Write a function takes as input two lists [a_1,...,a_n], [b_1,...,b_n] and returns [a_1+b_1,...,a_n+b_n].
+	"""
+    return [a + b for a, b in zip(lst1, lst2)]
+completed 27/397: acc = 0.78
+def sum_digits(n: int) -> int:
+    """
+	Write a function to get the sum of the digits of a non-negative integer.
+	"""
+    if n < 0:
+        raise ValueError("Input must be a non-negative integer")
+
+    return sum(int(digit) for digit in str(n))
+completed 28/397: acc = 0.79
+from typing import List, Tuple
+
+def max_length(list1: List[List[int]]) -> Tuple[int, List[int]]:
+    """
+	Write a function to find the list of maximum length in a list of lists.
+	"""
+    max_len = 0
+    max_list = []
+
+    for sublist in list1:
+        if len(sublist) > max_len:
+            max_len = len(sublist)
+            max_list = sublist
+
+    return max_len, max_list
+completed 29/397: acc = 0.79
+from typing import List, Tuple, Any
+
+def extract_nth_element(list1: List[Tuple[str, int, int]], n: int) -> List[Any]:
+    """
+	Write a function to extract the nth element from a given list of tuples.
+	"""
+    result = []
+
+    for tup in list1:
+        if len(tup) > n:
+            result.append(tup[n])
+
+    return result
+completed 30/397: acc = 0.8
+def replace_spaces(string: str) -> str:
+    """
+	Write a function to replace all spaces in the given string with '%20'.
+	"""
+    return string.replace(" ", "%20")
+completed 31/397: acc = 0.81
+from typing import List
+
+def group_tuples(Input: List[List[str]]) -> List[List[str]]:
+    """
+	Write a function to find common first element in given list of lists.
+	"""
+    result = {}
+    for lst in Input:
+        if lst[0] in result:
+            result[lst[0]].append(lst)
+        else:
+            result[lst[0]] = [lst]
+
+    return list(result.values())
+completed 32/397: acc = 0.78
+from typing import List
+
+def max_sub_array_sum_repeated(a: List[int], n: int, k: int) -> int:
+    """
+	Write a function to find the largest sum of a contiguous array in the modified array which is formed by repeating the given array k times.
+	"""
+    def max_sub_array_sum(arr: List[int]) -> int:
+        max_sum = float('-inf')
+        current_sum = 0
+
+        for num in arr:
+            current_sum = max(current_sum + num, num)
+            max_sum = max(max_sum, current_sum)
+
+        return max_sum
+
+    if k == 1:
+        return max_sub_array_sum(a)
+
+    prefix_sum = [0] * n
+    suffix_sum = [0] * n
+    prefix_sum[0] = a[0]
+    suffix_sum[-1] = a[-1]
+
+    for i in range(1, n):
+        prefix_sum[i] = prefix_sum[i - 1] + a[i]
+
+    for i in range(n - 2, -1, -1):
+        suffix_sum[i] = suffix_sum[i + 1] + a[i]
+
+    max_prefix_sum = max(prefix_sum)
+    max_suffix_sum = max(suffix_sum)
+
+    max_sum = max_sub_array_sum(a * 2)
+
+    if k > 2:
+        max_sum = max(max_sum, max_prefix_sum + max_suffix_sum + (k - 2) * sum(a))
+
+    return max_sum
+completed 33/397: acc = 0.79
+from typing import List
+
+def pos_count(list: List[int]) -> int:
+    """
+	Write a python function to count the number of positive numbers in a list.
+	"""
+    count = 0
+    for num in list:
+        if num > 0:
+            count += 1
+    return count
+completed 34/397: acc = 0.79
+from typing import List
+
+def extract_string(str: List[str], l: int) -> List[str]:
+    """
+	Write a function to extract specified size of strings from a given list of string values.
+	"""
+    result = []
+
+    for s in str:
+        if len(s) == l:
+            result.append(s)
+
+    return result
+completed 35/397: acc = 0.8
+from typing import List
+
+def trim_tuple(test_list: List[List[int]], K: int) -> List[List[int]]:
+    """
+	Write a function to trim each list by k in the given lists.
+	"""
+    trimmed_list = []
+
+    for sublist in test_list:
+        if len(sublist) > K:
+            trimmed_list.append(sublist[:K])
+        else:
+            trimmed_list.append(sublist)
+
+    return trimmed_list
+completed 36/397: acc = 0.78
+from typing import List
+
+def multiple_to_single(L: List[int]) -> int:
+    """
+	Write a function to join a list of multiple integers into a single integer.
+	"""
+    return int("".join(str(x) for x in L))
+completed 37/397: acc = 0.78
+def sum_series(n: int) -> int:
+    """
+	Write a function to calculate the sum (n - 2*i) from i=0 to n // 2, for instance n + (n-2) + (n-4)... (until n-x =< 0).
+	"""
+    total = 0
+    for i in range(0, n // 2 + 1):
+        total += n - 2 * i
+    return total
+completed 38/397: acc = 0.79
+def count_Set_Bits(n: int) -> int:
+    """
+	Write a python function to count the number of set bits (binary digits with value 1) in a given number.
+	"""
+    count = 0
+    while n:
+        count += n & 1
+        n >>= 1
+    return count
+completed 39/397: acc = 0.79
+def maximum(a: int, b: int) -> int:
+    """
+	Write a python function to find the maximum of two numbers.
+	"""
+    if a > b:
+        return a
+    else:
+        return b
+completed 40/397: acc = 0.8
+from typing import List
+
+def move_zero(num_list: List[int]) -> List[int]:
+    """
+	Write a python function to move all zeroes to the end of the given list.
+	"""
+    non_zero_list = [num for num in num_list if num != 0]
+    zero_list = [0] * (len(num_list) - len(non_zero_list))
+    return non_zero_list + zero_list
+completed 41/397: acc = 0.8
+from typing import List
+
+def frequency(a: List[int], x: int) -> int:
+    """
+	Write a function to count the number of occurrences of a number in a given list.
+	"""
+    count = 0
+    for num in a:
+        if num == x:
+            count += 1
+    return count
+completed 42/397: acc = 0.81
+from typing import List
+
+def sort_numeric_strings(nums_str: List[str]) -> List[int]:
+    """
+	Write a function to sort a given list of strings of numbers numerically. https://www.geeksforgeeks.org/python-sort-numeric-strings-in-a-list/
+	"""
+    nums_int = [int(num) for num in nums_str]
+    nums_int.sort()
+    return nums_int
+completed 43/397: acc = 0.81
+from typing import List, Dict
+
+def frequency_lists(list1: List[List[int]]) -> Dict[int, int]:
+    """
+	Write a function to find frequency of each element in a flattened list of lists, returned in a dictionary.
+	"""
+    frequency_dict = {}
+    
+    for sublist in list1:
+        for element in sublist:
+            if element in frequency_dict:
+                frequency_dict[element] += 1
+            else:
+                frequency_dict[element] = 1
+                
+    return frequency_dict
+completed 44/397: acc = 0.82
+from typing import Tuple
+
+def and_tuples(test_tup1: Tuple[int, int, int, int], test_tup2: Tuple[int, int, int, int]) -> Tuple[int, int, int, int]:
+    """
+	Write a function to extract the elementwise and tuples from the given two tuples.
+	"""
+    result = tuple(a & b for a, b in zip(test_tup1, test_tup2))
+    return result
+completed 45/397: acc = 0.82
+def is_decimal(num: str) -> bool:
+    """
+	Write a function to check whether a given string is a decimal number with a precision of 2.
+	"""
+    try:
+        float_num = float(num)
+        if len(num.split('.')[-1]) == 2:
+            return True
+        else:
+            return False
+    except ValueError:
+        return False
+completed 46/397: acc = 0.83
+from typing import Tuple
+
+def sum_average(number: int) -> Tuple[int, float]:
+    """
+	Write a function to find sum and average of first n natural numbers.
+	"""
+    total_sum = (number * (number + 1)) // 2
+    average = total_sum / number
+
+    return total_sum, average
+completed 47/397: acc = 0.83
+from typing import List
+
+def is_product_even(arr: List[int]) -> bool:
+    """
+	Write a function to check whether the product of numbers in a list is even or not.
+	"""
+    product = 1
+    for num in arr:
+        product *= num
+        if product % 2 == 0:
+            return True
+    return False
+completed 48/397: acc = 0.83
+def eulerian_num(n: int, m: int) -> int:
+    """
+	Write a function to find the Eulerian number a(n, m).
+	"""
+    if m == 0 or m == n:
+        return 1
+    if m > n:
+        return 0
+
+    dp = [[0] * (m + 1) for _ in range(n + 1)]
+
+    for i in range(n + 1):
+        dp[i][0] = 1
+
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            dp[i][j] = (i - j) * dp[i - 1][j - 1] + (j + 1) * dp[i - 1][j]
+
+    return dp[n][m]
+completed 49/397: acc = 0.84
+from typing import List, Dict
+
+def convert_list_dictionary(l1: List[str], l2: List[str], l3: List[int]) -> List[Dict[str, Dict[str, int]]]:
+    """
+	Write a function to convert more than one list to nested dictionary.
+	"""
+    result = []
+
+    for i in range(len(l1)):
+        inner_dict = {}
+        if i < len(l2) and i < len(l3):
+            inner_dict[l2[i]] = l3[i]
+        result.append({l1[i]: inner_dict})
+
+    return result
+completed 50/397: acc = 0.84
+from typing import List
+
+def heap_sort(iterable: List[int]) -> List[int]:
+    """
+	Write a function to sort the given list.
+	"""
+    def heapify(arr: List[int], n: int, i: int) -> None:
+        largest = i
+        left = 2 * i + 1
+        right = 2 * i + 2
+
+        if left < n and arr[i] < arr[left]:
+            largest = left
+
+        if right < n and arr[largest] < arr[right]:
+            largest = right
+
+        if largest != i:
+            arr[i], arr[largest] = arr[largest], arr[i]
+            heapify(arr, n, largest)
+
+    n = len(iterable)
+
+    for i in range(n // 2 - 1, -1, -1):
+        heapify(iterable, n, i)
+
+    for i in range(n - 1, 0, -1):
+        iterable[i], iterable[0] = iterable[0], iterable[i]
+        heapify(iterable, i, 0)
+
+    return iterable
+completed 51/397: acc = 0.84
+from typing import List
+
+def sum_even_and_even_index(arr: List[int]) -> int:
+    """
+	Write a python function to find the sum of even numbers at even positions of a list.
+	"""
+    even_sum = 0
+    for i in range(0, len(arr), 2):
+        if arr[i] % 2 == 0:
+            even_sum += arr[i]
+    return even_sum
+completed 52/397: acc = 0.85
+def text_match_three(text: str) -> bool:
+    """
+	Write a function that matches a string that has an a followed by three 'b'.
+	"""
+    import re
+
+    pattern = r"ab{3}"
+    if re.search(pattern, text):
+        return True
+    else:
+        return False
+completed 53/397: acc = 0.85
+def is_polite(n: int) -> int:
+    """
+	Write a function to find nth polite number. geeksforgeeks.org/n-th-polite-number/
+	"""
+    def polite_helper(n: int) -> int:
+        count = 0
+        i = 1
+        while count < n:
+            if i % 2 != 0 or i % 4 != 0:
+                count += 1
+            i += 1
+        return i - 1
+
+    return polite_helper(n)
+completed 54/397: acc = 0.83
+def remove_uppercase(str1: str) -> str:
+    """
+	Write a function to remove uppercase substrings from a given string.
+	"""
+    result = ""
+    for char in str1:
+        if not char.isupper():
+            result += char
+    return result
+completed 55/397: acc = 0.84
+def text_lowercase_underscore(text: str) -> bool:
+    """
+	Write a function to that returns true if the input string contains sequences of lowercase letters joined with an underscore and false otherwise.
+	"""
+    import re
+
+    pattern = re.compile(r'^[a-z]+(_[a-z]+)*$')
+    return bool(pattern.match(text))
+completed 56/397: acc = 0.84
+def lateralsurface_cone(r: int, h: int) -> float:
+    """
+	Write a function to find the lateral surface area of a cone given radius r and the height h.
+	"""
+    import math
+
+    # Calculate the slant height of the cone
+    slant_height = math.sqrt(r**2 + h**2)
+
+    # Calculate the lateral surface area of the cone
+    lateral_surface_area = math.pi * r * slant_height
+
+    return lateral_surface_area
+completed 57/397: acc = 0.84
+from typing import List
+
+def count_rotation(arr: List[int]) -> int:
+    """
+	Write a python function to count the number of rotations required to generate a sorted array. https://www.geeksforgeeks.org/count-of-rotations-required-to-generate-a-sorted-array/
+	"""
+    n = len(arr)
+    min_index = 0
+
+    for i in range(1, n):
+        if arr[i] < arr[min_index]:
+            min_index = i
+
+    return min_index
+completed 58/397: acc = 0.83
+from typing import List
+
+def odd_length_sum(arr: List[int]) -> int:
+    """
+	Write a python function to find the sum of all odd length subarrays. https://www.geeksforgeeks.org/sum-of-all-odd-length-subarrays/
+	"""
+    total_sum = 0
+    n = len(arr)
+
+    for i in range(n):
+        for j in range(i, n, 2):
+            total_sum += sum(arr[i:i+j+1])
+
+    return total_sum
+completed 59/397: acc = 0.81
+from typing import Tuple
+
+def add_pairwise(test_tup: Tuple[int, int, int, int, int]) -> Tuple[int, int, int, int]:
+    """
+	Write a function to find the pairwise addition of the neighboring elements of the given tuple.
+	"""
+    result = ()
+    for i in range(len(test_tup) - 1):
+        result += (test_tup[i] + test_tup[i + 1],)
+    return result
+completed 60/397: acc = 0.82
+def square_perimeter(a: int) -> int:
+    """
+	Write a function that returns the perimeter of a square given its side length as input.
+	"""
+    return 4 * a
+completed 61/397: acc = 0.82
+def all_Bits_Set_In_The_Given_Range(n: int, l: int, r: int) -> bool:
+    """
+	Write a python function to check whether all the bits are unset in the given range or not.
+	"""
+    # Create a mask with all bits set in the given range
+    mask = (1 << (r - l + 1)) - 1
+    mask = mask << (l - 1)
+
+    # Check if all bits are set in the given range
+    return (n & mask) == mask
+completed 62/397: acc = 0.81
+from typing import List, Any
+
+def replace_list(list1: List[Any], list2: List[Any]) -> List[Any]:
+    """
+	Write a function that takes in two lists and replaces the last element of the first list with the elements of the second list.
+	"""
+    if not list1 or not list2:
+        return list1
+
+    list1.pop()
+    list1.extend(list2)
+    return list1
+completed 63/397: acc = 0.81
+from typing import List
+
+def cube_nums(nums: List[int]) -> List[int]:
+    """
+	Write a function to find cubes of individual elements in a list.
+	"""
+    return [num ** 3 for num in nums]
+completed 64/397: acc = 0.81
+from typing import Tuple
+
+def division_elements(test_tup1: Tuple[int, int, int, int], test_tup2: Tuple[int, int, int, int]) -> Tuple[int, int, int, int]:
+    """
+	Write a function that takes in two tuples and performs mathematical division operation element-wise across the given tuples.
+	"""
+    result = tuple(a // b for a, b in zip(test_tup1, test_tup2))
+    return result
+completed 65/397: acc = 0.82
+def surface_Area(b: int, s: int) -> int:
+    """
+	Write a python function to find the surface area of a square pyramid with a given base edge and height.
+	"""
+    base_area = b * b
+    lateral_area = 4 * (0.5 * b * s)
+    total_area = base_area + lateral_area
+    return total_area
+completed 66/397: acc = 0.82
+def validate(n: int) -> bool:
+    """
+	Write a python function takes in an integer and check whether the frequency of each digit in the integer is less than or equal to the digit itself.
+	"""
+    from collections import Counter
+
+    # Convert the integer to a string to count the frequency of each digit
+    str_n = str(n)
+    digit_counter = Counter(str_n)
+
+    # Iterate through the digit_counter and check if the frequency is less than or equal to the digit
+    for digit, frequency in digit_counter.items():
+        if frequency > int(digit):
+            return False
+
+    return True
+completed 67/397: acc = 0.82
+from typing import List, Any
+
+def check_element(list: List[Any], element: Any) -> bool:
+    """
+	Write a function that takes in a list and element and checks whether all items in the list are equal to the given element.
+	"""
+    return all(item == element for item in list)
+completed 68/397: acc = 0.82
+from typing import List
+
+def kth_element(arr: List[int], k: int) -> int:
+    """
+	Write a function to find the kth element in the given array using 1-based indexing.
+	"""
+    if k > len(arr) or k < 1:
+        raise ValueError("Invalid value for k")
+
+    return arr[k-1]
+completed 69/397: acc = 0.83
+def upper_ctr(str: str) -> int:
+    """
+	Write a python function to count the upper case characters in a given string.
+	"""
+    upper_case_count = 0
+
+    for char in str:
+        if char.isupper():
+            upper_case_count += 1
+
+    return upper_case_count
+completed 70/397: acc = 0.81
+def removezero_ip(ip: str) -> str:
+    """
+	Write a function to remove leading zeroes from an ip address.
+	"""
+    ip_parts = ip.split(".")
+    new_ip_parts = []
+
+    for part in ip_parts:
+        new_ip_parts.append(str(int(part)))
+
+    return ".".join(new_ip_parts)
+completed 71/397: acc = 0.82
+from typing import List, Tuple
+
+def new_tuple(test_list: List[str], test_str: str) -> Tuple[str, str, str]:
+    """
+	Write a function to create a new tuple from the given string and list.
+	"""
+    if len(test_list) >= 2:
+        return (test_list[0], test_str, test_list[1])
+    elif len(test_list) == 1:
+        return (test_list[0], test_str, "")
+    else:
+        return ("", test_str, "")
+completed 72/397: acc = 0.81
+from typing import List
+
+def find_sum(arr: List[int]) -> int:
+    """
+	Write a python function to find the sum of non-repeated elements in a given list.
+	"""
+    unique_elements = set(arr)
+    return sum(unique_elements)
+completed 73/397: acc = 0.81
+from typing import List
+
+def split_Arr(l: List[int], n: int) -> List[int]:
+    """
+	Write a python function to split a list at the nth eelment and add the first part to the end.
+	"""
+    first_part = l[:n]
+    second_part = l[n:]
+    result = second_part + first_part
+    return result
+completed 74/397: acc = 0.81
+from typing import List
+
+def sort_sublists(input_list: List[List[str]]) -> List[List[str]]:
+    """
+	Write a function to sort each sublist of strings in a given list of lists.
+	"""
+    sorted_sublists = []
+
+    for sublist in input_list:
+        sorted_sublist = sorted(sublist)
+        sorted_sublists.append(sorted_sublist)
+
+    return sorted_sublists
+completed 75/397: acc = 0.81
+from typing import List
+
+def check_Consecutive(l: List[int]) -> bool:
+    """
+	Write a python function to check whether the given list contains consecutive numbers or not.
+	"""
+    if len(l) < 2:
+        return False
+
+    l.sort()
+    for i in range(len(l) - 1):
+        if l[i] + 1 != l[i + 1]:
+            return False
+    return True
+completed 76/397: acc = 0.82
+from typing import List
+
+def string_to_tuple(str1: str) -> List[str]:
+    """
+	Write a function to convert a given string to a list of characters.
+	"""
+    return list(str1)
+completed 77/397: acc = 0.81
+def lateralsurface_cube(l: int) -> int:
+    """
+	Write a function to find the lateral surface area of a cube given its side length.
+	"""
+    return 4 * l * l
+completed 78/397: acc = 0.81
+def even_Power_Sum(n: int) -> int:
+    """
+	Write a python function that takes in an integer n and finds the sum of the first n even natural numbers that are raised to the fifth power.
+	"""
+    even_sum = 0
+    for i in range(1, n+1):
+        even_sum += (2*i)**5
+    return even_sum
+completed 79/397: acc = 0.81
+def number_of_substrings(str: str) -> int:
+    """
+	Write a python function to count the number of non-empty substrings of a given string.
+	"""
+    n = len(str)
+    return (n * (n + 1)) // 2
+completed 80/397: acc = 0.81
+def sum_Of_product(n: int) -> int:
+    """
+	Write a python function to find the sum of the product of consecutive binomial co-efficients.
+	"""
+    result = 0
+    for i in range(1, n + 1):
+        result += i * (n - i + 1)
+    return result
+completed 81/397: acc = 0.8
+from typing import List
+
+def is_samepatterns(colors: List[str], patterns: List[str]) -> bool:
+    """
+	Write a function to check whether it follows the sequence given in the patterns array.
+	"""
+    if len(colors) != len(patterns):
+        return False
+
+    color_map = {}
+    pattern_map = {}
+
+    for i in range(len(colors)):
+        if colors[i] not in color_map:
+            color_map[colors[i]] = patterns[i]
+        if patterns[i] not in pattern_map:
+            pattern_map[patterns[i]] = colors[i]
+
+        if color_map[colors[i]] != patterns[i] or pattern_map[patterns[i]] != colors[i]:
+            return False
+
+    return True
+completed 82/397: acc = 0.8
+from typing import List, Tuple
+
+def max_Product(arr: List[int]) -> Tuple[int, int]:
+    """
+	Write a python function to find a pair with highest product from a given array of integers.
+	"""
+    max_product = float('-inf')
+    pair = (0, 0)
+
+    for i in range(len(arr)):
+        for j in range(i+1, len(arr)):
+            product = arr[i] * arr[j]
+            if product > max_product:
+                max_product = product
+                pair = (arr[i], arr[j])
+
+    return pair
+completed 83/397: acc = 0.81
+def count_divisors(n: int) -> bool:
+    """
+	Write a python function to check whether the count of divisors is even. https://www.w3resource.com/python-exercises/basic/python-basic-1-exercise-24.php
+	"""
+    count = 0
+    for i in range(1, n+1):
+        if n % i == 0:
+            count += 1
+
+    if count % 2 == 0:
+        return True
+    else:
+        return False
+completed 84/397: acc = 0.81
+def surfacearea_cube(l: int) -> int:
+    """
+	Write a function to find the surface area of a cube of a given size.
+	"""
+    return 6 * (l ** 2)
+completed 85/397: acc = 0.81
+def check_char(string: str) -> str:
+    """
+	Write a function to check whether the given string starts and ends with the same character or not.
+	"""
+    if len(string) == 0:
+        return "Empty string"
+
+    if string[0] == string[-1]:
+        return "The string starts and ends with the same character"
+    else:
+        return "The string does not start and end with the same character"
+completed 86/397: acc = 0.8
+from typing import List
+
+def count_reverse_pairs(test_list: List[str]) -> int:
+    """
+	Write a function to count the pairs of reverse strings in the given string list. https://www.geeksforgeeks.org/python-program-to-count-the-pairs-of-reverse-strings/
+	"""
+    reverse_pairs = 0
+
+    for i in range(len(test_list)):
+        for j in range(i+1, len(test_list)):
+            if test_list[i] == test_list[j][::-1]:
+                reverse_pairs += 1
+
+    return reverse_pairs
+completed 87/397: acc = 0.8
+from typing import List, Tuple
+
+def find_tuples(test_list: List[Tuple[int, int, int]], K: int) -> List[Tuple[int, int, int]]:
+    """
+	Write a function to find tuples which have all elements divisible by k from the given list of tuples.
+	"""
+    result = []
+
+    for tup in test_list:
+        if all(element % K == 0 for element in tup):
+            result.append(tup)
+
+    return result
+completed 88/397: acc = 0.81
+from typing import Tuple
+
+def tuple_str_int(test_str: str) -> Tuple[int, int, int]:
+    """
+	Write a function to convert tuple string to integer tuple.
+	"""
+    # Remove the parentheses and split the string by comma
+    test_str = test_str.strip("()").split(",")
+
+    # Convert each element to an integer and store it in a tuple
+    int_tuple = tuple(int(x) for x in test_str)
+
+    return int_tuple
+completed 89/397: acc = 0.81
+def count_vowels(test_str: str) -> int:
+    """
+	Write a function to count those characters which have vowels as their neighbors in the given string.
+	"""
+    vowels = "aeiou"
+    count = 0
+
+    for i in range(1, len(test_str) - 1):
+        if test_str[i - 1] in vowels and test_str[i + 1] in vowels:
+            count += 1
+
+    return count
+completed 90/397: acc = 0.8
+from typing import Dict
+
+def dict_filter(dict: Dict[str, int], n: int) -> Dict[str, int]:
+    """
+	Write a function that takes in a dictionary and integer n and filters the dictionary to only include entries with values greater than or equal to n.
+	"""
+    filtered_dict = {}
+    for key, value in dict.items():
+        if value >= n:
+            filtered_dict[key] = value
+    return filtered_dict
+completed 91/397: acc = 0.8
+from typing import List
+
+def max_product(arr: List[int]) -> int:
+    """
+	Write a function to find the maximum product formed by multiplying numbers of an increasing subsequence of that array.
+	"""
+    if not arr:
+        return 0
+
+    n = len(arr)
+    max_product = [0] * n
+    max_product[0] = arr[0]
+
+    for i in range(1, n):
+        max_product[i] = arr[i]
+        for j in range(i):
+            if arr[i] > arr[j]:
+                max_product[i] = max(max_product[i], max_product[j] * arr[i])
+
+    return max(max_product)
+completed 92/397: acc = 0.79
+def is_num_decagonal(n: int) -> int:
+    """
+	Write a function to find the nth decagonal number.
+	"""
+    if n < 1:
+        return 0
+
+    return n * (4 * n - 3)
+completed 93/397: acc = 0.8
+def is_not_prime(n: int) -> bool:
+    """
+	Write a python function to identify non-prime numbers.
+	"""
+    if n <= 1:
+        return True
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return True
+    return False
+completed 94/397: acc = 0.8
+from typing import List, Dict
+
+def freq_count(list1: List[int]) -> Dict[int, int]:
+    """
+	Write a function to get the frequency of all the elements in a list, returned as a dictionary.
+	"""
+    freq_dict = {}
+    for num in list1:
+        if num in freq_dict:
+            freq_dict[num] += 1
+        else:
+            freq_dict[num] = 1
+    return freq_dict
+completed 95/397: acc = 0.8
+from typing import List
+
+def maximize_elements(test_tup1: List[List[int]], test_tup2: List[List[int]]) -> List[List[int]]:
+    """
+	Write a function to maximize the given two lists.
+	"""
+    result = []
+
+    for i in range(len(test_tup1)):
+        temp = []
+        for j in range(len(test_tup1[i])):
+            temp.append(max(test_tup1[i][j], test_tup2[i][j]))
+        result.append(temp)
+
+    return result
+completed 96/397: acc = 0.8
+from typing import List, Dict
+
+def empty_list(length: int) -> List[Dict[None, None]]:
+    """
+	Write a function to create a list of N empty dictionaries.
+	"""
+    return [{} for _ in range(length)]
+completed 97/397: acc = 0.8
+def text_match_two_three(text: str) -> bool:
+    """
+	Write a function that checks whether a string contains the 'a' character followed by two or three 'b' characters.
+	"""
+    import re
+
+    pattern = re.compile(r'ab{2,3}')
+    match = pattern.search(text)
+
+    return bool(match)
+completed 98/397: acc = 0.81
+from typing import List
+
+def maxAverageOfPath(cost: List[List[int]]) -> float:
+    """
+	Given a square matrix of size N*N given as a list of lists, where each cell is associated with a specific cost. A path is defined as a specific sequence of cells that starts from the top-left cell move only right or down and ends on bottom right cell. We want to find a path with the maximum average over all existing paths. Average is computed as total cost divided by the number of cells visited in the path.
+	"""
+    def dfs(row: int, col: int, total_cost: int, num_cells: int) -> float:
+        if row == len(cost) - 1 and col == len(cost[0]) - 1:
+            return total_cost / num_cells
+
+        if row >= len(cost) or col >= len(cost[0]):
+            return 0
+
+        right = dfs(row, col + 1, total_cost + cost[row][col], num_cells + 1)
+        down = dfs(row + 1, col, total_cost + cost[row][col], num_cells + 1)
+
+        return max(right, down)
+
+    return dfs(0, 0, 0, 1)
+completed 99/397: acc = 0.8
+def sum_in_range(l: int, r: int) -> int:
+    """
+	Write a python function to find the sum of all odd natural numbers within the range l and r.
+	"""
+    odd_sum = 0
+    for i in range(l, r + 1):
+        if i % 2 != 0:
+            odd_sum += i
+    return odd_sum
+completed 100/397: acc = 0.8
+from typing import List
+
+def heap_queue_largest(nums: List[int], n: int) -> List[int]:
+    """
+	Write a function to find the n largest integers from a given list of numbers, returned in descending order.
+	"""
+    import heapq
+
+    if n > len(nums):
+        n = len(nums)
+
+    largest_nums = heapq.nlargest(n, nums)
+    largest_nums.sort(reverse=True)
+
+    return largest_nums
+completed 101/397: acc = 0.8
+from typing import List, Tuple
+
+def max_product_tuple(list1: List[Tuple[int, int]]) -> int:
+    """
+	Write a function to find the maximum absolute product between numbers in pairs of tuples within a given list.
+	"""
+    max_product = 0
+
+    for i in range(len(list1)):
+        for j in range(i+1, len(list1)):
+            product = abs(list1[i][0] * list1[j][0] * list1[i][1] * list1[j][1])
+            if product > max_product:
+                max_product = product
+
+    return max_product
+completed 102/397: acc = 0.79
+def replace_blank(str1: str, char: str) -> str:
+    """
+	Write a function that takes in a string and character, replaces blank spaces in the string with the character, and returns the string.
+	"""
+    return str1.replace(" ", char)
+completed 103/397: acc = 0.8
+def is_Even(n: int) -> bool:
+    """
+	Write a python function to check whether the given number is even or not.
+	"""
+    if n % 2 == 0:
+        return True
+    else:
+        return False
+completed 104/397: acc = 0.8
+from typing import Tuple
+
+def find_adverb_position(text: str) -> Tuple[int, int, str]:
+    """
+	Write a function to find the first adverb and their positions in a given sentence.
+	"""
+    import re
+
+    adverbs = re.findall(r'\b\w+ly\b', text)
+    if adverbs:
+        first_adverb = adverbs[0]
+        start_position = text.index(first_adverb)
+        end_position = start_position + len(first_adverb)
+        return start_position, end_position, first_adverb
+    else:
+        return -1, -1, ""
+completed 105/397: acc = 0.8
+from typing import Optional, Tuple
+
+def occurance_substring(text: str, pattern: str) -> Optional[Tuple[str, int, int]]:
+    """
+	Write a function to find the occurrence and position of the substrings within a string. Return None if there is no match.
+	"""
+    if pattern in text:
+        start_index = text.index(pattern)
+        end_index = start_index + len(pattern)
+        return (pattern, start_index, end_index)
+    else:
+        return None
+completed 106/397: acc = 0.8
+def get_total_number_of_sequences(m: int, n: int) -> int:
+    """
+	Write a function that takes in positive integers m and n and finds the number of possible sequences of length n, such that each element is a positive integer and is greater than or equal to twice the previous element but less than or equal to m.
+	"""
+    def count_sequences(m: int, n: int, prev: int) -> int:
+        if n == 0:
+            return 1
+        if prev * 2 > m:
+            return 0
+
+        total_sequences = 0
+        for i in range(prev * 2, m + 1):
+            total_sequences += count_sequences(m, n - 1, i)
+
+        return total_sequences
+
+    return count_sequences(m, n, 1)
+completed 107/397: acc = 0.79
+from typing import List, Any
+
+def list_split(S: List[Any], step: int) -> List[List[Any]]:
+    """
+	Write a function that takes in a list and an integer n and splits a list for every nth element, returning a list of the resulting lists.
+	"""
+    result = []
+    for i in range(0, len(S), step):
+        result.append(S[i:i + step])
+    return result
+completed 108/397: acc = 0.79
+from typing import List
+
+def remove_odd(l: List[int]) -> List[int]:
+    """
+	Write a python function to remove odd numbers from a given list.
+	"""
+    return [num for num in l if num % 2 == 0]
+completed 109/397: acc = 0.79
+from typing import List
+
+def overlapping(list1: List[int], list2: List[int]) -> bool:
+    """
+	Write a python function to check whether any value in a sequence exists in a sequence or not.
+	"""
+    for value in list1:
+        if value in list2:
+            return True
+    return False
+completed 110/397: acc = 0.79
+from typing import Optional, Tuple
+
+def find_solution(a: int, b: int, n: int) -> Optional[Tuple[int, int]]:
+    """
+	Write a function that returns integers x and y that satisfy ax + by = n as a tuple, or return None if no solution exists.
+	"""
+    for x in range(n + 1):
+        for y in range(n + 1):
+            if a * x + b * y == n:
+                return (x, y)
+    return None
+completed 111/397: acc = 0.79
+from typing import List
+
+def max_sub_array_sum(a: List[int], size: int) -> int:
+    """
+	Write a function to find the sum of the largest contiguous sublist in the given list.
+	"""
+    max_sum = float('-inf')
+    current_sum = 0
+
+    for i in range(len(a)):
+        current_sum += a[i]
+
+        if i >= size - 1:
+            max_sum = max(max_sum, current_sum)
+            current_sum -= a[i - size + 1]
+
+    return max_sum
+completed 112/397: acc = 0.79
+from typing import Tuple
+
+def check_smaller(test_tup1: Tuple[int, int, int], test_tup2: Tuple[int, int, int]) -> bool:
+    """
+	Write a function to check if each element of second tuple is smaller than its corresponding element in the first tuple.
+	"""
+    for i in range(len(test_tup1)):
+        if test_tup2[i] >= test_tup1[i]:
+            return False
+    return True
+completed 113/397: acc = 0.79
+from typing import List
+
+def Split(list: List[int]) -> List[int]:
+    """
+	Write a python function to find even numbers from a list of numbers.
+	"""
+    even_numbers = []
+
+    for number in list:
+        if number % 2 == 0:
+            even_numbers.append(number)
+
+    return even_numbers
+completed 114/397: acc = 0.79
+from typing import List
+
+def count_same_pair(nums1: List[int], nums2: List[int]) -> int:
+    """
+	The input is defined as two lists of the same length. Write a function to count indices where the lists have the same values.
+	"""
+    count = 0
+    for i in range(len(nums1)):
+        if nums1[i] == nums2[i]:
+            count += 1
+    return count
+completed 115/397: acc = 0.79
+def count_charac(str1: str) -> int:
+    """
+	Write a function to count the total number of characters in a string.
+	"""
+    return len(str1)
+completed 116/397: acc = 0.79
+from typing import Tuple
+
+def tuple_modulo(test_tup1: Tuple[int, int, int, int], test_tup2: Tuple[int, int, int, int]) -> Tuple[int, int, int, int]:
+    """
+	Write a function which takes two tuples of the same length and performs the element wise modulo.
+	"""
+    result = tuple(a % b for a, b in zip(test_tup1, test_tup2))
+    return result
+completed 117/397: acc = 0.79
+def catalan_number(num: int) -> int:
+    """
+	Write a function which returns nth catalan number.
+	"""
+    if num == 0 or num == 1:
+        return 1
+
+    catalan = [0] * (num + 1)
+    catalan[0] = 1
+    catalan[1] = 1
+
+    for i in range(2, num + 1):
+        catalan[i] = 0
+        for j in range(i):
+            catalan[i] += catalan[j] * catalan[i - j - 1]
+
+    return catalan[num]
+completed 118/397: acc = 0.8
+from typing import List
+
+def magic_square_test(my_matrix: List[List[int]]) -> bool:
+    """
+	Write a function to calculate whether the matrix is a magic square.
+	"""
+    # Check if the matrix is square
+    n = len(my_matrix)
+    if not all(len(row) == n for row in my_matrix):
+        return False
+
+    # Calculate the magic constant
+    magic_constant = sum(my_matrix[0])
+
+    # Check rows and columns
+    for i in range(n):
+        row_sum = sum(my_matrix[i])
+        col_sum = sum(my_matrix[j][i] for j in range(n))
+        if row_sum != magic_constant or col_sum != magic_constant:
+            return False
+
+    # Check diagonals
+    diag1_sum = sum(my_matrix[i][i] for i in range(n))
+    diag2_sum = sum(my_matrix[i][n - i - 1] for i in range(n))
+    if diag1_sum != magic_constant or diag2_sum != magic_constant:
+        return False
+
+    return True
+completed 119/397: acc = 0.8
+def count_Substrings(s: str) -> int:
+    """
+	Write a python function to count the number of substrings with the sum of digits equal to their length.
+	"""
+    count = 0
+    for i in range(len(s)):
+        for j in range(i+1, len(s)+1):
+            substring = s[i:j]
+            sum_of_digits = sum(int(digit) for digit in substring if digit.isdigit())
+            if sum_of_digits == len(substring):
+                count += 1
+    return count
+completed 120/397: acc = 0.8
+def square_Sum(n: int) -> int:
+    """
+	Write a python function takes in an integer n and returns the sum of squares of first n even natural numbers.
+	"""
+    sum_of_squares = 0
+    for i in range(1, n+1):
+        even_number = i * 2
+        sum_of_squares += even_number ** 2
+    return sum_of_squares
+completed 121/397: acc = 0.8
+def power(a: int, b: int) -> int:
+    """
+	Write a function to calculate the value of 'a' to the power 'b'.
+	"""
+    if b == 0:
+        return 1
+    elif b < 0:
+        return 1 / power(a, -b)
+    else:
+        result = 1
+        for _ in range(b):
+            result *= a
+        return result
+completed 122/397: acc = 0.8
+from typing import Tuple
+
+def find_literals(text: str, pattern: str) -> Tuple[str, int, int]:
+    """
+	Write a function to search a string for a regex pattern. The function should return the matching subtring, a start index and an end index.
+	"""
+    import re
+
+    match = re.search(pattern, text)
+    if match:
+        start_index = match.start()
+        end_index = match.end()
+        return text[start_index:end_index], start_index, end_index
+    else:
+        return "", -1, -1
+completed 123/397: acc = 0.8
+from typing import List, Tuple
+
+def index_minimum(test_list: List[Tuple[str, int]]) -> str:
+    """
+	Given a list of tuples, write a function that returns the first value of the tuple with the smallest second value.
+	"""
+    min_value = float('inf')
+    min_index = 0
+
+    for i, (_, value) in enumerate(test_list):
+        if value < min_value:
+            min_value = value
+            min_index = i
+
+    return test_list[min_index][0]
+completed 124/397: acc = 0.81
+def is_Sum_Of_Powers_Of_Two(n: int) -> bool:
+    """
+	Write a python function to check whether the given number can be represented as sum of non-zero powers of 2 or not.
+	"""
+    if n <= 0:
+        return False
+
+    while n > 1:
+        if n % 2 != 0:
+            return False
+        n = n // 2
+
+    return True
+completed 125/397: acc = 0.8
+from typing import List
+
+def diff_even_odd(list1: List[int]) -> int:
+    """
+	Write a function to find the difference of the first even and first odd number of a given list.
+	"""
+    first_even = None
+    first_odd = None
+
+    for num in list1:
+        if num % 2 == 0 and first_even is None:
+            first_even = num
+        elif num % 2 != 0 and first_odd is None:
+            first_odd = num
+
+        if first_even is not None and first_odd is not None:
+            break
+
+    if first_even is not None and first_odd is not None:
+        return first_even - first_odd
+    else:
+        return 0
+completed 126/397: acc = 0.8
+def even_binomial_Coeff_Sum(n: int) -> int:
+    """
+	Write a python function that takes in a positive integer n and finds the sum of even index binomial coefficients.
+	"""
+    from math import comb
+
+    even_sum = 0
+    for i in range(0, n+1, 2):
+        even_sum += comb(n, i)
+
+    return even_sum
+completed 127/397: acc = 0.8
+def sum(a: int, b: int) -> int:
+    """
+	Write a python function to find the sum of common divisors of two given numbers.
+	"""
+    result = 0
+    for i in range(1, min(a, b) + 1):
+        if a % i == 0 and b % i == 0:
+            result += i
+    return result
+completed 128/397: acc = 0.8
+from typing import List
+
+def Diff(li1: List[int], li2: List[int]) -> List[int]:
+    """
+	Write a python function to get the difference between two lists.
+	"""
+    return [item for item in li1 if item not in li2]
+completed 129/397: acc = 0.8
+from typing import Dict
+
+def return_sum(dict: Dict[str, int]) -> int:
+    """
+	Write function to find the sum of all items in the given dictionary.
+	"""
+    total = 0
+    for value in dict.values():
+        total += value
+    return total
+completed 130/397: acc = 0.8
+def surfacearea_cylinder(r: int, h: int) -> float:
+    """
+	Write a function to find the surface area of a cylinder.
+	"""
+    import math
+
+    base_area = math.pi * r**2
+    lateral_area = 2 * math.pi * r * h
+    surface_area = 2 * base_area + lateral_area
+
+    return surface_area
+completed 131/397: acc = 0.79
+from typing import List
+
+def rgb_to_hsv(r: int, g: int, b: int) -> List[float]:
+    """
+	Write a function to convert rgb color to hsv color. https://www.geeksforgeeks.org/program-change-rgb-color-model-hsv-color-model/
+	"""
+    r, g, b = r/255.0, g/255.0, b/255.0
+    max_value = max(r, g, b)
+    min_value = min(r, g, b)
+    difference = max_value-min_value
+
+    if max_value == min_value:
+        h = 0
+    elif max_value == r:
+        h = (60 * ((g-b)/difference) + 360) % 360
+    elif max_value == g:
+        h = (60 * ((b-r)/difference) + 120) % 360
+    elif max_value == b:
+        h = (60 * ((r-g)/difference) + 240) % 360
+
+    if max_value == 0:
+        s = 0
+    else:
+        s = (difference/max_value)*100
+
+    v = max_value*100
+
+    return [h, s, v]
+completed 132/397: acc = 0.8
+from typing import List
+
+def get_equal(Input: List[List[int]]) -> bool:
+    """
+	Write a function to find whether all the given lists have equal length or not.
+	"""
+    lengths = [len(lst) for lst in Input]
+    return all(length == lengths[0] for length in lengths)
+completed 133/397: acc = 0.8
+def square_Sum(n: int) -> int:
+    """
+	Write a python function that takes in an integer n and returns the sum of the squares of the first n odd natural numbers.
+	"""
+    sum_of_squares = 0
+
+    for i in range(1, n * 2, 2):
+        sum_of_squares += i ** 2
+
+    return sum_of_squares
+completed 134/397: acc = 0.8
+def perimeter_pentagon(a: int) -> int:
+    """
+	Write a function to find the perimeter of a regular pentagon from the length of its sides.
+	"""
+    return a * 5
+completed 135/397: acc = 0.8
+from typing import Any
+
+def check_type(test_tuple: Any) -> bool:
+    """
+	Write a function to check if all the elements in tuple have same data type or not.
+	"""
+    if not isinstance(test_tuple, tuple):
+        return False
+
+    if len(test_tuple) == 0:
+        return True
+
+    first_element_type = type(test_tuple[0])
+
+    for element in test_tuple:
+        if type(element) != first_element_type:
+            return False
+
+    return True
+completed 136/397: acc = 0.8
+def are_equivalent(num1: int, num2: int) -> bool:
+    """
+	Write a function to determine if the sum of the divisors of two integers are the same.
+	"""
+    def sum_of_divisors(num: int) -> int:
+        divisors_sum = 0
+        for i in range(1, num // 2 + 1):
+            if num % i == 0:
+                divisors_sum += i
+        return divisors_sum
+
+    return sum_of_divisors(num1) == sum_of_divisors(num2)
+completed 137/397: acc = 0.8
+def is_perfect_square(n: int) -> bool:
+    """
+	Write a function to check whether the given number is a perfect square or not. https://www.geeksforgeeks.org/check-if-given-number-is-perfect-square-in-cpp/
+	"""
+    if n < 0:
+        return False
+
+    i = 1
+    while n > 0:
+        n -= i
+        i += 2
+
+    return n == 0
+completed 138/397: acc = 0.8
+from typing import List, Tuple
+
+def start_withp(words: List[str]) -> Tuple[str, str]:
+    """
+	Write a function to return two words from a list of words starting with letter 'p'.
+	"""
+    p_words = [word for word in words if word.lower().startswith('p')]
+
+    if len(p_words) >= 2:
+        return p_words[0], p_words[1]
+    elif len(p_words) == 1:
+        return p_words[0], ""
+    else:
+        return "", ""
+completed 139/397: acc = 0.8
+from typing import Tuple
+
+def min_Jumps(steps: Tuple[int, int], d: int) -> float:
+    """
+	Write a function to check for the number of jumps required of given length to reach a point of form (d, 0) from origin in a 2d plane.
+	"""
+    import math
+
+    # Calculate the distance between the origin and the target point
+    distance = math.sqrt(steps[0]**2 + steps[1]**2)
+
+    # Calculate the number of jumps required to reach the target point
+    jumps = math.ceil(distance / d)
+
+    return jumps
+completed 140/397: acc = 0.79
+from typing import List, Tuple
+
+def list_to_float(test_list: List[Tuple[str, str]]) -> List[Tuple[float, float]]:
+    """
+	Write a function to convert all possible convertible elements in a list of lists to floats.
+	"""
+    result = []
+
+    for item in test_list:
+        try:
+            first = float(item[0])
+        except ValueError:
+            first = item[0]
+
+        try:
+            second = float(item[1])
+        except ValueError:
+            second = item[1]
+
+        result.append((first, second))
+
+    return result
+completed 141/397: acc = 0.79
+from typing import List, Any
+
+def count_element_in_list(list1: List[List[Any]], x: Any) -> int:
+    """
+	Write a function to count the number of sublists containing a particular element.
+	"""
+    count = 0
+    for sublist in list1:
+        if x in sublist:
+            count += 1
+    return count
+completed 142/397: acc = 0.8
+def bell_number(n: int) -> int:
+    """
+	Write a function to find the number of ways to partition a set of Bell numbers.
+	"""
+    def bell_number_helper(n, k, memo):
+        if n == 0 or k == 0 or k > n:
+            return 0
+        if k == 1 or k == n:
+            return 1
+        if memo[n][k] != -1:
+            return memo[n][k]
+
+        memo[n][k] = bell_number_helper(n-1, k-1, memo) + k * bell_number_helper(n-1, k, memo)
+        return memo[n][k]
+
+    memo = [[-1 for _ in range(n+1)] for _ in range(n+1)]
+    return sum(bell_number_helper(n, k, memo) for k in range(1, n+1))
+completed 143/397: acc = 0.79
+def minimum(a: int, b: int) -> int:
+    """
+	Write a python function to find the minimum of two numbers.
+	"""
+    if a < b:
+        return a
+    else:
+        return b
+completed 144/397: acc = 0.79
+def find_Volume(l: int, b: int, h: int) -> int:
+    """
+	Write a python function to find the volume of a triangular prism.
+	"""
+    volume = (l * b * h) / 2
+    return int(volume)
+completed 145/397: acc = 0.79
+from typing import List
+
+def square_nums(nums: List[int]) -> List[int]:
+    """
+	Write a function to find squares of individual elements in a list.
+	"""
+    return [num ** 2 for num in nums]
+completed 146/397: acc = 0.79
+from typing import Dict, Tuple
+
+def filter_data(students: Dict[str, Tuple[float, int]], h: float, w: int) -> Dict[str, Tuple[float, int]]:
+    """
+	The input is given as - a dictionary with a student name as a key and a tuple of float (student_height, student_weight) as a value, - minimal height, - minimal weight. Write a function to filter students that have height and weight above the minimum.
+	"""
+    filtered_students = {}
+
+    for student, data in students.items():
+        student_height, student_weight = data
+        if student_height > h and student_weight > w:
+            filtered_students[student] = (student_height, student_weight)
+
+    return filtered_students
+completed 147/397: acc = 0.79
+def next_Perfect_Square(N: int) -> int:
+    """
+	Write a python function to find the next perfect square greater than a given number.
+	"""
+    import math
+
+    # Find the square root of the given number
+    sqrt_N = math.sqrt(N)
+
+    # If the square root is an integer, increment it by 1
+    if sqrt_N.is_integer():
+        next_sqrt = int(sqrt_N) + 1
+    # If the square root is not an integer, round it up to the nearest integer
+    else:
+        next_sqrt = math.ceil(sqrt_N)
+
+    # Calculate the next perfect square
+    next_perfect_square = next_sqrt ** 2
+
+    return next_perfect_square
+completed 148/397: acc = 0.79
+from typing import List, Union, Optional
+
+def second_smallest(numbers: List[Union[int, float]]) -> Optional[float]:
+    """
+	Write a function to find the second smallest number in a list.
+	"""
+    if len(numbers) < 2:
+        return None
+
+    first_smallest, second_smallest = float('inf'), float('inf')
+
+    for num in numbers:
+        if num < first_smallest:
+            second_smallest = first_smallest
+            first_smallest = num
+        elif num < second_smallest and num != first_smallest:
+            second_smallest = num
+
+    return second_smallest if second_smallest != float('inf') else None
+completed 149/397: acc = 0.79
+from typing import List, Union, Any
+
+def check_tuplex(tuplex: List[Union[str, int]], tuple1: Any) -> bool:
+    """
+	Write a function to check whether an element exists within a tuple.
+	"""
+    for element in tuplex:
+        if element == tuple1:
+            return True
+    return False
+completed 150/397: acc = 0.79
+def find(n: int, m: int) -> int:
+    """
+	Write a python function to find quotient of two numbers (rounded down to the nearest integer).
+	"""
+    quotient = n // m
+    return quotient
+completed 151/397: acc = 0.79
+from typing import List
+
+def get_ludic(n: int) -> List[int]:
+    """
+	Write a function to get all lucid numbers smaller than or equal to a given integer.
+	"""
+    def sieve(l: int) -> List[int]:
+        numbers = list(range(2, l + 1))
+        for i in numbers:
+            if i is not None:
+                for j in range(i * 2, l + 1, i):
+                    numbers[j - 2] = None
+        return [x for x in numbers if x is not None]
+
+    def ludic_numbers(l: int) -> List[int]:
+        numbers = list(range(2, l + 1))
+        ludic = []
+        while numbers:
+            ludic.append(numbers.pop(0))
+            numbers = [x for i, x in enumerate(numbers) if (i + 1) % ludic[-1] != 0]
+        return ludic
+
+    return ludic_numbers(n)
+completed 152/397: acc = 0.79
+from typing import List
+
+def sum_Of_Subarray_Prod(arr: List[int]) -> int:
+    """
+	Write a python function to find sum of products of all possible sublists of a given list. https://www.geeksforgeeks.org/sum-of-products-of-all-possible-subarrays/
+	"""
+    n = len(arr)
+    result = 0
+
+    for i in range(n):
+        product = 1
+        for j in range(i, n):
+            product *= arr[j]
+            result += product
+
+    return result
+completed 153/397: acc = 0.79
+from typing import List
+
+def extract_values(text: str) -> List[str]:
+    """
+	Write a function to extract values between quotation marks from a string.
+	"""
+    import re
+
+    pattern = r'"(.*?)"'
+    values = re.findall(pattern, text)
+
+    return values
+completed 154/397: acc = 0.79
+from typing import List
+
+def issort_list(list1: List[int]) -> bool:
+    """
+	Write a function to check whether a specified list is sorted or not.
+	"""
+    if len(list1) <= 1:
+        return True
+
+    for i in range(len(list1) - 1):
+        if list1[i] > list1[i + 1]:
+            return False
+
+    return True
+completed 155/397: acc = 0.79
+from typing import Dict, List, Tuple
+
+def sort_counter(dict1: Dict[str, int]) -> List[Tuple[str, int]]:
+    """
+	Write a function to sort a dictionary by value.
+	"""
+    sorted_dict = sorted(dict1.items(), key=lambda x: x[1], reverse=True)
+    return sorted_dict
+completed 156/397: acc = 0.79
+from typing import List, Union
+
+def recursive_list_sum(data_list: List[Union[int, List[int]]]) -> int:
+    """
+	Write a function to flatten a list and sum all of its elements.
+	"""
+    total = 0
+    for item in data_list:
+        if isinstance(item, int):
+            total += item
+        elif isinstance(item, list):
+            total += recursive_list_sum(item)
+    return total
+completed 157/397: acc = 0.8
+from typing import List
+
+def union_elements(test_tup1: List[int], test_tup2: List[int]) -> List[int]:
+    """
+	Write a function to find the union of the elements of two given lists and output them in sorted order.
+	"""
+    result = list(set(test_tup1).union(set(test_tup2)))
+    result.sort()
+    return result
+completed 158/397: acc = 0.8
+def check_str(string: str) -> bool:
+    """
+	Write a function to check whether the given string is starting with a vowel or not using regex.
+	"""
+    import re
+
+    # Define the regex pattern for vowels
+    pattern = r"^[aeiouAEIOU]"
+
+    # Check if the string starts with a vowel
+    if re.match(pattern, string):
+        return True
+    else:
+        return False
+completed 159/397: acc = 0.8
+from typing import Optional
+
+def triangle_area(r: int) -> Optional[int]:
+    """
+	Write a python function to find the area of the largest triangle that can be inscribed in a semicircle with a given radius.
+	"""
+    if r <= 0:
+        return None
+
+    # The area of the largest triangle that can be inscribed in a semicircle is given by the formula:
+    # Area = (1/2) * base * height
+    # In this case, the base is the diameter of the semicircle (2 * r) and the height is the radius (r).
+    area = (1/2) * (2 * r) * r
+
+    return int(area)
+completed 160/397: acc = 0.79
+from typing import List, Union
+
+def count_integer(list1: List[Union[int, str, float]]) -> int:
+    """
+	Write a python function that returns the number of integer elements in a given list.
+	"""
+    count = 0
+    for element in list1:
+        if isinstance(element, int):
+            count += 1
+    return count
+completed 161/397: acc = 0.8
+from typing import List
+
+def max_subarray_product(arr: List[int]) -> int:
+    """
+	Write a function to find the maximum product subarray of the given array.
+	"""
+    if not arr:
+        return 0
+
+    max_product = arr[0]
+    min_product = arr[0]
+    result = arr[0]
+
+    for i in range(1, len(arr)):
+        if arr[i] < 0:
+            max_product, min_product = min_product, max_product
+
+        max_product = max(arr[i], max_product * arr[i])
+        min_product = min(arr[i], min_product * arr[i])
+
+        result = max(result, max_product)
+
+    return result
+completed 162/397: acc = 0.8
+from typing import List
+
+def is_majority(arr: List[int], n: int, x: int) -> bool:
+    """
+	Write a function that takes in a sorted array, its length (n), and an element and returns whether the element is the majority element in the given sorted array. (The majority element is the element that occurs more than n/2 times.)
+	"""
+    count = 0
+
+    for num in arr:
+        if num == x:
+            count += 1
+
+    return count > n / 2
+completed 163/397: acc = 0.8
+def text_starta_endb(text: str) -> bool:
+    """
+	Write a function that matches a string that has an 'a' followed by anything, ending in 'b'.
+	"""
+    if text:
+        return text.startswith('a') and text.endswith('b')
+    else:
+        return False
+completed 164/397: acc = 0.8
+def word_len(s: str) -> bool:
+    """
+	Write a python function to check whether the length of the word is odd or not.
+	"""
+    return len(s) % 2 != 0
+completed 165/397: acc = 0.8
+from typing import List, Any
+
+def add_string(list_: List[Any], string: str) -> List[str]:
+    """
+	Write a function to apply a given format string to all of the elements in a list.
+	"""
+    return [string.format(item) for item in list_]
+completed 166/397: acc = 0.8
+def all_Characters_Same(s: str) -> bool:
+    """
+	Write a python function to check whether all the characters are same or not.
+	"""
+    if len(s) == 0:
+        return True
+
+    first_char = s[0]
+    for char in s:
+        if char != first_char:
+            return False
+
+    return True
+completed 167/397: acc = 0.8
+from typing import List
+
+def odd_position(nums: List[int]) -> bool:
+    """
+	Write a python function to check whether every odd index contains odd numbers of a given list.
+	"""
+    for i in range(1, len(nums), 2):
+        if nums[i] % 2 == 0:
+            return False
+    return True
+completed 168/397: acc = 0.8
+from typing import List
+
+def reverse_Array_Upto_K(input: List[int], k: int) -> List[int]:
+    """
+	Write a python function to reverse an array upto a given position.
+	"""
+    if k > len(input):
+        k = len(input)
+
+    return input[:k][::-1] + input[k:]
+completed 169/397: acc = 0.8
+from typing import List
+
+def big_diff(nums: List[int]) -> int:
+    """
+	Write a python function to find the difference between largest and smallest value in a given list.
+	"""
+    if not nums:
+        return 0
+
+    min_val = min(nums)
+    max_val = max(nums)
+
+    return max_val - min_val
+completed 170/397: acc = 0.81
+from typing import List, Union
+
+def flatten_list(list1: List[Union[int, List[int]]]) -> List[int]:
+    """
+	Write a function to flatten a given nested list structure.
+	"""
+    result = []
+
+    for item in list1:
+        if isinstance(item, int):
+            result.append(item)
+        elif isinstance(item, list):
+            result.extend(flatten_list(item))
+
+    return result
+completed 171/397: acc = 0.81
+from typing import List
+
+def index_multiplication(test_tup1: List[List[int]], test_tup2: List[List[int]]) -> List[List[int]]:
+    """
+	Write a function to perform index wise multiplication of list elements in the given two lists.
+	"""
+    result = []
+
+    for i in range(len(test_tup1)):
+        temp = []
+        for j in range(len(test_tup1[i])):
+            temp.append(test_tup1[i][j] * test_tup2[i][j])
+        result.append(temp)
+
+    return result
+completed 172/397: acc = 0.81
+def count_Primes_nums(n: int) -> int:
+    """
+	Write a python function that takes in a non-negative number and returns the number of prime numbers less than the given non-negative number.
+	"""
+    def is_prime(num):
+        if num < 2:
+            return False
+        for i in range(2, int(num**0.5) + 1):
+            if num % i == 0:
+                return False
+        return True
+
+    count = 0
+    for i in range(2, n):
+        if is_prime(i):
+            count += 1
+    return count
+completed 173/397: acc = 0.81
+from typing import List
+
+def sum_range_list(list1: List[int], m: int, n: int) -> int:
+    """
+	Write a function to find the sum of numbers in a list within a range specified by two indices.
+	"""
+    if m < 0 or n >= len(list1) or m > n:
+        return 0
+
+    return sum(list1[m:n+1])
+completed 174/397: acc = 0.8
+from typing import List
+
+def comb_sort(nums: List[int]) -> List[int]:
+    """
+	Write a function to sort a list of elements.
+	"""
+    gap = len(nums)
+    shrink = 1.3
+    sorted = False
+
+    while not sorted:
+        gap = int(gap / shrink)
+        if gap <= 1:
+            gap = 1
+            sorted = True
+
+        i = 0
+        while i + gap < len(nums):
+            if nums[i] > nums[i + gap]:
+                nums[i], nums[i + gap] = nums[i + gap], nums[i]
+                sorted = False
+            i += 1
+
+    return nums
+completed 175/397: acc = 0.81
+def remove_whitespaces(text1: str) -> str:
+    """
+	Write a function to remove all whitespaces from the given string.
+	"""
+    return text1.replace(" ", "")
+completed 176/397: acc = 0.81
+def lcs_of_three(X: str, Y: str, Z: str) -> int:
+    """
+	Write a function to find the longest common subsequence for the given three string sequence. https://www.geeksforgeeks.org/lcs-longest-common-subsequence-three-strings/
+	"""
+    m = len(X)
+    n = len(Y)
+    o = len(Z)
+
+    L = [[[0 for _ in range(o+1)] for _ in range(n+1)] for _ in range(m+1)]
+
+    for i in range(m+1):
+        for j in range(n+1):
+            for k in range(o+1):
+                if i == 0 or j == 0 or k == 0:
+                    L[i][j][k] = 0
+                elif X[i-1] == Y[j-1] == Z[k-1]:
+                    L[i][j][k] = L[i-1][j-1][k-1] + 1
+                else:
+                    L[i][j][k] = max(L[i-1][j][k], L[i][j-1][k], L[i][j][k-1])
+
+    return L[m][n][o]
+completed 177/397: acc = 0.81
+from typing import List
+
+def swap_numbers(a: int, b: int) -> List[int]:
+    """
+	Write a function that takes in two numbers and returns a list with the second number and then the first number.
+	"""
+    return [b, a]
+completed 178/397: acc = 0.81
+from typing import List, Tuple
+
+def subject_marks(subjectmarks: List[Tuple[str, int]]) -> List[Tuple[str, int]]:
+    """
+	Write a function to sort a list of tuples using the second value of each tuple.
+	"""
+    return sorted(subjectmarks, key=lambda x: x[1])
+completed 179/397: acc = 0.81
+from typing import Tuple
+
+def tuple_to_int(nums: Tuple[int, int, int]) -> int:
+    """
+	Write a function to convert a given tuple of positive integers into a single integer.
+	"""
+    return int("".join(str(num) for num in nums))
+completed 180/397: acc = 0.81
+def first_Digit(n: int) -> int:
+    """
+	Write a python function to find the first digit of a given number.
+	"""
+    while n >= 10:
+        n //= 10
+    return n
+completed 181/397: acc = 0.81
+from typing import List
+
+def string_to_list(string: str) -> List[str]:
+    """
+	Write a function to convert a string to a list of strings split on the space character.
+	"""
+    return string.split(" ")
+completed 182/397: acc = 0.81
+from typing import List
+
+def find_min_diff(arr: List[int], n: int) -> int:
+    """
+	Write a python function to find the minimum difference between any two elements in a given array. https://www.geeksforgeeks.org/find-minimum-difference-pair/
+	"""
+    if n <= 1:
+        return 0
+
+    arr.sort()
+
+    min_diff = arr[1] - arr[0]
+    for i in range(2, n):
+        min_diff = min(min_diff, arr[i] - arr[i - 1])
+
+    return min_diff
+completed 183/397: acc = 0.81
+from typing import List
+
+def k_smallest_pairs(nums1: List[int], nums2: List[int], k: int) -> List[List[int]]:
+    """
+	Write a function to find k number of smallest pairs which consist of one element from the first array and one element from the second array.
+	"""
+    import heapq
+
+    if not nums1 or not nums2:
+        return []
+
+    pairs = []
+    for i in nums1:
+        for j in nums2:
+            heapq.heappush(pairs, (i + j, [i, j]))
+
+    result = []
+    for _ in range(min(k, len(pairs))):
+        result.append(heapq.heappop(pairs)[1])
+
+    return result
+completed 184/397: acc = 0.82
+def capital_words_spaces(str1: str) -> str:
+    """
+	Write a function to put spaces between words starting with capital letters in a given string.
+	"""
+    result = ""
+    for i, char in enumerate(str1):
+        if char.isupper() and i != 0:
+            result += " "
+        result += char
+    return result
+completed 185/397: acc = 0.82
+from typing import Tuple
+
+def convert(numbers: int) -> Tuple[float, float]:
+    """
+	Write a python function to convert complex numbers to polar coordinates.
+	"""
+    import cmath
+
+    # Convert the given complex number to polar coordinates
+    polar_coordinates = cmath.polar(complex(numbers))
+
+    # Return the polar coordinates as a tuple (magnitude, angle)
+    return polar_coordinates
+completed 186/397: acc = 0.82
+from typing import List
+
+def neg_nos(list1: List[int]) -> List[int]:
+    """
+	Write a python function to return the negative numbers in a list.
+	"""
+    negative_numbers = [num for num in list1 if num < 0]
+    return negative_numbers
+completed 187/397: acc = 0.82
+def median_numbers(a: int, b: int, c: int) -> float:
+    """
+	Write a function to find the median of three numbers.
+	"""
+    numbers = [a, b, c]
+    numbers.sort()
+    return numbers[1]
+completed 188/397: acc = 0.82
+from typing import List, Union
+
+def combinations_list(list1: List[str]) -> List[Union[List[None], List[str]]]:
+    """
+	Write a function to find all possible combinations of the elements of a given list.
+	"""
+    from itertools import chain, combinations
+
+    def all_combinations(iterable):
+        return chain(*map(lambda x: combinations(iterable, x), range(0, len(iterable) + 1)))
+
+    result = list(all_combinations(list1))
+    return [list(comb) for comb in result]
+completed 189/397: acc = 0.81
+from typing import List
+
+def divisible_by_digits(startnum: int, endnum: int) -> List[int]:
+    """
+	Write a function to find numbers within a given range from startnum ti endnum where every number is divisible by every digit it contains. https://www.w3resource.com/python-exercises/lambda/python-lambda-exercise-24.php
+	"""
+    result = []
+
+    for num in range(startnum, endnum + 1):
+        digits = [int(d) for d in str(num) if int(d) != 0]
+        if all(num % d == 0 for d in digits):
+            result.append(num)
+
+    return result
+completed 190/397: acc = 0.81
+from typing import List
+
+def Split(list: List[int]) -> List[int]:
+    """
+	Write a python function which takes a list of integers and only returns the odd ones.
+	"""
+    odd_numbers = []
+
+    for number in list:
+        if number % 2 != 0:
+            odd_numbers.append(number)
+
+    return odd_numbers
+completed 191/397: acc = 0.81
+from typing import List
+
+def long_words(n: int, str: str) -> List[str]:
+    """
+	Write a function to find words that are longer than n characters from a given list of words.
+	"""
+    words = str.split()
+    long_words_list = []
+
+    for word in words:
+        if len(word) > n:
+            long_words_list.append(word)
+
+    return long_words_list
+completed 192/397: acc = 0.81
+from typing import List
+
+def is_sublist(l: List[int], s: List[int]) -> bool:
+    """
+	Write a function to check whether a list contains the given sublist or not.
+	"""
+    if not s:
+        return True
+
+    for i in range(len(l) - len(s) + 1):
+        if l[i:i+len(s)] == s:
+            return True
+
+    return False
+completed 193/397: acc = 0.81
+from typing import List, Any, Optional
+
+def common_element(list1: List[Any], list2: List[Any]) -> Optional[bool]:
+    """
+	Write a function that takes two lists and returns true if they have at least one common element.
+	"""
+    for element in list1:
+        if element in list2:
+            return True
+    return False
+completed 194/397: acc = 0.81
+def replace_specialchar(text: str) -> str:
+    """
+	Write a function to replace all occurrences of spaces, commas, or dots with a colon.
+	"""
+    return text.replace(" ", ":").replace(",", ":").replace(".", ":")
+completed 195/397: acc = 0.81
+from typing import List
+
+def pancake_sort(nums: List[int]) -> List[int]:
+    """
+	Write a function to sort a list of elements.
+	"""
+    def flip(nums: List[int], k: int) -> None:
+        left = 0
+        right = k
+        while left < right:
+            nums[left], nums[right] = nums[right], nums[left]
+            left += 1
+            right -= 1
+
+    def find_max_index(nums: List[int], k: int) -> int:
+        max_index = 0
+        for i in range(1, k + 1):
+            if nums[i] > nums[max_index]:
+                max_index = i
+        return max_index
+
+    n = len(nums)
+    while n > 1:
+        max_index = find_max_index(nums, n - 1)
+        if max_index != n - 1:
+            flip(nums, max_index)
+            flip(nums, n - 1)
+        n -= 1
+
+    return nums
+completed 196/397: acc = 0.81
+from typing import List
+
+def large_product(nums1: List[int], nums2: List[int], N: int) -> List[int]:
+    """
+	Write a function to find the specified number of largest products from two given lists, selecting one factor from each list.
+	"""
+    # Initialize an empty list to store the products
+    products = []
+
+    # Iterate through both lists and calculate the product of each pair
+    for num1 in nums1:
+        for num2 in nums2:
+            products.append(num1 * num2)
+
+    # Sort the products in descending order
+    products.sort(reverse=True)
+
+    # Return the first N largest products
+    return products[:N]
+completed 197/397: acc = 0.81
+def otherside_rightangle(w: int, h: int) -> float:
+    """
+	Write a function to find the third side of a right angled triangle.
+	"""
+    import math
+
+    # Calculate the third side using the Pythagorean theorem
+    third_side = math.sqrt(w**2 + h**2)
+
+    return third_side
+completed 198/397: acc = 0.81
+from typing import List, Tuple
+
+def add_lists(test_list: List[int], test_tup: Tuple[int, int]) -> Tuple[int, int, int, int, int]:
+    """
+	Write a function to append the given list to the given tuples.
+	"""
+    # Convert the tuple to a list
+    test_tup_list = list(test_tup)
+
+    # Append the elements of test_list to test_tup_list
+    for element in test_list:
+        test_tup_list.append(element)
+
+    # Convert the list back to a tuple
+    result = tuple(test_tup_list)
+
+    return result
+completed 199/397: acc = 0.81
+from typing import Tuple, Dict
+
+def add_dict_to_tuple(test_tup: Tuple[int, int, int], test_dict: Dict[str, int]) -> Tuple[int, int, int, Dict[str, int]]:
+    """
+	Write a function to add a dictionary to the tuple. The output should be a tuple.
+	"""
+    new_tup = test_tup + (test_dict,)
+    return new_tup
+completed 200/397: acc = 0.81
+from typing import Optional
+
+def first_non_repeating_character(str1: str) -> Optional[str]:
+    """
+	Write a python function to find the first non-repeated character in a given string.
+	"""
+    char_count = {}
+
+    for char in str1:
+        if char in char_count:
+            char_count[char] += 1
+        else:
+            char_count[char] = 1
+
+    for char in str1:
+        if char_count[char] == 1:
+            return char
+
+    return None
+completed 201/397: acc = 0.82
+from typing import List, Any
+
+def Find_Min(lst: List[List[Any]]) -> List[Any]:
+    """
+	Write a python function to find the sublist having minimum length.
+	"""
+    if not lst:
+        return []
+
+    min_len = len(lst[0])
+    min_sublist = lst[0]
+
+    for sublist in lst[1:]:
+        if len(sublist) < min_len:
+            min_len = len(sublist)
+            min_sublist = sublist
+
+    return min_sublist
+completed 202/397: acc = 0.82
+from typing import List, Any
+
+def extract_quotation(text1: str) -> List[Any]:
+    """
+	Write a function to extract values between quotation marks " " of the given string.
+	"""
+    result = []
+    start = -1
+
+    for i, char in enumerate(text1):
+        if char == '"':
+            if start == -1:
+                start = i + 1
+            else:
+                result.append(text1[start:i])
+                start = -1
+
+    return result
+completed 203/397: acc = 0.82
+def find_Rotations(str: str) -> int:
+    """
+	Write a python function to find the minimum number of rotations (greater than 0) required to get the same string.
+	"""
+    n = len(str)
+    temp = str + str
+    count = 1
+
+    for i in range(1, n):
+        if temp[i:i+n] == str:
+            return count
+        count += 1
+
+    return n
+completed 204/397: acc = 0.82
+from typing import List
+
+def count_list(input_list: List[List[int]]) -> int:
+    """
+	Write a python function to count the number of lists in a given number of lists.
+	"""
+    count = 0
+    for item in input_list:
+        if isinstance(item, list):
+            count += 1
+    return count
+completed 205/397: acc = 0.82
+def is_lower(string: str) -> str:
+    """
+	Write a python function to convert the given string to lower case.
+	"""
+    return string.lower()
+completed 206/397: acc = 0.82
+def find_Average_Of_Cube(n: int) -> float:
+    """
+	Write a python function to find the average of cubes of first n natural numbers.
+	"""
+    total_sum = 0
+    for i in range(1, n+1):
+        total_sum += i**3
+    average = total_sum / n
+    return average
+completed 207/397: acc = 0.82
+def noprofit_noloss(actual_cost: int, sale_amount: int) -> bool:
+    """
+	Write a function to check whether the given amount has no profit and no loss
+	"""
+    if actual_cost == sale_amount:
+        return True
+    else:
+        return False
+completed 208/397: acc = 0.82
+def toggle_string(string: str) -> str:
+    """
+	Write a function to toggle the case of all characters in a string.
+	"""
+    toggled_string = ""
+
+    for char in string:
+        if char.islower():
+            toggled_string += char.upper()
+        else:
+            toggled_string += char.lower()
+
+    return toggled_string
+completed 209/397: acc = 0.82
+from typing import List
+
+def right_insertion(a: List[int], x: int) -> int:
+    """
+	Write a function to locate the right insertion point for a specified value in sorted order.
+	"""
+    left, right = 0, len(a)
+
+    while left < right:
+        mid = (left + right) // 2
+        if a[mid] > x:
+            right = mid
+        else:
+            left = mid + 1
+
+    return left
+completed 210/397: acc = 0.82
+from typing import List
+
+def first_odd(nums: List[int]) -> int:
+    """
+	Write a python function to find the first odd number in a given list of numbers.
+	"""
+    for num in nums:
+        if num % 2 != 0:
+            return num
+    return -1
+completed 211/397: acc = 0.82
+def replace_spaces(text: str) -> str:
+    """
+	Write a function to replace whitespaces with an underscore and vice versa in a given string.
+	"""
+    return text.replace(" ", "_").replace("_", " ")
+completed 212/397: acc = 0.82
+from typing import List
+
+def unique_product(list_data: List[int]) -> int:
+    """
+	Write a python function to calculate the product of the unique numbers in a given list.
+	"""
+    unique_numbers = set(list_data)
+    product = 1
+
+    for number in unique_numbers:
+        product *= number
+
+    return product
+completed 213/397: acc = 0.82
+def text_match_wordz_middle(text: str) -> bool:
+    """
+	Write a function that checks if a strings contains 'z', except at the start and end of the word.
+	"""
+    if len(text) < 3:
+        return False
+
+    for i in range(1, len(text) - 1):
+        if text[i] == 'z':
+            return True
+
+    return False
+completed 214/397: acc = 0.82
+from typing import List, Tuple
+
+def max_aggregate(stdata: List[Tuple[str, int]]) -> Tuple[str, int]:
+    """
+	Write a function to calculate the maximum aggregate from the list of tuples.
+	"""
+    max_tuple = stdata[0]
+
+    for data in stdata:
+        if data[1] > max_tuple[1]:
+            max_tuple = data
+
+    return max_tuple
+completed 215/397: acc = 0.82
+def replace_char(str1: str, ch: str, newch: str) -> str:
+    """
+	Write a function to replace characters in a string.
+	"""
+    return str1.replace(ch, newch)
+completed 216/397: acc = 0.82
+from typing import List
+
+def check_greater(arr: List[int], number: int) -> bool:
+    """
+	Write a function to check whether the entered number is greater than the elements of the given array.
+	"""
+    for element in arr:
+        if number <= element:
+            return False
+    return True
+completed 217/397: acc = 0.82
+def change_date_format(dt: str) -> str:
+    """
+	Write a function to convert a date of yyyy-mm-dd format to dd-mm-yyyy format.
+	"""
+    date_parts = dt.split("-")
+    return f"{date_parts[2]}-{date_parts[1]}-{date_parts[0]}"
+completed 218/397: acc = 0.82
+from typing import List
+
+def positive_count(nums: List[int]) -> float:
+    """
+	Write a function to find the ration of positive numbers in an array of integers.
+	"""
+    if not nums:
+        return 0
+
+    positive_nums = sum(1 for num in nums if num > 0)
+    return positive_nums / len(nums)
+completed 219/397: acc = 0.82
+def sumofFactors(n: int) -> int:
+    """
+	Write a python function to find the sum of even factors of a number.
+	"""
+    even_factors_sum = 0
+
+    for i in range(2, n+1, 2):
+        if n % i == 0:
+            even_factors_sum += i
+
+    return even_factors_sum
+completed 220/397: acc = 0.82
+def remove_lowercase(str1: str) -> str:
+    """
+	Write a function to remove lowercase substrings from a given string.
+	"""
+    result = ""
+    for char in str1:
+        if not char.islower():
+            result += char
+    return result
+completed 221/397: acc = 0.82
+def remove_dirty_chars(string: str, second_string: str) -> str:
+    """
+	Write a function to remove characters from the first string which are present in the second string.
+	"""
+    clean_string = ""
+    for char in string:
+        if char not in second_string:
+            clean_string += char
+    return clean_string
+completed 222/397: acc = 0.82
+from typing import List, Any
+
+def consecutive_duplicates(nums: List[Any]) -> List[Any]:
+    """
+	Write a function to remove consecutive duplicates of a given list.
+	"""
+    result = []
+    for i in range(len(nums)):
+        if i == 0 or nums[i] != nums[i-1]:
+            result.append(nums[i])
+    return result
+completed 223/397: acc = 0.82
+from typing import Any, List
+
+def count_Occurrence(tup: Any, lst: List[Any]) -> int:
+    """
+	Write a python function to count the occurence of all elements of list in a tuple.
+	"""
+    count = 0
+    for item in lst:
+        count += tup.count(item)
+    return count
+completed 224/397: acc = 0.82
+def remove_length(test_str: str, K: int) -> str:
+    """
+	Write a function to remove all the words with k length in the given string.
+	"""
+    words = test_str.split()
+    result = [word for word in words if len(word) != K]
+    return ' '.join(result)
+completed 225/397: acc = 0.82
+def jacobsthal_num(n: int) -> int:
+    """
+	Write a function to find the nth jacobsthal number. https://www.geeksforgeeks.org/jacobsthal-and-jacobsthal-lucas-numbers/ 0, 1, 1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, ...
+	"""
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return jacobsthal_num(n-1) + 2 * jacobsthal_num(n-2)
+completed 226/397: acc = 0.82
+from typing import List
+
+def max_Abs_Diff(arr: List[int]) -> int:
+    """
+	Write a python function to find the maximum difference between any two elements in a given array.
+	"""
+    max_diff = 0
+
+    for i in range(len(arr)):
+        for j in range(i+1, len(arr)):
+            diff = abs(arr[i] - arr[j])
+            if diff > max_diff:
+                max_diff = diff
+
+    return max_diff
+completed 227/397: acc = 0.82
+from typing import List
+
+def two_unique_nums(nums: List[int]) -> List[int]:
+    """
+	Write a python function to remove duplicate numbers from a given number of lists.
+	"""
+    unique_nums = list(set(nums))
+    return unique_nums
+completed 228/397: acc = 0.82
+from typing import List
+
+def find_Odd_Pair(A: List[int], N: int) -> int:
+    """
+	Write a python function to count the number of pairs whose xor value is odd.
+	"""
+    count = 0
+
+    for i in range(N):
+        for j in range(i+1, N):
+            if (A[i] ^ A[j]) % 2 != 0:
+                count += 1
+
+    return count
+completed 229/397: acc = 0.82
+from typing import List
+
+def max_sum_increasing_subseq(a: List[int], n: int, index: int, k: int) -> int:
+    """
+	Write a function to find the maximum sum of increasing subsequence from prefix until ith index and also including a given kth element which is after i, i.e., k > i .
+	"""
+    if index < 0:
+        return 0
+
+    if k <= index:
+        return max_sum_increasing_subseq(a, n, index - 1, k)
+
+    max_sum = max_sum_increasing_subseq(a, n, index - 1, k)
+
+    if a[index] < a[k]:
+        max_sum = max(max_sum, a[index] + max_sum_increasing_subseq(a, n, index - 1, index))
+
+    return max_sum
+completed 230/397: acc = 0.82
+def highest_Power_of_2(n: int) -> int:
+    """
+	Write a python function to find the highest power of 2 that is less than or equal to n.
+	"""
+    power = 0
+    while (2 ** (power + 1)) <= n:
+        power += 1
+    return 2 ** power
+completed 231/397: acc = 0.82
+from typing import List
+
+def add_nested_tuples(test_tup1: List[List[int]], test_tup2: List[List[int]]) -> List[List[int]]:
+    """
+	Write a function to perform index wise addition of list elements in the given two nested lists.
+	"""
+    result = []
+
+    for i in range(len(test_tup1)):
+        temp = []
+        for j in range(len(test_tup1[i])):
+            temp.append(test_tup1[i][j] + test_tup2[i][j])
+        result.append(temp)
+
+    return result
+completed 232/397: acc = 0.82
+def last_Digit(n: int) -> int:
+    """
+	Write a python function to find the last digit of a given number.
+	"""
+    return n % 10
+completed 233/397: acc = 0.82
+from typing import List
+
+def max_of_nth(test_list: List[List[int]], N: int) -> int:
+    """
+	Write a function which given a matrix represented as a list of lists returns the max of the n'th column.
+	"""
+    if not test_list or N < 0:
+        return None
+
+    max_value = float('-inf')
+    for row in test_list:
+        if len(row) > N:
+            max_value = max(max_value, row[N])
+
+    return max_value
+completed 234/397: acc = 0.82
+from typing import List, Tuple
+
+def sequential_search(dlist: List[int], item: int) -> Tuple[bool, int]:
+    """
+	Write a function that takes in an array and element and returns a tuple containing a boolean that indicates if the element is in the array and the index position of the element (or -1 if the element is not found).
+	"""
+    for index, element in enumerate(dlist):
+        if element == item:
+            return True, index
+    return False, -1
+completed 235/397: acc = 0.82
+from typing import List
+
+def is_Sub_Array(A: List[int], B: List[int]) -> bool:
+    """
+	Write a python function to check whether a list is sublist of another or not.
+	"""
+    if not B:
+        return True
+
+    for i in range(len(A) - len(B) + 1):
+        if A[i:i+len(B)] == B:
+            return True
+
+    return False
+completed 236/397: acc = 0.82
+def reverse_vowels(str1: str) -> str:
+    """
+	Write a python function to reverse only the vowels of a given string (where y is not a vowel).
+	"""
+    vowels = "AEIOUaeiou"
+    str1_list = list(str1)
+    i, j = 0, len(str1) - 1
+
+    while i < j:
+        if str1_list[i] not in vowels:
+            i += 1
+        elif str1_list[j] not in vowels:
+            j -= 1
+        else:
+            str1_list[i], str1_list[j] = str1_list[j], str1_list[i]
+            i += 1
+            j -= 1
+
+    return "".join(str1_list)
+completed 237/397: acc = 0.82
+def median_trapezium(base1: int, base2: int, height: int) -> float:
+    """
+	Write a function to find the median length of a trapezium.
+	"""
+    median_length = (base1 + base2) / 2
+    return median_length
+completed 238/397: acc = 0.82
+from typing import List
+
+def remove_elements(list1: List[int], list2: List[int]) -> List[int]:
+    """
+	Write a function to remove all elements from a given list present in another list.
+	"""
+    result = [elem for elem in list1 if elem not in list2]
+    return result
+completed 239/397: acc = 0.82
+from typing import List
+
+def find_kth(arr1: List[int], arr2: List[int], k: int) -> int:
+    """
+	Write a function to find kth element from the given two sorted arrays.
+	"""
+    if not arr1:
+        return arr2[k - 1]
+    if not arr2:
+        return arr1[k - 1]
+    if k == 1:
+        return min(arr1[0], arr2[0])
+
+    mid1 = min(k // 2, len(arr1))
+    mid2 = min(k // 2, len(arr2))
+
+    if arr1[mid1 - 1] < arr2[mid2 - 1]:
+        return find_kth(arr1[mid1:], arr2, k - mid1)
+    else:
+        return find_kth(arr1, arr2[mid2:], k - mid2)
+completed 240/397: acc = 0.82
+def odd_values_string(str: str) -> str:
+    """
+	Write a python function to remove the characters which have odd index values of a given string.
+	"""
+    result = ""
+    for i in range(len(str)):
+        if i % 2 == 0:
+            result += str[i]
+    return result
+completed 241/397: acc = 0.83
+from typing import List, Union, Tuple
+
+def count_first_elements(test_tup: List[Union[int, Tuple[int, int]]]) -> int:
+    """
+	Write a function to find the number of elements that occurs before the list element in the given tuple.
+	"""
+    count = 0
+    for element in test_tup:
+        if isinstance(element, int):
+            count += 1
+        else:
+            break
+    return count
+completed 242/397: acc = 0.83
+def ascii_value(k: str) -> int:
+    """
+	Write a function to find the ascii value of a character.
+	"""
+    return ord(k)
+completed 243/397: acc = 0.83
+def find_Index(n: int) -> int:
+    """
+	Write a python function to find the index of smallest triangular number with n digits. https://www.geeksforgeeks.org/index-of-smallest-triangular-number-with-n-digits/
+	"""
+    import math
+
+    # Calculate the smallest triangular number with n digits
+    smallest_triangular_number = 10 ** (n - 1)
+
+    # Calculate the index using the formula: index = ceil((sqrt(8 * smallest_triangular_number + 1) - 1) / 2)
+    index = math.ceil((math.sqrt(8 * smallest_triangular_number + 1) - 1) / 2)
+
+    return index
+completed 244/397: acc = 0.83
+from typing import List
+
+def test_duplicate(arraynums: List[int]) -> bool:
+    """
+	Write a function to find whether a given array of integers contains any duplicate element.
+	"""
+    if len(arraynums) == len(set(arraynums)):
+        return False
+    else:
+        return True
+completed 245/397: acc = 0.83
+from typing import List
+
+def smallest_num(xs: List[int]) -> int:
+    """
+	Write a python function to find smallest number in a list.
+	"""
+    if not xs:
+        raise ValueError("List is empty")
+
+    smallest = xs[0]
+    for num in xs:
+        if num < smallest:
+            smallest = num
+
+    return smallest
+completed 246/397: acc = 0.83
+from typing import Optional
+
+def sector_area(r: int, a: int) -> Optional[float]:
+    """
+	Write a function to find area of a sector. The function takes the radius and angle as inputs. Function should return None if the angle is larger than 360 degrees.
+	"""
+    if a > 360:
+        return None
+
+    import math
+    area = (a / 360) * math.pi * r**2
+    return area
+completed 247/397: acc = 0.83
+from typing import List
+
+def count_samepair(list1: List[int], list2: List[int], list3: List[int]) -> int:
+    """
+	Write a function to count number items that are identical in the same position of three given lists.
+	"""
+    count = 0
+    for i in range(min(len(list1), len(list2), len(list3))):
+        if list1[i] == list2[i] == list3[i]:
+            count += 1
+    return count
+completed 248/397: acc = 0.83
+from typing import List, Tuple
+
+def extract_freq(test_list: List[Tuple[int, int]]) -> int:
+    """
+	Write a function to extract the number of unique tuples in the given list.
+	"""
+    unique_tuples = set(test_list)
+    return len(unique_tuples)
+completed 249/397: acc = 0.83
+from typing import Any
+
+def min_Swaps(str1: str, str2: str) -> Any:
+    """
+	Write a python function to count minimum number of swaps required to convert one binary number represented as a string to another.
+	"""
+    if len(str1) != len(str2):
+        return "Invalid input: strings must have the same length"
+
+    if not (set(str1) == set(str2) == {'0', '1'}):
+        return "Invalid input: strings must contain only 0s and 1s"
+
+    count1 = count2 = 0
+    for i in range(len(str1)):
+        if str1[i] != str2[i]:
+            if str1[i] == '0':
+                count1 += 1
+            else:
+                count2 += 1
+
+    return (count1 + 1) // 2 + (count2 + 1) // 2
+completed 250/397: acc = 0.82
+def hexagonal_num(n: int) -> int:
+    """
+	Write a function to find the nth hexagonal number.
+	"""
+    return n * (2 * n - 1)
+completed 251/397: acc = 0.82
+def remove_all_spaces(text: str) -> str:
+    """
+	Write a function to remove all whitespaces from a string.
+	"""
+    return text.replace(" ", "")
+completed 252/397: acc = 0.83
+def multiply_int(x: int, y: int) -> int:
+    """
+	Write a function to multiply two integers.
+	"""
+    result = x * y
+    return result
+completed 253/397: acc = 0.83
+def number_ctr(str: str) -> int:
+    """
+	Write a python function to count number of digits in a given string.
+	"""
+    count = 0
+    for char in str:
+        if char.isdigit():
+            count += 1
+    return count
+completed 254/397: acc = 0.83
+from typing import List
+
+def get_pairs_count(arr: List[int], sum: int) -> int:
+    """
+	Write a python function to count the number of pairs whose sum is equal to ‘sum’. The funtion gets as input a list of numbers and the sum,
+	"""
+    count = 0
+    n = len(arr)
+
+    for i in range(n):
+        for j in range(i+1, n):
+            if arr[i] + arr[j] == sum:
+                count += 1
+
+    return count
+completed 255/397: acc = 0.83
+def decimal_to_binary(n: int) -> str:
+    """
+	Write a function to convert the given decimal number to its binary equivalent, represented as a string with no leading zeros.
+	"""
+    if n == 0:
+        return "0"
+    binary = ""
+    while n > 0:
+        binary = str(n % 2) + binary
+        n = n // 2
+    return binary
+completed 256/397: acc = 0.83
+from typing import List
+
+def search(arr: List[int]) -> int:
+    """
+	Write a python function to find the element that appears only once in a sorted array.
+	"""
+    if len(arr) == 1:
+        return arr[0]
+
+    for i in range(0, len(arr), 2):
+        if i == len(arr) - 1 or arr[i] != arr[i + 1]:
+            return arr[i]
+
+    return -1
+completed 257/397: acc = 0.83
+def is_undulating(n: int) -> bool:
+    """
+	Write a function to check whether the given number is undulating or not.
+	"""
+    if n < 100:
+        return False
+
+    str_n = str(n)
+    first_digit = str_n[0]
+    second_digit = str_n[1]
+
+    if first_digit == second_digit:
+        return False
+
+    for i in range(2, len(str_n)):
+        if i % 2 == 0:
+            if str_n[i] != first_digit:
+                return False
+        else:
+            if str_n[i] != second_digit:
+                return False
+
+    return True
+completed 258/397: acc = 0.83
+from typing import List
+
+def count(lst: List[bool]) -> int:
+    """
+	Write a python function to count true booleans in the given list.
+	"""
+    count_true = 0
+    for item in lst:
+        if item:
+            count_true += 1
+    return count_true
+completed 259/397: acc = 0.83
+from typing import List, Tuple
+
+def pair_wise(l1: List[int]) -> List[Tuple[int, int]]:
+    """
+	Write a function to return a list of all pairs of consecutive items in a given list.
+	"""
+    result = []
+    for i in range(len(l1) - 1):
+        result.append((l1[i], l1[i + 1]))
+    return result
+completed 260/397: acc = 0.83
+from typing import Dict
+
+def check_value(dict: Dict[str, int], n: int) -> bool:
+    """
+	Write a function to check if all values are same in a dictionary.
+	"""
+    values = list(dict.values())
+    return all(value == n for value in values)
+completed 261/397: acc = 0.83
+from typing import List
+
+def largest_neg(list1: List[int]) -> int:
+    """
+	Write a python function to find the largest negative number from the given list.
+	"""
+    if not list1:
+        return None
+
+    largest_negative = None
+    for num in list1:
+        if num < 0:
+            if largest_negative is None or num > largest_negative:
+                largest_negative = num
+
+    return largest_negative
+completed 262/397: acc = 0.83
+from typing import Optional
+
+def first_repeated_char(str1: str) -> Optional[str]:
+    """
+	Write a python function to find the first repeated character in a given string.
+	"""
+    char_count = {}
+
+    for char in str1:
+        if char in char_count:
+            return char
+        else:
+            char_count[char] = 1
+
+    return None
+completed 263/397: acc = 0.83
+def odd_num_sum(n: int) -> int:
+    """
+	Write a python function to find the sum of fourth power of first n odd natural numbers.
+	"""
+    sum_of_fourth_powers = 0
+
+    for i in range(1, n * 2, 2):
+        sum_of_fourth_powers += i ** 4
+
+    return sum_of_fourth_powers
+completed 264/397: acc = 0.83
+from typing import Tuple, List
+
+def extract_rear(test_tuple: Tuple[str, str, str]) -> List[str]:
+    """
+	Write a function to extract only the rear index element of each string in the given tuple.
+	"""
+    result = []
+    for string in test_tuple:
+        if len(string) > 0:
+            result.append(string[-1])
+    return result
+completed 265/397: acc = 0.83
+from typing import List
+
+def sum_negativenum(nums: List[int]) -> int:
+    """
+	Write a function to calculate the sum of the negative numbers of a given list of numbers.
+	"""
+    negative_sum = 0
+    for num in nums:
+        if num < 0:
+            negative_sum += num
+    return negative_sum
+completed 266/397: acc = 0.83
+from typing import List
+
+def unique_Element(arr: List[int]) -> bool:
+    """
+	Write a python function to check whether a list of numbers contains only one distinct element or not.
+	"""
+    if len(arr) == 0:
+        return False
+
+    unique_element = arr[0]
+    for element in arr:
+        if element != unique_element:
+            return False
+
+    return True
+completed 267/397: acc = 0.83
+from typing import List
+
+def all_unique(test_list: List[int]) -> bool:
+    """
+	Write a python function to check if the elements of a given list are unique or not.
+	"""
+    return len(test_list) == len(set(test_list))
+completed 268/397: acc = 0.83
+def find_Parity(x: int) -> bool:
+    """
+	Write a python function to find whether the parity of a given number is odd.
+	"""
+    return x % 2 != 0
+completed 269/397: acc = 0.83
+from typing import List
+
+def Find_Max_Length(lst: List[List[int]]) -> int:
+    """
+	Write a python function to find the length of the longest sublists.
+	"""
+    max_length = 0
+
+    for sublist in lst:
+        if len(sublist) > max_length:
+            max_length = len(sublist)
+
+    return max_length
+completed 270/397: acc = 0.83
+from typing import Dict
+
+def merge_dictionaries_three(dict1: Dict[str, str], dict2: Dict[str, str], dict3: Dict[str, str]) -> Dict[str, str]:
+    """
+	Write a function to merge three dictionaries into a single dictionary.
+	"""
+    merged_dict = {}
+    for d in (dict1, dict2, dict3):
+        merged_dict.update(d)
+    return merged_dict
+completed 271/397: acc = 0.83
+def remove_Occ(s: str, ch: str) -> str:
+    """
+	Write a python function to remove first and last occurrence of a given character from the string.
+	"""
+    if not ch in s:
+        return s
+
+    first_occurrence = s.find(ch)
+    last_occurrence = s.rfind(ch)
+
+    if first_occurrence == last_occurrence:
+        return s[:first_occurrence] + s[first_occurrence + 1:]
+
+    return s[:first_occurrence] + s[first_occurrence + 1:last_occurrence] + s[last_occurrence + 1:]
+completed 272/397: acc = 0.83
+from typing import List
+
+def check_min_heap(arr: List[int]) -> bool:
+    """
+	Write a function to check if the given array represents min heap or not. https://www.geeksforgeeks.org/how-to-check-if-a-given-array-represents-a-binary-heap/
+	"""
+    n = len(arr)
+
+    def is_min_heap(i: int) -> bool:
+        left = 2 * i + 1
+        right = 2 * i + 2
+
+        if left < n and arr[left] < arr[i]:
+            return False
+        if right < n and arr[right] < arr[i]:
+            return False
+
+        if left >= n or right >= n:
+            return True
+
+        return is_min_heap(left) and is_min_heap(right)
+
+    return is_min_heap(0)
+completed 273/397: acc = 0.83
+from typing import List, Union
+
+def min_val(listval: List[Union[str, int]]) -> int:
+    """
+	Write a function to find the minimum value in a given heterogeneous list.
+	"""
+    min_value = None
+
+    for val in listval:
+        if isinstance(val, int):
+            if min_value is None or val < min_value:
+                min_value = val
+
+    return min_value
+completed 274/397: acc = 0.83
+from typing import List
+
+def interleave_lists(list1: List[int], list2: List[int], list3: List[int]) -> List[int]:
+    """
+	Write a function to interleave 3 lists of the same length into a single flat list.
+	"""
+    result = []
+    for i in range(len(list1)):
+        result.append(list1[i])
+        result.append(list2[i])
+        result.append(list3[i])
+    return result
+completed 275/397: acc = 0.83
+from typing import List
+
+def len_log(list1: List[str]) -> int:
+    """
+	Write a python function to find the length of the longest word.
+	"""
+    longest_word_length = 0
+
+    for word in list1:
+        if len(word) > longest_word_length:
+            longest_word_length = len(word)
+
+    return longest_word_length
+completed 276/397: acc = 0.83
+def loss_amount(actual_cost: int, sale_amount: int) -> int:
+    """
+	Write a function that gives loss amount on a sale if the given amount has loss else return 0.
+	"""
+    if actual_cost > sale_amount:
+        return actual_cost - sale_amount
+    else:
+        return 0
+completed 277/397: acc = 0.83
+from typing import List
+
+def _sum(arr: List[int]) -> int:
+    """
+	Write a python function to find the sum of an array.
+	"""
+    result = 0
+    for num in arr:
+        result += num
+    return result
+completed 278/397: acc = 0.83
+from typing import List, Tuple
+
+def max_length_list(input_list: List[List[int]]) -> Tuple[int, List[int]]:
+    """
+	Write a function to find the list with maximum length.
+	"""
+    max_length = 0
+    max_list = []
+
+    for lst in input_list:
+        if len(lst) > max_length:
+            max_length = len(lst)
+            max_list = lst
+
+    return max_length, max_list
+completed 279/397: acc = 0.83
+from typing import List, Tuple
+
+def rear_extract(test_list: List[Tuple[int, str, int]]) -> List[int]:
+    """
+	Write a function that takes in a list of tuples and returns a list containing the rear element of each tuple.
+	"""
+    result = []
+    for tup in test_list:
+        result.append(tup[-1])
+    return result
+completed 280/397: acc = 0.83
+from typing import List
+
+def count_Pairs(arr: List[int], n: int) -> int:
+    """
+	Write a python function which takes a list of integers and counts the number of possible unordered pairs where both elements are unequal.
+	"""
+    count = 0
+
+    for i in range(n):
+        for j in range(i+1, n):
+            if arr[i] != arr[j]:
+                count += 1
+
+    return count
+completed 281/397: acc = 0.83
+from typing import List, Tuple
+
+def count_bidirectional(test_list: List[Tuple[int, int]]) -> int:
+    """
+	Write a function to count bidirectional tuple pairs.
+	"""
+    count = 0
+    for i in range(len(test_list)):
+        for j in range(i+1, len(test_list)):
+            if test_list[i] == (test_list[j][1], test_list[j][0]):
+                count += 1
+    return count
+completed 282/397: acc = 0.83
+from typing import List
+
+def remove_parenthesis(items: List[str]) -> str:
+    """
+	Write a function to remove the parenthesis and what is inbetween them from a string.
+	"""
+    result = ""
+    open_parenthesis = 0
+
+    for char in items:
+        if char == '(':
+            open_parenthesis += 1
+        elif char == ')':
+            open_parenthesis -= 1
+        elif open_parenthesis == 0:
+            result += char
+
+    return result
+completed 283/397: acc = 0.83
+def dif_Square(n: int) -> bool:
+    """
+	Write a python function to check whether the given number can be represented as the difference of two squares or not.
+	"""
+    for i in range(1, n):
+        for j in range(i, n):
+            if i * i - j * j == n:
+                return True
+            elif i * i - j * j > n:
+                break
+    return False
+completed 284/397: acc = 0.82
+def cal_sum(n: int) -> int:
+    """
+	Write a function to calculate the sum of perrin numbers.
+	"""
+    def perrin_number(n: int) -> int:
+        if n == 0:
+            return 3
+        elif n == 1:
+            return 0
+        elif n == 2:
+            return 2
+        else:
+            return perrin_number(n-2) + perrin_number(n-3)
+
+    sum_perrin = 0
+    for i in range(n+1):
+        sum_perrin += perrin_number(i)
+
+    return sum_perrin
+completed 285/397: acc = 0.82
+def divisor(n: int) -> int:
+    """
+	Write a python function to find the number of divisors of a given integer.
+	"""
+    count = 0
+    for i in range(1, n+1):
+        if n % i == 0:
+            count += 1
+    return count
+completed 286/397: acc = 0.83
+from typing import List
+
+def get_Inv_Count(arr: List[int]) -> int:
+    """
+	Write a python function to count inversions in an array.
+	"""
+    inv_count = 0
+    n = len(arr)
+
+    for i in range(n):
+        for j in range(i+1, n):
+            if arr[i] > arr[j]:
+                inv_count += 1
+
+    return inv_count
+completed 287/397: acc = 0.83
+from typing import List
+
+def find_Max_Num(arr: List[int]) -> int:
+    """
+	Write a python function to find the largest number that can be formed with the given list of digits.
+	"""
+    arr.sort(reverse=True)
+    max_num = int("".join(str(x) for x in arr))
+    return max_num
+completed 288/397: acc = 0.83
+from typing import List
+
+def cummulative_sum(test_list: List[List[int]]) -> int:
+    """
+	Write a function to find the cumulative sum of all the values that are present in the given list of lists.
+	"""
+    total_sum = 0
+    for sublist in test_list:
+        for value in sublist:
+            total_sum += value
+    return total_sum
+completed 289/397: acc = 0.83
+from typing import List
+
+def nth_nums(nums: List[int], n: int) -> List[int]:
+    """
+	Write a function to compute the n-th power of each number in a list.
+	"""
+    result = []
+    for num in nums:
+        result.append(num ** n)
+    return result
+completed 290/397: acc = 0.83
+def left_rotate(n: int, d: int) -> int:
+    """
+	Write a function to that rotate left bits by d bits a given number. We assume that the number is 32 bit.
+	"""
+    # Left rotate the bits by d positions
+    return (n << d) | (n >> (32 - d))
+completed 291/397: acc = 0.83
+def lps(str: str) -> int:
+    """
+	Write a function to find the length of the longest palindromic subsequence in the given string.
+	"""
+    n = len(str)
+    dp = [[0] * n for _ in range(n)]
+
+    for i in range(n - 1, -1, -1):
+        dp[i][i] = 1
+        for j in range(i + 1, n):
+            if str[i] == str[j]:
+                dp[i][j] = dp[i + 1][j - 1] + 2
+            else:
+                dp[i][j] = max(dp[i + 1][j], dp[i][j - 1])
+
+    return dp[0][n - 1]
+completed 292/397: acc = 0.83
+def toggle_middle_bits(n: int) -> int:
+    """
+	Write a python function to toggle bits of the number except the first and the last bit. https://www.geeksforgeeks.org/toggle-bits-number-expect-first-last-bits/
+	"""
+    # Find the number of bits in the given number
+    num_bits = n.bit_length()
+
+    # If the number has less than 3 bits, return the number as it is
+    if num_bits < 3:
+        return n
+
+    # Create a mask with all bits set except the first and last bits
+    mask = (1 << (num_bits - 2)) - 4
+
+    # Toggle the middle bits using XOR operation
+    result = n ^ mask
+
+    return result
+completed 293/397: acc = 0.83
+from typing import List
+
+def tup_string(tup1: List[str]) -> str:
+    """
+	Write a function to convert a list to a string.
+	"""
+    result = ""
+    for item in tup1:
+        result += item
+    return result
+completed 294/397: acc = 0.83
+from typing import List
+
+def Extract(lst: List[List[int]]) -> List[int]:
+    """
+	Write a python function to get the first element of each sublist.
+	"""
+    result = []
+    for sublist in lst:
+        if len(sublist) > 0:
+            result.append(sublist[0])
+    return result
+completed 295/397: acc = 0.83
+def radian_degree(degree: int) -> float:
+    """
+	Write a function to convert degrees to radians.
+	"""
+    import math
+
+    radians = degree * (math.pi / 180)
+    return radians
+completed 296/397: acc = 0.83
+def next_power_of_2(n: int) -> int:
+    """
+	Write a python function to find the smallest power of 2 greater than or equal to n.
+	"""
+    if n <= 0:
+        return 1
+
+    power = 1
+    while power < n:
+        power *= 2
+
+    return power
+completed 297/397: acc = 0.83
+def text_match_zero_one(text: str) -> bool:
+    """
+	Write a function that matches a string that has an 'a' followed by one or more 'b's. https://www.w3resource.com/python-exercises/re/python-re-exercise-3.php
+	"""
+    import re
+
+    pattern = r"ab+"
+    if re.search(pattern, text):
+        return True
+    else:
+        return False
+completed 298/397: acc = 0.83
+from typing import List
+
+def pair_xor_Sum(arr: List[int], n: int) -> int:
+    """
+	Write a python function to find the sum of xor of all pairs of numbers in the given list.
+	"""
+    xor_sum = 0
+
+    for i in range(n):
+        for j in range(i+1, n):
+            xor_sum += arr[i] ^ arr[j]
+
+    return xor_sum
+completed 299/397: acc = 0.83
+def rectangle_area(l: int, b: int) -> int:
+    """
+	Write a function to find the area of a rectangle.
+	"""
+    area = l * b
+    return area
+completed 300/397: acc = 0.83
+def geometric_sum(n: int) -> float:
+    """
+	Write a function to calculate the geometric sum of n-1. https://www.w3resource.com/python-exercises/data-structures-and-algorithms/python-recursion-exercise-9.php
+	"""
+    if n < 0:
+        return 0
+    else:
+        return 1 / (2 ** n) + geometric_sum(n - 1)
+completed 301/397: acc = 0.83
+from typing import List
+
+def filter_oddnumbers(nums: List[int]) -> List[int]:
+    """
+	Write a function to filter odd numbers.
+	"""
+    return [num for num in nums if num % 2 != 0]
+completed 302/397: acc = 0.83
+def remove_odd(str1: str) -> str:
+    """
+	Write a function to remove odd characters in a string.
+	"""
+    result = ""
+    for i in range(len(str1)):
+        if i % 2 == 0:
+            result += str1[i]
+    return result
+completed 303/397: acc = 0.83
+def min_of_three(a: int, b: int, c: int) -> int:
+    """
+	Write a function to find minimum of three numbers.
+	"""
+    return min(a, b, c)
+completed 304/397: acc = 0.83
+def count_occurance(s: str) -> int:
+    """
+	Write a function to count the number of occurence of the string 'std' in a given string.
+	"""
+    return s.count('std')
+completed 305/397: acc = 0.83
+def text_match_one(text: str) -> bool:
+    """
+	Write a function that matches a string that has an a followed by one or more b's.
+	"""
+    import re
+
+    pattern = re.compile(r"ab+")
+    match = pattern.search(text)
+
+    return bool(match)
+completed 306/397: acc = 0.83
+def count_no_of_ways(n: int, k: int) -> int:
+    """
+	Write a function to find out the number of ways of painting the fence such that at most 2 adjacent posts have the same color for the given fence with n posts and k colors.
+	"""
+    if n == 0:
+        return 0
+    if n == 1:
+        return k
+    if n == 2:
+        return k * k
+
+    dp = [0] * (n + 1)
+    dp[1] = k
+    dp[2] = k * k
+
+    for i in range(3, n + 1):
+        dp[i] = (k - 1) * (dp[i - 1] + dp[i - 2])
+
+    return dp[n]
+completed 307/397: acc = 0.83
+from typing import List
+
+def find_remainder(arr: List[int], n: int) -> int:
+    """
+	Write a python function to find the product of the array multiplication modulo n.
+	"""
+    product = 1
+    for num in arr:
+        product *= num
+    return product % n
+completed 308/397: acc = 0.83
+from typing import List
+
+def check_K(test_tup: List[int], K: int) -> bool:
+    """
+	Write a function to check if the given tuples contain the k or not.
+	"""
+    return K in test_tup
+completed 309/397: acc = 0.83
+from typing import List
+
+def is_Monotonic(A: List[int]) -> bool:
+    """
+	Write a python function to check whether the given array is monotonic or not.
+	"""
+    if len(A) < 2:
+        return True
+
+    direction = A[1] - A[0]
+    for i in range(2, len(A)):
+        if direction == 0:
+            direction = A[i] - A[i - 1]
+            continue
+
+        if (A[i] - A[i - 1]) * direction < 0:
+            return False
+
+    return True
+completed 310/397: acc = 0.83
+def parabola_directrix(a: int, b: int, c: int) -> int:
+    """
+	Write a function to find the directrix of a parabola.
+	"""
+    directrix = (c - (b ** 2) / (4 * a))
+    return directrix
+completed 311/397: acc = 0.83
+from typing import List
+
+def div_list(nums1: List[int], nums2: List[int]) -> List[float]:
+    """
+	Write a function to divide two lists element wise.
+	"""
+    result = []
+    for i in range(len(nums1)):
+        if nums2[i] != 0:
+            result.append(nums1[i] / nums2[i])
+        else:
+            result.append(float('inf'))
+    return result
+completed 312/397: acc = 0.83
+from typing import Tuple
+
+def concatenate_tuple(test_tup: Tuple[str, str, int, str]) -> str:
+    """
+	Write a function to concatenate each element of tuple by the delimiter.
+	"""
+    delimiter = "-"
+    return delimiter.join(str(element) for element in test_tup)
+completed 313/397: acc = 0.83
+from typing import List, Tuple
+
+def add_tuple(test_list: List[int], test_tup: Tuple[int, int]) -> List[int]:
+    """
+	Write a function to add the given tuple to the given list.
+	"""
+    # Adding the tuple elements to the list
+    test_list.extend(test_tup)
+
+    # Returning the modified list
+    return test_list
+completed 314/397: acc = 0.83
+from typing import List
+
+def find_Element(arr: List[int], ranges: List[List[int]], rotations: int, index: int) -> int:
+    """
+	Write a python function to find element at a given index after number of rotations.
+	"""
+    def rotate(arr: List[int], start: int, end: int) -> None:
+        temp = arr[start]
+        for i in range(start, end):
+            arr[i] = arr[i + 1]
+        arr[end] = temp
+
+    for _ in range(rotations):
+        for r in ranges:
+            start, end = r
+            rotate(arr, start, end)
+
+    return arr[index]
+completed 315/397: acc = 0.83
+from typing import Tuple, Dict
+
+def tuple_to_dict(test_tup: Tuple[int, int, int, int, int, int]) -> Dict[int, int]:
+    """
+	Write a function to convert the given tuple to a key-value dictionary using adjacent elements. https://www.geeksforgeeks.org/python-convert-tuple-to-adjacent-pair-dictionary/
+	"""
+    result_dict = {}
+    for i in range(0, len(test_tup) - 1, 2):
+        result_dict[test_tup[i]] = test_tup[i + 1]
+    return result_dict
+completed 316/397: acc = 0.83
+from typing import List
+
+def find_First_Missing(array: List[int]) -> int:
+    """
+	Write a python function to find the smallest missing number from a sorted list of natural numbers.
+	"""
+    if not array:
+        return 1
+
+    for i in range(len(array)):
+        if array[i] != i + 1:
+            return i + 1
+
+    return len(array) + 1
+completed 317/397: acc = 0.83
+from typing import List, Union
+
+def max_val(listval: List[Union[str, int]]) -> int:
+    """
+	Write a function to find the maximum value in a given heterogeneous list.
+	"""
+    max_value = None
+
+    for val in listval:
+        if isinstance(val, int):
+            if max_value is None or val > max_value:
+                max_value = val
+
+    return max_value
+completed 318/397: acc = 0.83
+def count_char_position(str1: str) -> int:
+    """
+	Write a function to count the number of characters in a string that occur at the same position in the string as in the English alphabet (case insensitive).
+	"""
+    count = 0
+    str1 = str1.lower()
+
+    for i, char in enumerate(str1):
+        if ord(char) - ord('a') == i:
+            count += 1
+
+    return count
+completed 319/397: acc = 0.83
+from typing import List
+
+def perfect_squares(a: int, b: int) -> List[int]:
+    """
+	Write a function to find perfect squares between two given numbers.
+	"""
+    result = []
+    for i in range(a, b+1):
+        if i > 0 and (i ** 0.5).is_integer():
+            result.append(i)
+    return result
+completed 320/397: acc = 0.83
+from typing import Any
+
+def check_none(test_tup: Any) -> bool:
+    """
+	Write a function to check if the given tuple has any none value or not.
+	"""
+    for item in test_tup:
+        if item is None:
+            return True
+    return False
+completed 321/397: acc = 0.83
+from typing import List, Any
+
+def multiply_elements(test_tup: List[int]) -> List[Any]:
+    """
+	Write a function that takes as input a list of numbers (t_1,...,t_{N+1}) and returns a list of length N where the i-th element of the tuple is equal to t_i * t_{i+1}.
+	"""
+    result = []
+    for i in range(len(test_tup) - 1):
+        result.append(test_tup[i] * test_tup[i + 1])
+    return result
+completed 322/397: acc = 0.83
+from typing import List
+
+def left_insertion(a: List[int], x: int) -> int:
+    """
+	Write a function to locate the left insertion point for a specified value in sorted order. https://www.w3resource.com/python-exercises/data-structures-and-algorithms/python-data-structure-exercise-24.php
+	"""
+    left, right = 0, len(a)
+
+    while left < right:
+        mid = (left + right) // 2
+        if a[mid] < x:
+            left = mid + 1
+        else:
+            right = mid
+
+    return left
+completed 323/397: acc = 0.83
+from typing import List, Tuple
+
+def max_difference(test_list: List[Tuple[int, int]]) -> int:
+    """
+	Write a function to find the maximum difference between available pairs in the given tuple list.
+	"""
+    max_diff = 0
+
+    for i in range(len(test_list)):
+        for j in range(i+1, len(test_list)):
+            diff = abs(test_list[i][0] - test_list[j][0]) + abs(test_list[i][1] - test_list[j][1])
+            max_diff = max(max_diff, diff)
+
+    return max_diff
+completed 324/397: acc = 0.83
+def dog_age(h_age: int) -> int:
+    """
+	Write a function to calculate a dog's age in dog's years.
+	"""
+    dog_years = h_age * 7
+    return dog_years
+completed 325/397: acc = 0.82
+from typing import Tuple
+
+def substract_elements(test_tup1: Tuple[int, int, int], test_tup2: Tuple[int, int, int]) -> Tuple[int, int, int]:
+    """
+	Write a function that takes in two tuples and subtracts the elements of the first tuple by the elements of the second tuple with the same index.
+	"""
+    result = tuple(a - b for a, b in zip(test_tup1, test_tup2))
+    return result
+completed 326/397: acc = 0.83
+def get_Char(strr: str) -> str:
+    """
+	Write a python function to find the character made by adding the ASCII value of all the characters of the given string modulo 26.
+	"""
+    ascii_sum = 0
+
+    for char in strr:
+        ascii_sum += ord(char)
+
+    result_char = chr(((ascii_sum % 26) + ord('A')))
+
+    return result_char
+completed 327/397: acc = 0.82
+from typing import List
+
+def find_substring(str1: List[str], sub_str: str) -> bool:
+    """
+	Write a function to check if a string is present as a substring in a given list of string values.
+	"""
+    for string in str1:
+        if sub_str in string:
+            return True
+    return False
+completed 328/397: acc = 0.82
+def next_smallest_palindrome(num: int) -> int:
+    """
+	Write a function to find the next smallest palindrome of a specified integer, returned as an integer.
+	"""
+    def is_palindrome(n: int) -> bool:
+        return str(n) == str(n)[::-1]
+
+    num += 1
+    while not is_palindrome(num):
+        num += 1
+
+    return num
+completed 329/397: acc = 0.82
+from typing import List
+
+def sub_list(nums1: List[int], nums2: List[int]) -> List[int]:
+    """
+	Write a function to subtract two lists element-wise.
+	"""
+    result = []
+    for i in range(len(nums1)):
+        result.append(nums1[i] - nums2[i])
+    return result
+completed 330/397: acc = 0.82
+from typing import List
+
+def even_position(nums: List[int]) -> bool:
+    """
+	Write a python function to check whether every even index contains even numbers of a given list.
+	"""
+    for i in range(0, len(nums), 2):
+        if nums[i] % 2 != 0:
+            return False
+    return True
+completed 331/397: acc = 0.82
+def snake_to_camel(word: str) -> str:
+    """
+	Write a function to convert the given snake case string to camel case string.
+	"""
+    components = word.split('_')
+    return components[0] + ''.join(x.title() for x in components[1:])
+completed 332/397: acc = 0.82
+from typing import List, Any
+
+def extract_index_list(l1: List[int], l2: List[int], l3: List[int]) -> List[Any]:
+    """
+	We say that an element is common for lists l1, l2, l3 if it appears in all three lists under the same index. Write a function to find common elements from three lists. The function should return a list.
+	"""
+    common_elements = []
+
+    for i in range(min(len(l1), len(l2), len(l3))):
+        if l1[i] == l2[i] == l3[i]:
+            common_elements.append(l1[i])
+
+    return common_elements
+completed 333/397: acc = 0.82
+def checks(n: int) -> bool:
+    """
+	Write a python function to check if a given number is one less than twice its reverse.
+	"""
+    # Reverse the given number
+    reversed_n = int(str(n)[::-1])
+
+    # Check if the given number is one less than twice its reverse
+    return n == (2 * reversed_n) - 1
+completed 334/397: acc = 0.82
+def power_base_sum(base: int, power: int) -> int:
+    """
+	Write a function that takes base and power as arguments and calculate the sum of all digits of the base to the specified power.
+	"""
+    result = base ** power
+    return sum(int(digit) for digit in str(result))
+completed 335/397: acc = 0.82
+def find_star_num(n: int) -> int:
+    """
+	Write a function to find the n'th star number.
+	"""
+    if n < 1:
+        return None
+
+    return n * (6 * (n - 1) + 1)
+completed 336/397: acc = 0.82
+from typing import List
+
+def insert_element(list: List[str], element: str) -> List[str]:
+    """
+	Write a function that takes in a list and an element and inserts the element before each element in the list, and returns the resulting list.
+	"""
+    result = []
+    for item in list:
+        result.append(element)
+        result.append(item)
+    return result
+completed 337/397: acc = 0.82
+from typing import List
+
+def shell_sort(my_list: List[int]) -> List[int]:
+    """
+	Write a function to sort the given array by using shell sort.
+	"""
+    n = len(my_list)
+    gap = n // 2
+
+    while gap > 0:
+        for i in range(gap, n):
+            temp = my_list[i]
+            j = i
+            while j >= gap and my_list[j - gap] > temp:
+                my_list[j] = my_list[j - gap]
+                j -= gap
+            my_list[j] = temp
+        gap //= 2
+
+    return my_list
+completed 338/397: acc = 0.82
+from typing import List
+
+def big_sum(nums: List[int]) -> int:
+    """
+	Write a python function to find the sum of the largest and smallest value in a given array.
+	"""
+    if not nums:
+        return 0
+
+    min_num = min(nums)
+    max_num = max(nums)
+
+    return min_num + max_num
+completed 339/397: acc = 0.82
+from typing import Dict, Optional
+
+def drop_empty(dict1: Dict[str, Optional[str]]) -> Dict[str, str]:
+    """
+	Write a function to drop empty items from a given dictionary.
+	"""
+    result = {}
+    for key, value in dict1.items():
+        if value is not None and value != "":
+            result[key] = value
+    return result
+completed 340/397: acc = 0.82
+def text_match_wordz(text: str) -> bool:
+    """
+	Write a function that matches a word containing 'z'.
+	"""
+    return 'z' in text.lower()
+completed 341/397: acc = 0.82
+def prime_num(num: int) -> bool:
+    """
+	Write a function to check if the given integer is a prime number.
+	"""
+    if num <= 1:
+        return False
+    for i in range(2, num):
+        if num % i == 0:
+            return False
+    return True
+completed 342/397: acc = 0.82
+from typing import List
+
+def merge_sorted_list(num1: List[int], num2: List[int], num3: List[int]) -> List[int]:
+    """
+	Write a function to merge three lists into a single sorted list.
+	"""
+    merged_list = num1 + num2 + num3
+    merged_list.sort()
+    return merged_list
+completed 343/397: acc = 0.82
+from typing import List
+
+def sample_nam(sample_names: List[str]) -> int:
+    """
+	Write a function to sum the length of the names of a given list of names after removing the names that start with a lowercase letter.
+	"""
+    total_length = 0
+
+    for name in sample_names:
+        if name and name[0].isupper():
+            total_length += len(name)
+
+    return total_length
+completed 344/397: acc = 0.82
+from typing import List, Tuple
+
+def min_product_tuple(list1: List[Tuple[int, int]]) -> int:
+    """
+	Write a function to find the minimum product from the pairs of tuples within a given list.
+	"""
+    min_product = float('inf')
+
+    for pair in list1:
+        product = pair[0] * pair[1]
+        if product < min_product:
+            min_product = product
+
+    return min_product
+completed 345/397: acc = 0.82
+from typing import Any, Tuple
+
+def remove_nested(test_tup: Any) -> Tuple[int, int, int, int]:
+    """
+	Write a function to remove tuples from the given tuple.
+	"""
+    flat_tup = ()
+    for item in test_tup:
+        if not isinstance(item, tuple):
+            flat_tup += (item,)
+    return flat_tup
+completed 346/397: acc = 0.82
+from typing import List
+
+def swap_List(newList: List[int]) -> List[int]:
+    """
+	Write a python function to interchange the first and last elements in a list.
+	"""
+    if len(newList) == 0:
+        return newList
+
+    newList[0], newList[-1] = newList[-1], newList[0]
+    return newList
+completed 347/397: acc = 0.82
+from typing import List, Union
+
+def round_and_sum(list1: List[Union[float, int]]) -> int:
+    """
+	Write a function to round every number of a given list of numbers and print the total sum multiplied by the length of the list.
+	"""
+    rounded_list = [round(num) for num in list1]
+    total_sum = sum(rounded_list)
+    result = total_sum * len(list1)
+    return result
+completed 348/397: acc = 0.82
+def sequence(n: int) -> int:
+    """
+	Write a function to find the nth number in the newman conway sequence.
+	"""
+    if n == 1 or n == 2:
+        return 1
+
+    seq = [0] * (n + 1)
+    seq[1] = 1
+    seq[2] = 1
+
+    for i in range(3, n + 1):
+        seq[i] = seq[seq[i - 1]] + seq[i - seq[i - 1]]
+
+    return seq[n]
+completed 349/397: acc = 0.82
+def newman_prime(n: int) -> int:
+    """
+	Write a function to find the nth newman–shanks–williams prime number.
+	"""
+    if n < 0:
+        raise ValueError("n must be a non-negative integer")
+
+    if n == 0:
+        return 1
+
+    if n == 1:
+        return 1
+
+    a, b = 1, 1
+    for _ in range(2, n + 1):
+        a, b = b, 2 * b + a
+
+    return b
+completed 350/397: acc = 0.82
+from typing import List, Any
+
+def Find_Max(lst: List[List[Any]]) -> List[Any]:
+    """
+	Write a python function to find the element of a list having maximum length.
+	"""
+    max_length = 0
+    max_element = None
+
+    for element in lst:
+        if len(element) > max_length:
+            max_length = len(element)
+            max_element = element
+
+    return max_element
+completed 351/397: acc = 0.82
+from typing import List
+
+def split(word: str) -> List[str]:
+    """
+	Write a python function to split a string into characters.
+	"""
+    return [char for char in word]
+completed 352/397: acc = 0.82
+from typing import List, Any
+
+def pack_consecutive_duplicates(list1: List[Any]) -> List[List[Any]]:
+    """
+	Write a function to pack consecutive duplicates of a given list elements into sublists.
+	"""
+    if not list1:
+        return []
+
+    packed_list = []
+    current_sublist = [list1[0]]
+
+    for element in list1[1:]:
+        if element == current_sublist[-1]:
+            current_sublist.append(element)
+        else:
+            packed_list.append(current_sublist)
+            current_sublist = [element]
+
+    packed_list.append(current_sublist)
+    return packed_list
+completed 353/397: acc = 0.82
+from typing import List, Tuple
+
+def min_k(test_list: List[Tuple[str, int]], K: int) -> List[Tuple[str, int]]:
+    """
+	Write a function to find minimum k records from tuple list. https://www.geeksforgeeks.org/python-find-minimum-k-records-from-tuple-list/ - in this case a verbatim copy of test cases
+	"""
+    if K > len(test_list):
+        K = len(test_list)
+
+    sorted_list = sorted(test_list, key=lambda x: x[1])
+    return sorted_list[:K]
+completed 354/397: acc = 0.82
+def check_integer(text: str) -> bool:
+    """
+	Write a function to check if a string represents an integer or not.
+	"""
+    if text.startswith('-'):
+        text = text[1:]
+
+    return text.isdigit()
+completed 355/397: acc = 0.83
+from typing import List
+
+def rotate_right(list: List[int], m: int) -> List[int]:
+    """
+	Write a function to rotate a given list by specified number of items to the right direction. https://www.geeksforgeeks.org/python-program-right-rotate-list-n/
+	"""
+    n = len(list)
+    m = m % n
+    return list[-m:] + list[:-m]
+completed 356/397: acc = 0.83
+def armstrong_number(number: int) -> bool:
+    """
+	Write a function to check whether the given number is armstrong or not.
+	"""
+    num_str = str(number)
+    num_digits = len(num_str)
+    armstrong_sum = sum(int(digit) ** num_digits for digit in num_str)
+
+    return armstrong_sum == number
+completed 357/397: acc = 0.82
+from typing import List, Any
+
+def sum_of_digits(nums: List[Any]) -> int:
+    """
+	Write a function to compute the sum of digits of each number of a given list.
+	"""
+    total_sum = 0
+    for num in nums:
+        if isinstance(num, int):
+            num_str = str(abs(num))
+            for digit in num_str:
+                total_sum += int(digit)
+    return total_sum
+completed 358/397: acc = 0.82
+from typing import List
+
+def re_arrange_array(arr: List[int], n: int) -> List[int]:
+    """
+	Write a function that takes in an array and an integer n, and re-arranges the first n elements of the given array so that all negative elements appear before positive ones, and where the relative order among negative and positive elements is preserved.
+	"""
+    neg = []
+    pos = []
+
+    for i in range(n):
+        if arr[i] < 0:
+            neg.append(arr[i])
+        else:
+            pos.append(arr[i])
+
+    return neg + pos
+completed 359/397: acc = 0.82
+def wind_chill(v: int, t: int) -> int:
+    """
+	Write a function to calculate the wind chill index rounded to the next integer given the wind velocity in km/h and a temperature in celsius.
+	"""
+    wind_chill_index = 13.12 + 0.6215 * t - 11.37 * (v ** 0.16) + 0.3965 * t * (v ** 0.16)
+    return round(wind_chill_index)
+completed 360/397: acc = 0.82
+def bell_Number(n: int) -> int:
+    """
+	Write a python function to find nth bell number.
+	"""
+    def bell_number_helper(n, k, memo):
+        if n == 0 or k == 0 or n < k:
+            return 0
+        if k == 1 or n == k:
+            return 1
+        if memo[n][k] != -1:
+            return memo[n][k]
+
+        memo[n][k] = bell_number_helper(n - 1, k - 1, memo) + k * bell_number_helper(n - 1, k, memo)
+        return memo[n][k]
+
+    memo = [[-1 for _ in range(n + 1)] for _ in range(n + 1)]
+    return bell_number_helper(n, n, memo)
+completed 361/397: acc = 0.82
+def sum_div(number: int) -> int:
+    """
+	Write a function to return the sum of all divisors of a number.
+	"""
+    divisors = [i for i in range(1, number + 1) if number % i == 0]
+    return sum(divisors)
+completed 362/397: acc = 0.81
+from typing import Tuple, List
+
+def get_coordinates(test_tup: Tuple[int, int]) -> List[List[int]]:
+    """
+	Write a function to extract all the adjacent coordinates of the given coordinate tuple.
+	"""
+    adjacent_coordinates = []
+
+    for i in range(-1, 2):
+        for j in range(-1, 2):
+            if i == 0 and j == 0:
+                continue
+            adjacent_coordinates.append([test_tup[0] + i, test_tup[1] + j])
+
+    return adjacent_coordinates
+completed 363/397: acc = 0.81
+from typing import Tuple
+
+def find_dissimilar(test_tup1: Tuple[int, int, int, int], test_tup2: Tuple[int, int, int, int]) -> Tuple[int, int, int, int]:
+    """
+	Write a function to find the dissimilar elements in the given two tuples.
+	"""
+    dissimilar_elements = tuple(set(test_tup1).symmetric_difference(set(test_tup2)))
+    return dissimilar_elements
+completed 364/397: acc = 0.81
+def find_length(string: str) -> int:
+    """
+	Write a function to find the maximum difference between the number of 0s and number of 1s in any sub-string of the given binary string.
+	"""
+    max_diff = 0
+    for i in range(len(string)):
+        count_0 = 0
+        count_1 = 0
+        for j in range(i, len(string)):
+            if string[j] == '0':
+                count_0 += 1
+            else:
+                count_1 += 1
+            max_diff = max(max_diff, abs(count_0 - count_1))
+    return max_diff
+completed 365/397: acc = 0.81
+from typing import List, Any
+
+def split_two_parts(list1: List[Any], L: int) -> Any:
+    """
+	Write a function that takes in a list and an integer L and splits the given list into two parts where the length of the first part of the list is L, and returns the resulting lists in a tuple.
+	"""
+    first_part = list1[:L]
+    second_part = list1[L:]
+    return (first_part, second_part)
+completed 366/397: acc = 0.81
+def check_expression(exp: str) -> bool:
+    """
+	Write a function to check if the given expression is balanced or not. https://www.geeksforgeeks.org/check-for-balanced-parentheses-in-an-expression/
+	"""
+    stack = []
+
+    # Iterate through the expression
+    for char in exp:
+        if char in ["(", "{", "["]:
+            stack.append(char)
+        elif char in [")", "}", "]"]:
+            if not stack:
+                return False
+            top_element = stack.pop()
+            if char == ")" and top_element != "(":
+                return False
+            elif char == "}" and top_element != "{":
+                return False
+            elif char == "]" and top_element != "[":
+                return False
+
+    return len(stack) == 0
+completed 367/397: acc = 0.81
+def test_three_equal(x: int, y: int, z: int) -> int:
+    """
+	Write a python function to count the number of equal numbers from three given integers.
+	"""
+    count = 0
+
+    if x == y:
+        count += 1
+    if x == z:
+        count += 1
+    if y == z:
+        count += 1
+
+    if count == 1:
+        return 2
+    elif count == 3:
+        return 3
+    else:
+        return 0
+completed 368/397: acc = 0.81
+def find_lucas(n: int) -> int:
+    """
+	Write a function to find the n'th lucas number.
+	"""
+    if n == 0:
+        return 2
+    elif n == 1:
+        return 1
+    else:
+        lucas_n_minus_1 = 1
+        lucas_n_minus_2 = 2
+        for _ in range(2, n + 1):
+            lucas_n = lucas_n_minus_1 + lucas_n_minus_2
+            lucas_n_minus_2 = lucas_n_minus_1
+            lucas_n_minus_1 = lucas_n
+        return lucas_n
+completed 369/397: acc = 0.81
+def snake_to_camel(word: str) -> str:
+    """
+	Write a function to convert a snake case string to camel case string.
+	"""
+    components = word.split('_')
+    return components[0] + ''.join(x.title() for x in components[1:])
+completed 370/397: acc = 0.81
+def reverse_words(s: str) -> str:
+    """
+	Write a function to reverse words seperated by spaces in a given string.
+	"""
+    words = s.split(" ")
+    reversed_words = [word[::-1] for word in words]
+    return " ".join(reversed_words)
+completed 371/397: acc = 0.81
+def is_upper(string: str) -> str:
+    """
+	Write a python function to convert a given string to uppercase.
+	"""
+    return string.upper()
+completed 372/397: acc = 0.81
+def digit_distance_nums(n1: int, n2: int) -> int:
+    """
+	Write a python function to find the sum of the per-digit difference between two integers.
+	"""
+    # Convert the integers to strings to access individual digits
+    n1_str = str(n1)
+    n2_str = str(n2)
+
+    # Ensure both numbers have the same number of digits
+    if len(n1_str) != len(n2_str):
+        raise ValueError("Both numbers must have the same number of digits")
+
+    # Calculate the sum of the per-digit differences
+    digit_distance_sum = 0
+    for i in range(len(n1_str)):
+        digit_distance_sum += abs(int(n1_str[i]) - int(n2_str[i]))
+
+    return digit_distance_sum
+completed 373/397: acc = 0.81
+from typing import List, Any
+
+def find_lists(Input: List[Any]) -> int:
+    """
+	Write a function to find number of lists present in the given list.
+	"""
+    count = 0
+    for item in Input:
+        if isinstance(item, list):
+            count += 1
+    return count
+completed 374/397: acc = 0.81
+from typing import List
+
+def average_tuple(nums: List[List[int]]) -> List[float]:
+    """
+	Write a function which takes a lists of lists and returns the average value for each sublist as a list.
+	"""
+    result = []
+    for sublist in nums:
+        total = sum(sublist)
+        average = total / len(sublist)
+        result.append(average)
+    return result
+completed 375/397: acc = 0.81
+from typing import List
+
+def find_even_pair(A: List[int]) -> int:
+    """
+	Write a function that counts the number of pairs of integers in a list that xor to an even number.
+	"""
+    count = 0
+    for i in range(len(A)):
+        for j in range(i+1, len(A)):
+            if (A[i] ^ A[j]) % 2 == 0:
+                count += 1
+    return count
+completed 376/397: acc = 0.81
+def opposite_Signs(x: int, y: int) -> bool:
+    """
+	Write a python function to check whether the given two integers have opposite sign or not.
+	"""
+    if x < 0 and y > 0:
+        return True
+    elif x > 0 and y < 0:
+        return True
+    else:
+        return False
+completed 377/397: acc = 0.81
+from typing import List
+
+def sort_sublists(list1: List[List[str]]) -> List[List[str]]:
+    """
+	Write a function to sort each sublist of strings in a given list of lists.
+	"""
+    sorted_list = []
+
+    for sublist in list1:
+        sorted_sublist = sorted(sublist)
+        sorted_list.append(sorted_sublist)
+
+    return sorted_list
+completed 378/397: acc = 0.81
+from typing import List
+
+def combinations_colors(l: List[str], n: int) -> List[List[str]]:
+    """
+	Write a function that takes in a list and length n, and generates all combinations (with repetition) of the elements of the list and returns a list with a list for each combination.
+	"""
+    from itertools import product
+
+    return [list(combination) for combination in product(l, repeat=n)]
+completed 379/397: acc = 0.8
+def move_num(test_str: str) -> str:
+    """
+	Write a function to move all the numbers to the end of the given string.
+	"""
+    num_str = ""
+    non_num_str = ""
+
+    for char in test_str:
+        if char.isdigit():
+            num_str += char
+        else:
+            non_num_str += char
+
+    return non_num_str + num_str
+completed 380/397: acc = 0.81
+from typing import List
+
+def intersection_array(array_nums1: List[int], array_nums2: List[int]) -> List[int]:
+    """
+	Write a function to find the intersection of two arrays.
+	"""
+    result = list(set(array_nums1) & set(array_nums2))
+    return result
+completed 381/397: acc = 0.8
+from typing import List
+
+def count_X(tup: List[int], x: int) -> int:
+    """
+	Write a python function that takes in a tuple and an element and counts the occcurences of the element in the list.
+	"""
+    count = 0
+    for element in tup:
+        if element == x:
+            count += 1
+    return count
+completed 382/397: acc = 0.8
+from typing import List
+
+def get_median(arr1: List[int], arr2: List[int], n: int) -> float:
+    """
+	Write a function to find the median of two sorted lists of same size.
+	"""
+    merged_arr = []
+    i, j = 0, 0
+
+    while i < n and j < n:
+        if arr1[i] < arr2[j]:
+            merged_arr.append(arr1[i])
+            i += 1
+        else:
+            merged_arr.append(arr2[j])
+            j += 1
+
+    while i < n:
+        merged_arr.append(arr1[i])
+        i += 1
+
+    while j < n:
+        merged_arr.append(arr2[j])
+        j += 1
+
+    if len(merged_arr) % 2 == 0:
+        median = (merged_arr[len(merged_arr) // 2] + merged_arr[len(merged_arr) // 2 - 1]) / 2
+    else:
+        median = merged_arr[len(merged_arr) // 2]
+
+    return median
+completed 383/397: acc = 0.8
+def tetrahedral_number(n: int) -> int:
+    """
+	Write a function to find the nth tetrahedral number.
+	"""
+    return (n * (n + 1) * (n + 2)) // 6
+completed 384/397: acc = 0.8
+from typing import List, Tuple
+
+def find_combinations(test_list: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
+    """
+	Write a function to find the combinations of sums with tuples in the given tuple list. https://www.geeksforgeeks.org/python-combinations-of-sum-with-tuples-in-tuple-list/
+	"""
+    from itertools import combinations
+
+    result = []
+
+    # Iterate through all possible combination lengths
+    for length in range(1, len(test_list) + 1):
+        # Generate all combinations of the given length
+        for comb in combinations(test_list, length):
+            # Calculate the sum of the first and second elements of each tuple in the combination
+            sum_first = sum(t[0] for t in comb)
+            sum_second = sum(t[1] for t in comb)
+
+            # Add the combination to the result list if the sums are equal
+            if sum_first == sum_second:
+                result.append(comb)
+
+    return result
+completed 385/397: acc = 0.8
+from typing import List
+
+def find_first_occurrence(A: List[int], x: int) -> int:
+    """
+	Write a function to find the index of the first occurrence of a given number in a sorted array.
+	"""
+    left, right = 0, len(A) - 1
+
+    while left <= right:
+        mid = left + (right - left) // 2
+
+        if A[mid] == x:
+            if mid == 0 or A[mid - 1] != x:
+                return mid
+            else:
+                right = mid - 1
+        elif A[mid] < x:
+            left = mid + 1
+        else:
+            right = mid - 1
+
+    return -1
+completed 386/397: acc = 0.8
+def differ_At_One_Bit_Pos(a: int, b: int) -> bool:
+    """
+	Write a python function to check whether the two numbers differ at one bit position only or not.
+	"""
+    # Calculate the XOR of the two numbers
+    xor_result = a ^ b
+
+    # Check if the XOR result is a power of 2 (i.e., has only one bit set)
+    return xor_result != 0 and (xor_result & (xor_result - 1)) == 0
+completed 387/397: acc = 0.8
+def check_monthnumber_number(monthnum3: int) -> bool:
+    """
+	Write a function to check whether the given month number contains 30 days or not. Months are given as number from 1 to 12.
+	"""
+    if monthnum3 in [4, 6, 9, 11]:
+        return True
+    else:
+        return False
+completed 388/397: acc = 0.8
+from typing import List
+
+def swap_List(newList: List[int]) -> List[int]:
+    """
+	Write a python function to interchange the first and last element in a given list.
+	"""
+    if len(newList) == 0:
+        return newList
+
+    newList[0], newList[-1] = newList[-1], newList[0]
+    return newList
+completed 389/397: acc = 0.8
+from typing import Any
+
+def rearrange_bigger(n: int) -> Any:
+    """
+	Write a function to create the next bigger number by rearranging the digits of a given number.
+	"""
+    # Convert the number to a list of digits
+    digits = list(str(n))
+
+    # Find the rightmost digit that is smaller than the digit next to it
+    for i in reversed(range(len(digits) - 1)):
+        if digits[i] < digits[i + 1]:
+            break
+    else:
+        # If there is no such digit, the number is already the largest possible
+        return -1
+
+    # Find the smallest digit larger than the above digit to its right
+    for j in reversed(range(i + 1, len(digits))):
+        if digits[j] > digits[i]:
+            break
+
+    # Swap the two digits
+    digits[i], digits[j] = digits[j], digits[i]
+
+    # Reverse the sublist after the first digit to get the smallest possible number
+    digits[i + 1:] = reversed(digits[i + 1:])
+
+    # Convert the list of digits back to a number
+    return int("".join(digits))
+completed 390/397: acc = 0.8
+def get_max_sum(n: int) -> int:
+    """
+	Write a function to find the maximum sum possible by using the given equation f(n) = max( (f(n/2) + f(n/3) + f(n/4) + f(n/5)), n).
+	"""
+    if n == 0:
+        return 0
+
+    return max(get_max_sum(n // 2) + get_max_sum(n // 3) + get_max_sum(n // 4) + get_max_sum(n // 5), n)
+completed 391/397: acc = 0.8
+from typing import List
+
+def mul_even_odd(list1: List[int]) -> int:
+    """
+	Write a function to find the product of first even and odd number of a given list.
+	"""
+    even = None
+    odd = None
+
+    for num in list1:
+        if even is not None and odd is not None:
+            break
+        if num % 2 == 0 and even is None:
+            even = num
+        elif num % 2 != 0 and odd is None:
+            odd = num
+
+    if even is not None and odd is not None:
+        return even * odd
+    else:
+        return 0
+completed 392/397: acc = 0.8
+def odd_Equivalent(s: str, n: int) -> int:
+    """
+	Write a python function to find the number of numbers with an odd value when rotating a binary string the given number of times.
+	"""
+    count = 0
+
+    for i in range(n):
+        s = s[-1] + s[:-1]
+        decimal_value = int(s, 2)
+        if decimal_value % 2 != 0:
+            count += 1
+
+    return count
+completed 393/397: acc = 0.8
+from typing import List
+
+def Find_Min_Length(lst: List[List[int]]) -> int:
+    """
+	Write a python function to find the length of the smallest list in a list of lists.
+	"""
+    min_length = float('inf')
+
+    for sublist in lst:
+        if len(sublist) < min_length:
+            min_length = len(sublist)
+
+    return min_length
+completed 394/397: acc = 0.8
+from typing import Tuple
+
+def bitwise_xor(test_tup1: Tuple[int, int, int, int], test_tup2: Tuple[int, int, int, int]) -> Tuple[int, int, int, int]:
+    """
+	Write a function to perform the mathematical bitwise xor operation across the given tuples.
+	"""
+    result = tuple(a ^ b for a, b in zip(test_tup1, test_tup2))
+    return result
+completed 395/397: acc = 0.81
+def is_nonagonal(n: int) -> int:
+    """
+	Write a function to find the nth nonagonal number.
+	"""
+    if n < 1:
+        return 0
+
+    return n * (7 * n - 5) // 2
+completed 396/397: acc = 0.81
+def is_octagonal(n: int) -> int:
+    """
+	Write a function to find the nth octagonal number.
+	"""
+    return n * (3 * n - 2)
+completed 397/397: acc = 0.81
+Done! Check out the logs in `root/simple_mbpp_py2/mbpp-py._simple_1_gpt-4_pass_at_k_1_py.jsonl`
