@@ -49,10 +49,6 @@ class PyGenerator(Generator):
         )
         print(x, flush=True)
         return x
-<<<<<<< HEAD
-=======
-
->>>>>>> 963d1842b03f63852ea59adbc1cbc1ed6c3bc70e
 
     def func_impl(
         self,
