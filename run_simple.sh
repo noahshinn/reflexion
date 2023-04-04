@@ -1,5 +1,5 @@
 python main.py \
-  --run_name "simple_mbpp_py" \
+  --run_name "simple_mbpp_py2" \
   --root_dir "root" \
   --dataset_path ./benchmarks/mbpp-py.jsonl \
   --strategy "simple" \
