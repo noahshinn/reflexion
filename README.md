@@ -14,6 +14,12 @@ If you have any questions, please contact [noahshinn024@gmail.com](noahshinn024@
 
 ![result](./media/performance.png)
 
+### Cloning The Repository
+The repository contains git submodules. To clone the repo with the submodules, run:
+```bash
+git clone --recurse-submodules
+```
+
 ### Note
 
 Due to the nature of these experiments, it may not be feasible for individual developers to rerun the results due to limited access to GPT-4 and significant API charges. Due to recent requests, both trials have been rerun once more and are dumped in `./root` with a script [here](https://github.com/noahshinn024/reflexion-human-eval/blob/main/validate_py_results.py) to validate the solutions with the unit tests provided by [HumanEval](https://github.com/openai/human-eval).
