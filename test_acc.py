@@ -1,4 +1,4 @@
-from utils import enumerate_resume, write_jsonl
+from utils import enumerate_resume, write_jsonl, make_printv
 from executors import executor_factory
 from generators import generator_factory
 
@@ -15,7 +15,8 @@ def run_test_acc(
 ) -> None:
     exe = executor_factory(language)
     gen = generator_factory(language)
-    pass
+
+    print_v = make_printv(verbose)
 
     num_items = len(dataset)
     num_success = 0
@@ -25,9 +26,10 @@ def run_test_acc(
         tests_i = []
         while cur_pass < pass_at_k:
             tests_i = gen.internal_tests(item["prompt"], model, 1)
+            print_v(tests_i)
 
             cur_func_impl = item["prompt"] + item["canonical_solution"]
-            print(cur_func_impl)
+            print_v(cur_func_impl, flush=True)
 
             is_passing, _, _ = exe.execute(cur_func_impl, tests_i)
             if is_passing:
@@ -36,10 +38,9 @@ def run_test_acc(
                 break
             cur_pass += 1
         item["solution"] = tests_i
-        
+
         item["is_solved"] = is_solved
         write_jsonl(log_path, [item], append=True)
 
-        if verbose:
-            print(f'completed {i+1}/{num_items}: acc = {round(num_success/(i+1), 2)}')
-    
+        print_v(
+            f'completed {i+1}/{num_items}: acc = {round(num_success/(i+1), 2)}')

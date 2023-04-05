@@ -153,8 +153,8 @@ def run_reflexion_ucs(
             )
             assert best is not None  # impossible due to our when_none
 
-            print("BEST CODE:\n\n\n")
-            print(best.code)
+            debug_print("BEST CODE:\n\n\n")
+            debug_print(best.code)
             is_passing = exe.evaluate(
                 item["entry_point"], best.code, item["test"], timeout=5)
             if is_passing:

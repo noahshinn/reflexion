@@ -1,4 +1,4 @@
-from utils import enumerate_resume, write_jsonl
+from utils import enumerate_resume, make_printv, write_jsonl
 from executors import executor_factory
 from generators import generator_factory
 
@@ -16,6 +16,8 @@ def run_reflexion(
 ) -> None:
     exe = executor_factory(language)
     gen = generator_factory(language)
+
+    print_v = make_printv(verbose)
 
     num_items = len(dataset)
     num_success = 0
@@ -61,7 +63,8 @@ def run_reflexion(
                 assert isinstance(cur_func_impl, str)
 
                 # check if all internal unit tests pass
-                is_passing, cur_feedback, _ = exe.execute(cur_func_impl, tests_i)
+                is_passing, cur_feedback, _ = exe.execute(
+                    cur_func_impl, tests_i)
 
                 # if solved, check if it passes the real tests, exit early
                 if is_passing or cur_iter == max_iters - 1:
@@ -81,6 +84,5 @@ def run_reflexion(
         item["solution"] = cur_func_impl
         write_jsonl(log_path, [item], append=True)
 
-        if verbose:
-            print(
-                f'completed {i+1}/{num_items}: acc = {round(num_success/(i+1), 2)}')
+        print_v(
+            f'completed {i+1}/{num_items}: acc = {round(num_success/(i+1), 2)}')

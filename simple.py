@@ -1,4 +1,4 @@
-from utils import enumerate_resume, write_jsonl
+from utils import enumerate_resume, make_printv, write_jsonl
 from executors import executor_factory
 from generators import generator_factory
 
@@ -17,6 +17,8 @@ def run_simple(
     ) -> None:
     exe = executor_factory(language)
     gen = generator_factory(language)
+
+    print_v = make_printv(verbose)
     
     num_items = len(dataset)
     num_success = 0
@@ -38,5 +40,4 @@ def run_simple(
         item["is_solved"] = is_solved
         write_jsonl(log_path, [item], append=True)
 
-        if verbose:
-            print(f'completed {i+1}/{num_items}: acc = {round(num_success/(i+1), 2)}')
+        print_v(f'completed {i+1}/{num_items}: acc = {round(num_success/(i+1), 2)}')

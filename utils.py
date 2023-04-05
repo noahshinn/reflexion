@@ -9,6 +9,16 @@ from typing import List
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
+def make_printv(verbose: bool):
+    def print_v(*args, **kwargs):
+        if verbose:
+            kwargs["flush"] = True
+            print(*args, **kwargs)
+        else:
+            pass
+    return print_v
+
+
 def read_jsonl(path: str) -> List[dict]:
     if not os.path.exists(path):
         raise FileNotFoundError(f"File `{path}` does not exist.")
