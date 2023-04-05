@@ -207,10 +207,6 @@ class RsExecutor(Executor):
             print("Passed eval", flush=True)
             return len(errs) == 0
 
-class RsLeetExecutor(RsExecutor):
-    def evaluate(self, name: str, func: str, test: str, timeout: int = 5) -> bool:
-        raise NotImplementedError("Not implemented for Rust")
-
 
 assert_no_panic = r"""
 macro_rules! assert_eq_nopanic {
