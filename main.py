@@ -4,6 +4,7 @@ import argparse
 from simple import run_simple
 from reflexion import run_reflexion
 from reflexion_ucs import run_reflexion_ucs
+from test_acc import run_test_acc
 from utils import read_jsonl, read_jsonl_gz
 
 
@@ -34,6 +35,26 @@ def get_args():
     return args
 
 
+def strategy_factory(strategy: str):
+    def kwargs_wrapper_gen(func, delete_keys=[]):
+        def kwargs_wrapper(**kwargs):
+            for key in delete_keys:
+                del kwargs[key]
+            return func(**kwargs)
+        return kwargs_wrapper
+
+    if strategy == "simple":
+        return kwargs_wrapper_gen(run_simple, delete_keys=["expansion_factor", "max_iters"])
+    elif strategy == "reflexion":
+        return kwargs_wrapper_gen(run_reflexion, delete_keys=["expansion_factor"])
+    elif strategy == "reflexion-ucs":
+        return kwargs_wrapper_gen(run_reflexion_ucs)
+    elif strategy == "test-acc":
+        return kwargs_wrapper_gen(run_test_acc, delete_keys=["expansion_factor", "max_iters"])
+    else:
+        raise ValueError(f"Strategy `{strategy}` is not supported")
+
+
 def main(args):
     # check if the root dir exists and create it if not
     if not os.path.exists(args.root_dir):
@@ -50,8 +71,7 @@ def main(args):
         os.makedirs(log_dir)
 
     # check if the strategy is valid
-    if args.strategy not in ["simple", "reflexion", "reflexion-ucs"]:
-        raise ValueError(f"Strategy `{args.strategy}` is not supported")
+    run_strategy = strategy_factory(args.strategy)
 
     # print starting message
     if args.verbose:
@@ -76,36 +96,16 @@ pass@k: {args.pass_at_k}
     print(f"Loaded {len(dataset)} examples")
     # start the run
     # evaluate with pass@k
-    if args.strategy == "simple":
-        run_simple(
-            dataset=dataset,
-            model=args.model,
-            language=args.language,
-            pass_at_k=args.pass_at_k,
-            log_path=log_path,
-            verbose=args.verbose
-        )
-    elif args.strategy == "reflexion":
-        run_reflexion(
-            dataset=dataset,
-            model=args.model,
-            language=args.language,
-            max_iters=args.max_iters,
-            pass_at_k=args.pass_at_k,
-            log_path=log_path,
-            verbose=args.verbose
-        )
-    elif args.strategy == "reflexion-ucs":
-        run_reflexion_ucs(
-            dataset=dataset,
-            model=args.model,
-            language=args.language,
-            max_iters=args.max_iters,
-            pass_at_k=args.pass_at_k,
-            log_path=log_path,
-            verbose=args.verbose,
-            expansion_factor=args.expansion_factor
-        )
+    run_strategy(
+        dataset=dataset,
+        model=args.model,
+        language=args.language,
+        max_iters=args.max_iters,
+        pass_at_k=args.pass_at_k,
+        log_path=log_path,
+        verbose=args.verbose,
+        expansion_factor=args.expansion_factor
+    )
 
     print(f"Done! Check out the logs in `{log_path}`")
 
