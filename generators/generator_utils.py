@@ -38,6 +38,7 @@ def generic_generate_func_impl(
         if strategy == "reflexion":
             message = f"previous implementation:\n{prev_func_impl}\n\nunit tests:\n{feedback}\n\nhint:\n{self_reflection}\n\n# improved implementation\n{func_sig}"
             # func_bodies is a really bad name, as it can also be just 1 string
+            print(message, flush=True)
             func_bodies = gpt_chat(model, REFLEXION_CHAT_INSTRUCTION,
                                    message, num_comps=num_comps, temperature=temperature)
         else:
@@ -77,6 +78,7 @@ def generic_generate_internal_tests(
     """
     if model == "gpt-4" or model == "gpt-3.5-turbo":
         message = f'{TEST_GENERATION_FEW_SHOT}\n\nfunc signature:\n{func_sig}\nunit tests:'
+        print(message, flush=True)
         output = gpt_chat(
             model, TEST_GENERATION_CHAT_INSTRUCTION, message, max_tokens=1024)
     else:
