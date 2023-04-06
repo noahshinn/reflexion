@@ -129,3 +129,6 @@ dmypy.json
 .pyre/
 
 scratch/
+
+scratch/
+.vscode/
