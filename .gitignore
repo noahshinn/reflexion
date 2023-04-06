@@ -132,3 +132,5 @@ scratch/
 
 scratch/
 .vscode/
+
+.DS_Store/
