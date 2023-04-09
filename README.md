@@ -10,13 +10,17 @@ Check out the code for the original paper [here](https://github.com/noahshinn024
 
 Check out a new superhuman programming agent gym [here](https://github.com/GammaTauAI/leetcode-hard-gym)
 
+### Note
+
+This repo contains scratch code that was used for testing. The real version of Reflexion for benchmark-agnostic, language-agnostic code generation will be released after the first version of the upcoming paper to respect the privacy of the work (and collaboration) in progress.
+
 If you have any questions, please contact [noahshinn024@gmail.com](noahshinn024@gmail.com)
 
 ![architecture](./media/architecture.png)
 
 ![result](./media/performance.png)
 
-### Note
+### Another Note
 
 Due to the nature of these experiments, it may not be feasible for individual developers to rerun the results due to limited access to GPT-4 and significant API charges. Due to recent requests, both trials have been rerun once more and are dumped in `./root` with a script [here](https://github.com/noahshinn024/reflexion-human-eval/blob/main/validate_py_results.py) to validate the solutions with the unit tests provided by [HumanEval](https://github.com/openai/human-eval).
 
