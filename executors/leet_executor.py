@@ -1,7 +1,7 @@
 from typing import List
 
 from .executor_types import ExecuteResult, Executor
-from .executor_utils import SubmissionFormatter
+from .leetcode_env.leetcode_env.utils import SubmissionFormatter
 
 from .leetcode_env.leetcode_env.environment import LeetCodeEnv
 from .leetcode_env.leetcode_env.leetcode_types import ProgrammingLanguage, LeetCodeSubmission
@@ -21,7 +21,7 @@ class LeetExecutor(Executor):
         submission = LeetCodeSubmission(
             code = self.formatter.to_leetcode(func),
             lang = self.lang,
-            question_id = id_from_slug(name),
+            question_id = id_from_slug(name, self.env.api_instance),
             question_slug = name,
             timeout = timeout
         )
