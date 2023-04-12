@@ -1,7 +1,7 @@
 python main.py \
-  --run_name "reflexion_mbpp_py3" \
+  --run_name "immediate_reflexion_mbpp_py3" \
   --root_dir "root" \
-  --dataset_path ./benchmarks/mbpp-py.jsonl \
+  --dataset_path ./benchmarks/humaneval-py.jsonl.gz \
   --strategy "immediate-reflexion" \
   --language "py" \
   --model "gpt-4" \
