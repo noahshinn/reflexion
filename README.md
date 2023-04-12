@@ -15,7 +15,7 @@ If you have any questions, please contact [noahshinn024@gmail.com](noahshinn024@
 ![result](./media/performance.png)
 
 ### Cloning The Repository
-The repository contains git submodules. To clone the repo with the submodules, run:
+**The repository contains git submodules**. To clone the repo with the submodules, run:
 ```bash
 git clone --recurse-submodules
 ```
