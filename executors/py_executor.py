@@ -10,7 +10,8 @@ from .executor_types import ExecuteResult, Executor
 class PyExecutor(Executor):
     def execute(self, func: str, tests: List[str], timeout: int = 5) -> ExecuteResult:
         # Combine function code and assert statement
-        func_test_list = [f'{func}\n{test}' for test in tests]
+        imports = 'from typing import *'
+        func_test_list = [f'{imports}\n{func}\n{test}' for test in tests]
 
         # Run the tests and collect the results
         success_tests = []
@@ -77,7 +78,12 @@ check({name})
             return False
 
 def get_call_str(assert_statement: str) -> str:
-    call_str = ast.parse(assert_statement).body[0].test.left # type: ignore
+    ast_parsed = ast.parse(assert_statement)
+    try:
+        call_str = ast_parsed.body[0].test.left # type: ignore
+    except:
+        call_str = ast_parsed.body[0].test # type: ignore
+
     return astunparse.unparse(call_str).strip()
 
 def get_output(func: str, assert_statement: str, timeout: int = 5) -> str:

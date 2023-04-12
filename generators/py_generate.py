@@ -62,7 +62,7 @@ class PyGenerator(Generator):
         temperature: float = 0.0,
     ) -> Union[str, List[str]]:
         x = generic_generate_func_impl(
-            func_sig=func_sig,
+            func_sig=f'from typing import *\n{func_sig}',
             model=model,
             strategy=strategy,
             prev_func_impl=prev_func_impl,
