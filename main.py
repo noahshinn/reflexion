@@ -1,5 +1,6 @@
 import os
 import argparse
+from immediate_refinement import run_immediate_refinement
 from immediate_reflexion import run_immediate_reflexion
 
 from simple import run_simple
@@ -54,6 +55,8 @@ def strategy_factory(strategy: str):
         return kwargs_wrapper_gen(run_reflexion, delete_keys=["expansion_factor"])
     elif strategy == "immediate-reflexion":
         return kwargs_wrapper_gen(run_immediate_reflexion, delete_keys=["expansion_factor"])
+    elif strategy == "immediate-refinement":
+        return kwargs_wrapper_gen(run_immediate_refinement, delete_keys=["expansion_factor"])
     elif strategy == "reflexion-ucs":
         return kwargs_wrapper_gen(run_reflexion_ucs)
     elif strategy == "test-acc":
