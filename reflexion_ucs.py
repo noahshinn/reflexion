@@ -45,9 +45,10 @@ def run_reflexion_ucs(
     pass_at_k: int,
     log_path: str,
     verbose: bool,
-    expansion_factor: int
+    expansion_factor: int,
+    is_leetcode: bool = False
 ) -> None:
-    exe = executor_factory(language)
+    exe = executor_factory(language, is_leet=is_leetcode)
     gen = generator_factory(language)
 
     num_items = len(dataset)

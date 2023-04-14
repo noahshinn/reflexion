@@ -13,9 +13,10 @@ def run_simple(
         language: str,
         pass_at_k: int,
         log_path: str,
-        verbose: bool
+        verbose: bool,
+        is_leetcode: bool = False
     ) -> None:
-    exe = executor_factory(language)
+    exe = executor_factory(language, is_leet=is_leetcode)
     gen = generator_factory(language)
 
     print_v = make_printv(verbose)
@@ -29,7 +30,7 @@ def run_simple(
         while cur_pass < pass_at_k:
             cur_func_impl = gen.func_impl(item["prompt"], model, "simple")
             assert isinstance(cur_func_impl, str)
-            is_passing = exe.evaluate(item["entry_point"], cur_func_impl, item["test"], timeout=10)
+            is_passing = exe.evaluate(item["entry_point"], cur_func_impl, item["test"], timeout = 20 if is_leetcode else 10)
             if is_passing:
                 is_solved = True
                 num_success += 1

@@ -2,7 +2,7 @@ import ast
 import signal
 import astunparse
 
-from .executor_utils import timeout_handler
+from .executor_utils import timeout_handler, function_with_timeout
 
 from typing import List
 from .executor_types import ExecuteResult, Executor
@@ -21,12 +21,14 @@ class PyExecutor(Executor):
         for i in range(num_tests):
             try:
                 # Set the alarm
-                signal.signal(signal.SIGALRM, timeout_handler)
-                signal.alarm(timeout)
+                # signal.signal(signal.SIGALRM, timeout_handler)
+                # signal.alarm(timeout)
+
+                function_with_timeout(exec, (func_test_list[i], globals()), timeout)
 
                 # Run the test and disable the alarm
-                exec(func_test_list[i], globals())
-                signal.alarm(0)
+                # exec(func_test_list[i], globals())
+                # signal.alarm(0)
 
                 success_tests += [tests[i]]
             except Exception:
@@ -66,12 +68,13 @@ check({name})
     """
         try:
             # Set the alarm
-            signal.signal(signal.SIGALRM, timeout_handler)
-            signal.alarm(timeout)
+            # signal.signal(signal.SIGALRM, timeout_handler)
+            # signal.alarm(timeout)
+            function_with_timeout(exec, (code, globals()), timeout)
 
             # Run the test and disable the alarm
-            exec(code, globals())
-            signal.alarm(0)
+            # exec(code, globals())
+            # signal.alarm(0)
 
             return True
         except Exception:
@@ -92,11 +95,13 @@ def get_output(func: str, assert_statement: str, timeout: int = 5) -> str:
         exec(func, globals())
 
         # set the alarm
-        signal.signal(signal.SIGALRM, timeout_handler)
-        signal.alarm(timeout)
+        # signal.signal(signal.SIGALRM, timeout_handler)
+        # signal.alarm(timeout)
         # Run the test and disable the alarm
-        output = eval(func_call)
-        signal.alarm(0)
+        output = function_with_timeout(eval, (func_call,), timeout)
+        # output = eval(func_call)
+        # signal.alarm(0)
+
         return output
     except TimeoutError:
         return "TIMEOUT"

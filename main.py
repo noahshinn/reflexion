@@ -108,7 +108,8 @@ pass@k: {args.pass_at_k}
         pass_at_k=args.pass_at_k,
         log_path=log_path,
         verbose=args.verbose,
-        expansion_factor=args.expansion_factor
+        expansion_factor=args.expansion_factor,
+        is_leetcode=args.is_leetcode
     )
 
     print(f"Done! Check out the logs in `{log_path}`")

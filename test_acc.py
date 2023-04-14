@@ -11,9 +11,10 @@ def run_test_acc(
     language: str,
     pass_at_k: int,
     log_path: str,
-    verbose: bool
+    verbose: bool,
+    is_leetcode: bool = False
 ) -> None:
-    exe = executor_factory(language)
+    exe = executor_factory(language, is_leet=is_leetcode)
     gen = generator_factory(language)
 
     print_v = make_printv(verbose)

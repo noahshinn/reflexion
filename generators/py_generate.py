@@ -3,11 +3,13 @@ from .generator_utils import generic_generate_func_impl, gpt_chat, gpt_completio
 
 from typing import Optional, List, Union
 import ast
+import re
 
 PY_SIMPLE_COMPLETION_INSTRUCTION = "# Write the body of this function only."
 PY_REFLEXION_COMPLETION_INSTRUCTION = "You are PythonGPT. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only.\n\n-----"
 PY_SELF_REFLECTION_COMPLETION_INSTRUCTION = "You are PythonGPT. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation.\n\n-----"
-PY_SIMPLE_CHAT_INSTRUCTION = "You are PythonGPT. You will be given a function signature and docstring. You should fill in the following text of the missing function body. For example, the first line of the completion should have 4 spaces for the indendation so that it fits syntactically with the preceding signature."
+
+PY_SIMPLE_CHAT_INSTRUCTION = "You are PythonGPT, an AI that only responds with python code, NOT ENGLISH. You will be given a function signature and its docstring by the user. Respond only in code with correct implementation of the function. Do not include provided the docstring in your response." # The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
 PY_REFLEXION_CHAT_INSTRUCTION = "You are PythonGPT. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only. You should fill in the following text of the missing function body. For example, the first line of the completion should have 4 spaces for the indendation so that it fits syntactically with the preceding signature."
 PY_SELF_REFLECTION_CHAT_INSTRUCTION = "You are PythonGPT. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation."
 
@@ -62,7 +64,7 @@ class PyGenerator(Generator):
         temperature: float = 0.0,
     ) -> Union[str, List[str]]:
         x = generic_generate_func_impl(
-            func_sig=f'from typing import *\n{func_sig}',
+            func_sig=func_sig,
             model=model,
             strategy=strategy,
             prev_func_impl=prev_func_impl,
@@ -74,9 +76,8 @@ class PyGenerator(Generator):
             SIMPLE_CHAT_INSTRUCTION=PY_SIMPLE_CHAT_INSTRUCTION,
             REFLEXION_COMPLETION_INSTRUCTION=PY_REFLEXION_COMPLETION_INSTRUCTION,
             SIMPLE_COMPLETION_INSTRUCTION=PY_SIMPLE_COMPLETION_INSTRUCTION,
-            fix_body=(lambda x: x) if strategy == "simple" else py_fix_indentation
+            fix_body=fix_turbo_response if strategy == "simple" else py_fix_indentation
         )
-        print(x, flush=True)
         return x
 
 
@@ -98,7 +99,6 @@ class PyGenerator(Generator):
             parse_tests=parse_tests,
             is_syntax_valid=py_is_syntax_valid,
         )
-        print(x, flush=True)
         return x
 
 
@@ -118,8 +118,36 @@ def handle_entire_body_indent(func_body: str) -> str:
     res = "\n".join(["    " + line for line in split])
     return res
 
+def fix_turbo_response(func_body: str) -> str:
+    return fix_markdown(remove_unindented_signatures(func_body))
+
+def fix_markdown(func_body: str) -> str:
+    return re.sub("`{3}", "", func_body)
+
+def remove_unindented_signatures(code: str) -> str:
+    regex = r"^def\s+\w+\s*\("
+
+    before_signature = []
+    after_signature = []
+    signature_found = False
+
+    for line in code.split("\n"):
+        if re.match(regex, line):
+            signature_found = True
+            continue
+        
+        if signature_found:
+            after_signature.append(line)
+        else:
+            if not line.startswith("    ") and line.strip():
+                line = "    " + line
+            before_signature.append(line)
+
+    return "\n".join(before_signature + after_signature)
+
 
 def py_fix_indentation(func_body: str) -> str:
+    func_body = fix_turbo_response(func_body)
     """
     3 cases:
         1. good syntax
@@ -127,6 +155,7 @@ def py_fix_indentation(func_body: str) -> str:
         3. entire body not good
     """
     def parse_indent_rec(f_body: str, cur_state: int) -> str:
+        f_body = fix_markdown(f_body)
         if cur_state > 1:
             return f_body
         code = f'{DUMMY_FUNC_SIG}\n{f_body}\n{DUMMY_FUNC_CALL}'
