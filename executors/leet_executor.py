@@ -11,7 +11,11 @@ from .leetcode_env.leetcode_env.utils import id_from_slug
 from datetime import datetime
 
 class LeetExecutor(Executor):
+    from .leetcode_env.leetcode_env.utils import SubmissionFormatter
+    from .leetcode_env.leetcode_env.leetcode_types import ProgrammingLanguage
+
     def __init__(self, lang: ProgrammingLanguage, executor: Executor, formatter: SubmissionFormatter):
+        from .leetcode_env.leetcode_env.environment import LeetCodeEnv
         self.lang = lang
         self.executor = executor
         self.formatter = formatter
@@ -28,30 +32,13 @@ class LeetExecutor(Executor):
         print(leetcode_formatted_func)
         print('--------------------------------------------------------')
         submission = LeetCodeSubmission(
-            code = self.formatter.to_leetcode(func),
-            lang = self.lang,
-            question_id = id_from_slug(name, self.env.api_instance),
-            question_slug = name,
-            timeout = timeout
+            code=self.formatter.to_leetcode(func),
+            lang=self.lang,
+            question_id=id_from_slug(name, self.env.api_instance),
+            question_slug=name,
+            timeout=timeout
         )
 
-        status, reward, _, info = self.env.step(submission)
-
-        print('----------------- LEETCODE EVALUATION ------------------')
-        print(status)
-        print(info)
-        print('--------------------------------------------------------')
-
-        to_jsonl({
-            'code': leetcode_formatted_func,
-            'status': status,
-            'reward': reward,
-            'info': info
-        },
-        f'{self.name}.jsonl'
-        )
-
-
+        _, reward, _, _ = self.env.step(submission)
 
         return reward
-

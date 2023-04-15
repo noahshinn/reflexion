@@ -1,5 +1,7 @@
 import os
 import argparse
+from immediate_refinement import run_immediate_refinement
+from immediate_reflexion import run_immediate_reflexion
 
 from simple import run_simple
 from reflexion import run_reflexion
@@ -26,10 +28,10 @@ def get_args():
                         help="The maximum number of self-improvement iterations", default=10)
     parser.add_argument("--expansion_factor", type=int,
                         help="The expansion factor for the reflexion UCS and A* strategy", default=3)
-    
+
     parser.add_argument("--is_leetcode", action='store_true',
-                        help="To run the leetcode benchmark") # Temporary
-    
+                        help="To run the leetcode benchmark")  # Temporary
+
     parser.add_argument("--verbose", action='store_true',
                         help="To print live logs")
     # TODO: implement this
@@ -51,6 +53,10 @@ def strategy_factory(strategy: str):
         return kwargs_wrapper_gen(run_simple, delete_keys=["expansion_factor", "max_iters"])
     elif strategy == "reflexion":
         return kwargs_wrapper_gen(run_reflexion, delete_keys=["expansion_factor"])
+    elif strategy == "immediate-reflexion":
+        return kwargs_wrapper_gen(run_immediate_reflexion, delete_keys=["expansion_factor"])
+    elif strategy == "immediate-refinement":
+        return kwargs_wrapper_gen(run_immediate_refinement, delete_keys=["expansion_factor"])
     elif strategy == "reflexion-ucs":
         return kwargs_wrapper_gen(run_reflexion_ucs)
     elif strategy == "test-acc":
