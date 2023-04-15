@@ -20,15 +20,8 @@ class PyExecutor(Executor):
         num_tests = len(func_test_list)
         for i in range(num_tests):
             try:
-                # Set the alarm
-                # signal.signal(signal.SIGALRM, timeout_handler)
-                # signal.alarm(timeout)
 
                 function_with_timeout(exec, (func_test_list[i], globals()), timeout)
-
-                # Run the test and disable the alarm
-                # exec(func_test_list[i], globals())
-                # signal.alarm(0)
 
                 success_tests += [tests[i]]
             except Exception:
@@ -67,14 +60,8 @@ class PyExecutor(Executor):
 check({name})
     """
         try:
-            # Set the alarm
-            # signal.signal(signal.SIGALRM, timeout_handler)
-            # signal.alarm(timeout)
-            function_with_timeout(exec, (code, globals()), timeout)
 
-            # Run the test and disable the alarm
-            # exec(code, globals())
-            # signal.alarm(0)
+            function_with_timeout(exec, (code, globals()), timeout)
 
             return True
         except Exception:
@@ -92,15 +79,9 @@ def get_call_str(assert_statement: str) -> str:
 def get_output(func: str, assert_statement: str, timeout: int = 5) -> str:
     try:
         func_call = get_call_str(assert_statement)
+        to_eval = f"from typing import *\n{func}\n{func_call}"
         exec(func, globals())
-
-        # set the alarm
-        # signal.signal(signal.SIGALRM, timeout_handler)
-        # signal.alarm(timeout)
-        # Run the test and disable the alarm
-        output = function_with_timeout(eval, (func_call,), timeout)
-        # output = eval(func_call)
-        # signal.alarm(0)
+        output = function_with_timeout(eval, (func_call,globals()), timeout)
 
         return output
     except TimeoutError:

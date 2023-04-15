@@ -49,7 +49,6 @@ class PyGenerator(Generator):
             SELF_REFLECTION_CHAT_INSTRUCTION=PY_SELF_REFLECTION_CHAT_INSTRUCTION,
             SELF_REFLECTION_COMPLETION_INSTRUCTION=PY_SELF_REFLECTION_COMPLETION_INSTRUCTION,
         )
-        print(x, flush=True)
         return x
 
     def func_impl(
