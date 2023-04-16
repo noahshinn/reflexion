@@ -56,6 +56,8 @@ def run_immediate_reflexion(
 
         is_solved = exe.evaluate(
             item["entry_point"], cur_func_impl, item["test"], timeout=10)
+        if is_solved:
+            num_success += 1
 
         item["is_solved"] = is_solved
         item["reflections"] = reflections
