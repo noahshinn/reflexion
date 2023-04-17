@@ -59,7 +59,7 @@ def run_reflexion(
                     strategy="reflexion",
                     prev_func_impl=cur_func_impl,
                     feedback=cur_feedback,
-                    self_reflection=reflection
+                    self_reflection=reflection,
                 )
                 assert isinstance(cur_func_impl, str)
 

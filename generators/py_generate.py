@@ -9,12 +9,203 @@ PY_SIMPLE_COMPLETION_INSTRUCTION = "# Write the body of this function only."
 PY_REFLEXION_COMPLETION_INSTRUCTION = "You are PythonGPT. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only.\n\n-----"
 PY_SELF_REFLECTION_COMPLETION_INSTRUCTION = "You are PythonGPT. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation.\n\n-----"
 
-PY_SIMPLE_CHAT_INSTRUCTION = "You are PythonGPT, an AI that only responds with python code, NOT ENGLISH. You will be given a function signature and its docstring by the user. Respond only in code with correct implementation of the function. Do not include provided the docstring in your response." # The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
-PY_REFLEXION_CHAT_INSTRUCTION = "You are PythonGPT. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only. You should fill in the following text of the missing function body. For example, the first line of the completion should have 4 spaces for the indendation so that it fits syntactically with the preceding signature."
-PY_SELF_REFLECTION_CHAT_INSTRUCTION = "You are PythonGPT. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation."
+PY_SIMPLE_CHAT_INSTRUCTION = "You are PythonGPT, an AI that only responds with only python code. You will be given a function signature and its docstring by the user. Respond only in code with a correct, efficient implementation of the function. Do not include provided the docstring in your response." # The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
+PY_REFLEXION_CHAT_INSTRUCTION = "You are PythonGPT. You will be given your previous implementation of a function, a series of unit tests results, and your self-reflection on your previous implementation. Apply the necessary changes below by responding only with the improved body of the function. Do not include the signature in your response. The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature. You will be given a few examples by the user."
+PY_REFLEXION_FEW_SHOT_ADD = '''Example 1:
+[previous impl]:
+def add(a: int, b: int) -> int:
+    """
+    Given integers a and b, return the total value of a and b.
+    """
+    return a - b
 
-PY_TEST_GENERATION_FEW_SHOT = """For example:
+[unit test results from previous impl]:
+Tested passed:
 
+Tests failed:
+assert add(1, 2) == 3 # output: -1
+assert add(1, 2) == 4 # output: -1
+
+[reflection on previous impl]:
+The implementation failed the test cases where the input integers are 1 and 2. The issue arises because the code does not add the two integers together, but instead subtracts the second integer from the first. To fix this issue, we should change the operator from `-` to `+` in the return statement. This will ensure that the function returns the correct output for the given input.
+
+[improved impl]:
+def add(a: int, b: int) -> int:
+    """
+    Given integers a and b, return the total value of a and b.
+    """
+    return a + b
+'''
+
+PY_REFLEXION_FEW_SHOT = '''Example 1:
+[previous impl]:
+from typing import *
+def fullJustify(words: List[str], maxWidth: int) -> List[str]:
+    """
+    Given an array of words and a width maxWidth, format the text such that each line has exactly maxWidth characters and is fully (left and right) justified.
+    You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces `' '` when necessary so that each line has exactly maxWidth characters.
+    Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line do not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
+    For the last line of text, it should be left justified and no extra space is inserted between words.
+    Note:
+    A word is defined as a character sequence consisting of non-space characters only.
+    Each word's length is guaranteed to be greater than 0 and not exceed maxWidth.
+    The input array `words` contains at least one word.
+    """
+    res = []
+    cur_line = []
+    cur_len = 0
+
+    for word in words:
+        if cur_len + len(word) + len(cur_line) > maxWidth:
+            if len(cur_line) == 1:
+                res.append(cur_line[0] + ' ' * (maxWidth - cur_len))
+            else:
+                spaces = maxWidth - cur_len
+                space_between = spaces // (len(cur_line) - 1)
+                extra_spaces = spaces % (len(cur_line) - 1)
+                line = ''
+                for i, w in enumerate(cur_line[:-1]):
+                    line += w + ' ' * (space_between + (i < extra_spaces))
+                line += cur_line[-1]
+                res.append(line)
+            cur_line = []
+            cur_len = 0
+        cur_line.append(word)
+        cur_len += len(word)
+
+    last_line = ' '.join(cur_line)
+    last_line += ' ' * (maxWidth - len(last_line))
+    res.append(last_line)
+
+    return res
+
+[unit test results from previous impl]:
+Tested passed:
+
+Tests failed:
+assert fullJustify([], 10) == [] # output: ['          ']
+assert fullJustify([], 0) == [] # output: ['']
+
+[reflection on previous impl]:
+The implementation failed the test cases where the input list of words is empty. The issue arises because the code does not handle the case where there are no words to process. As a result, it still appends a line with spaces to the result list, even when there are no words. To fix this issue, we should add a condition at the beginning of the function to check if the input list is empty, and return an empty list if it is. This will ensure that the function returns the correct output for empty input lists.
+
+[improved impl]:
+from typing import *
+def fullJustify(words: List[str], maxWidth: int) -> List[str]:
+    """
+    Given an array of words and a width maxWidth, format the text such that each line has exactly maxWidth characters and is fully (left and right) justified.
+    You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces `' '` when necessary so that each line has exactly maxWidth characters.
+    Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line do not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
+    For the last line of text, it should be left justified and no extra space is inserted between words.
+    Note:
+    A word is defined as a character sequence consisting of non-space characters only.
+    Each word's length is guaranteed to be greater than 0 and not exceed maxWidth.
+    The input array `words` contains at least one word.
+    """
+    if not words:
+        return []
+
+    res = []
+    cur_line = []
+    cur_len = 0
+
+    for word in words:
+        if cur_len + len(word) + len(cur_line) > maxWidth:
+            if len(cur_line) == 1:
+                res.append(cur_line[0] + ' ' * (maxWidth - cur_len))
+            else:
+                spaces = maxWidth - cur_len
+                space_between = spaces // (len(cur_line) - 1)
+                extra_spaces = spaces % (len(cur_line) - 1)
+                line = ''
+                for i, w in enumerate(cur_line[:-1]):
+                    line += w + ' ' * (space_between + (i < extra_spaces))
+                line += cur_line[-1]
+                res.append(line)
+            cur_line = []
+            cur_len = 0
+        cur_line.append(word)
+        cur_len += len(word)
+
+    last_line = ' '.join(cur_line)
+    last_line += ' ' * (maxWidth - len(last_line))
+    res.append(last_line)
+
+    return res
+END EXAMPLES
+
+'''
+
+PY_SELF_REFLECTION_CHAT_INSTRUCTION = "You are PythonGPT. You will be given a function implementation and a series of unit test results. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as guidance when you try again later. Only provide the few sentence description in your answer, not the implementation. You will be given a few examples by the user."
+PY_SELF_REFLECTION_FEW_SHOT = """Example 1:
+[function impl]:
+def longest_subarray_with_sum_limit(nums: List[int], target: int) -> List[int]:
+    n = len(nums)
+    left, right = 0, 0
+    max_length = 0
+    current_sum = 0
+    result = []
+    while right < n:
+        current_sum += nums[right]
+        while current_sum > target:
+            current_sum -= nums[left]
+            left += 1
+        if right - left + 1 >= max_length:
+            max_length = right - left + 1
+            result = nums[left:right+1]
+        right += 1
+    return result
+[unit test results]:
+Tests passing:
+assert longest_subarray_with_sum_limit([1, 2, 3, 4, 5], 8) == [1, 2, 3]
+assert longest_subarray_with_sum_limit([1, 2, 3, 4, 5], 15) == [1, 2, 3, 4, 5]
+assert longest_subarray_with_sum_limit([1, -1, 2, -2, 3, -3], 2) == [1, -1, 2, -2, 3]
+assert longest_subarray_with_sum_limit([], 10) == []
+assert longest_subarray_with_sum_limit([], 0) == []
+assert longest_subarray_with_sum_limit([], -5) == []  
+Tests failing:
+assert longest_subarray_with_sum_limit([5, 6, 7, 8, 9], 4) == [] # output: [5]
+[self-reflection]:
+The implementation failed the where no subarray fulfills the condition. The issue in the implementation is due to the use of >= instead of > in the condition to update the result. Because of this, it returns a subarray even when the sum is greater than the target, as it still updates the result when the current subarray length is equal to the previous longest subarray length. To overcome this error, we should change the condition to only update the result when the current subarray length is strictly greater than the previous longest subarray length. This can be done by replacing >= with > in the condition.
+
+Example 2:
+[function impl]:
+def longest_subarray_with_sum_limit(nums: List[int], target: int) -> List[int]:
+    n = len(nums)
+    left, right = 0, 0
+    max_length = 0
+    current_sum = 0
+    result = []
+    while current_sum + nums[right] <= target:
+        current_sum += nums[right]
+        right += 1
+    while right < n:
+        current_sum += nums[right]
+        while current_sum > target:
+            current_sum -= nums[left]
+            left += 1
+        if right - left + 1 > max_length:
+            max_length = right - left + 1
+            result = nums[left:right+1]
+        right += 1
+    return result
+[unit test results]:
+Tests passing:
+assert longest_subarray_with_sum_limit([], 10) == []
+assert longest_subarray_with_sum_limit([], 0) == []
+assert longest_subarray_with_sum_limit([], -5) == []
+Tests failing:
+assert longest_subarray_with_sum_limit([1, 2, 3, 4, 5], 8) == [1, 2, 3] # output: list index out of range
+assert longest_subarray_with_sum_limit([1, 2, 3, 4, 5], 15) == [1, 2, 3, 4, 5] # output: list index out of range
+assert longest_subarray_with_sum_limit([5, 6, 7, 8, 9], 4) == [] # output: list index out of range
+assert longest_subarray_with_sum_limit([1, -1, 2, -2, 3, -3], 2) == [1, -1, 2, -2, 3] # output: list index out of range
+[self-reflection]:
+The implementation failed 4 out of the 7 test cases due to an IndexError. The issue stems from the while loop while current_sum + nums[right] <= target:, which directly accesses nums[right] without checking if right is within the bounds of the list. This results in a runtime error when right goes beyond the list length. To overcome this error, we need to add a bounds check for the right variable in the mentioned while loop. We can modify the loop condition to while right < len(nums) and current_sum + nums[right] <= target:. This change will ensure that we only access elements within the bounds of the list, thus avoiding the IndexError.
+END OF EXAMPLES
+
+"""
+
+PY_TEST_GENERATION_FEW_SHOT = """Examples:
 func signature:
 def has_close_elements(numbers: List[float], threshold: float) -> bool:
     \"\"\" Check if in given list of numbers, are any two numbers closer to each other than
@@ -24,7 +215,6 @@ def has_close_elements(numbers: List[float], threshold: float) -> bool:
     >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
     True
     \"\"\"
-
 unit tests:
 assert has_close_elements([1.0, 2.0, 3.9, 4.0, 5.0, 2.2], 0.3) == True
 assert has_close_elements([1.0, 2.0, 3.9, 4.0, 5.0, 2.2], 0.05) == False
@@ -34,11 +224,36 @@ assert has_close_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0], 0.1) == True
 assert has_close_elements([1.1, 2.2, 3.1, 4.1, 5.1], 1.0) == True
 assert has_close_elements([1.1, 2.2, 3.1, 4.1, 5.1], 0.5) == False"""
 
-PY_TEST_GENERATION_COMPLETION_INSTRUCTION = f"""You are PythonGPT, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring.
+PY_TEST_GENERATION_FEW_SHOT_REACT = '''Example 1:
+[func signature]:
+def longest_subarray_with_sum_limit(nums: List[int], target: int) -> List[int]:
+    """
+    Given a list of integers nums and an integer target, write a function that returns the longest contiguous subarray of nums with a sum less than or equal to target.
+    If there is no subarray with sum less than or equal to target, return an empty list.
+    """
+[think]:
+Okay, let's think of some test cases for this longest_subarray_with_sum_limit function. We need to cover various edge cases. First, let's test with a simple list of positive integers and a target value where a subarray exists. Next, we could test with a target value greater than the sum of all elements in the list, which should return the entire list. We should also test a case where no subarray fulfills the condition, so the function should return an empty list. It would be interesting to include negative numbers in the list and test if the function handles them correctly. Finally, we should also test with an empty list and different target values to make sure the function can handle those cases.
+[unit tests]:
+# Test case 1: Simple list of positive integers with existing subarray
+assert longest_subarray_with_sum_limit([1, 2, 3, 4, 5], 8) == [1, 2, 3]
+# Test case 2: Target value greater than sum of all elements in the list
+assert longest_subarray_with_sum_limit([1, 2, 3, 4, 5], 15) == [1, 2, 3, 4, 5]
+# Test case 3: No subarray fulfills the condition
+assert longest_subarray_with_sum_limit([5, 6, 7, 8, 9], 4) == []
+# Test case 4: List with negative numbers
+assert longest_subarray_with_sum_limit([1, -1, 2, -2, 3, -3], 2) == [1, -1, 2, -2, 3]
+# Test case 5: Empty list with different target values
+assert longest_subarray_with_sum_limit([], 10) == []
+assert longest_subarray_with_sum_limit([], 0) == []
+assert longest_subarray_with_sum_limit([], -5) == []
+END OF EXAMPLES
+'''
 
+PY_TEST_GENERATION_COMPLETION_INSTRUCTION = f"""You are PythonGPT, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring.
 {PY_TEST_GENERATION_FEW_SHOT}"""
 
 PY_TEST_GENERATION_CHAT_INSTRUCTION = """You are CodexGPT, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring."""
+PY_TEST_GENERATION_CHAT_INSTRUCTION_REACT = """You are CodexGPT, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the description and signature. You will first 'think', brainstorming possible edge cases and points of failure. Then, you will write a series of unit tests that reflect your thinking. Make sure that tests conform to any constraints. You will be given a few examples."""
 
 class PyGenerator(Generator):
     def self_reflection(self, func: str, feedback: str, model: str) -> str:
@@ -48,6 +263,7 @@ class PyGenerator(Generator):
             model=model,
             SELF_REFLECTION_CHAT_INSTRUCTION=PY_SELF_REFLECTION_CHAT_INSTRUCTION,
             SELF_REFLECTION_COMPLETION_INSTRUCTION=PY_SELF_REFLECTION_COMPLETION_INSTRUCTION,
+            SELF_REFLECTION_FEW_SHOT=PY_SELF_REFLECTION_FEW_SHOT
         )
         return x
 
@@ -72,6 +288,7 @@ class PyGenerator(Generator):
             num_comps=num_comps,
             temperature=temperature,
             REFLEXION_CHAT_INSTRUCTION=PY_REFLEXION_CHAT_INSTRUCTION,
+            REFLEXION_FEW_SHOT = PY_REFLEXION_FEW_SHOT_ADD,
             SIMPLE_CHAT_INSTRUCTION=PY_SIMPLE_CHAT_INSTRUCTION,
             REFLEXION_COMPLETION_INSTRUCTION=PY_REFLEXION_COMPLETION_INSTRUCTION,
             SIMPLE_COMPLETION_INSTRUCTION=PY_SIMPLE_COMPLETION_INSTRUCTION,

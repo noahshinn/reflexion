@@ -2,7 +2,7 @@ import ast
 import signal
 import astunparse
 
-from .executor_utils import timeout_handler, function_with_timeout
+from .executor_utils import function_with_timeout
 
 from typing import List
 from .executor_types import ExecuteResult, Executor
@@ -78,11 +78,9 @@ def get_call_str(assert_statement: str) -> str:
 
 def get_output(func: str, assert_statement: str, timeout: int = 5) -> str:
     try:
+        exec(f"from typing import *\n{func}", globals())
         func_call = get_call_str(assert_statement)
-        to_eval = f"from typing import *\n{func}\n{func_call}"
-        exec(func, globals())
-        output = function_with_timeout(eval, (func_call,globals()), timeout)
-
+        output = function_with_timeout(eval, (func_call, globals()), timeout)
         return output
     except TimeoutError:
         return "TIMEOUT"

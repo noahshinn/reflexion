@@ -24,7 +24,11 @@ class LeetExecutor(Executor):
         from .leetcode_env.leetcode_env.leetcode_types import LeetCodeSubmission
         from .leetcode_env.leetcode_env.utils import id_from_slug
         print(f'Timeout is {timeout} seconds')
-        leetcode_formatted_func = self.formatter.to_leetcode(func)
+        try:
+            leetcode_formatted_func = self.formatter.to_leetcode(func)
+        except Exception as e:
+            print(f'Error formatting function to leetcode: {e}')
+            return False
         print('----------------- LEETCODE SUBMISSION ------------------')
         print(leetcode_formatted_func)
         print('--------------------------------------------------------')
