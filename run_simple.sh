@@ -1,7 +1,7 @@
 python main.py \
-  --run_name "simple_mbpp_py2" \
+  --run_name "simple_humaneval_py_hardest50" \
   --root_dir "root" \
-  --dataset_path ./benchmarks/mbpp-py.jsonl \
+  --dataset_path ./benchmarks/humaneval-py_hardest50.jsonl \
   --strategy "simple" \
   --language "py" \
   --model "gpt-4" \

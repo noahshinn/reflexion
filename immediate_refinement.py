@@ -12,7 +12,8 @@ def run_immediate_refinement(
     max_iters: int,
     pass_at_k: int,
     log_path: str,
-    verbose: bool
+    verbose: bool,
+    is_leetcode: bool,
 ) -> None:
     exe = executor_factory(language)
     gen = generator_factory(language)
