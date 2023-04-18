@@ -43,7 +43,7 @@ def validate_rs_results(log_path: str):
             red_text_out = red_text(f"failed!")
             print(f"Test {i}: {red_text_out}")
     print(f"Summary: {num_success}/{len(data)} tests passed")
-    print(f"Acc: {round(num_success/len(data), 2)} tests passed")
+    print(f"Acc: {round(num_success/len(data), 3)} tests passed")
 
 if __name__ == "__main__":
     validate_rs_results(LOG_PATH)
