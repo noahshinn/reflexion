@@ -1,7 +1,7 @@
 python main.py \
-  --run_name "simple_leetcode_python3_gpt4" \
+  --run_name "simple_leetcode_python3_gpt4_visible" \
   --root_dir "root" \
-  --dataset_path ./executors/leetcode_env/leetcode_dataset/data/humaneval/leetcode-hard-py-40-uncontaminated.jsonl \
+  --dataset_path ./executors/leetcode_env/leetcode_dataset/data/humaneval/leetcode-hard-py-40-uncontaminated_tests.jsonl \
   --strategy "simple" \
   --language "py" \
   --model "gpt-4" \

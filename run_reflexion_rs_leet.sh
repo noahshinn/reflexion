@@ -1,0 +1,11 @@
+python main.py \
+  --run_name "reflexion_leetcode_rs_gpt4_react_constraints_visible" \
+  --root_dir "root" \
+  --dataset_path ./executors/leetcode_env/leetcode_dataset/data/humaneval/leetcode-hard-rs-40-uncontaminated_tests.jsonl \
+  --strategy "reflexion" \
+  --language "rs" \
+  --model "gpt-4" \
+  --pass_at_k "1" \
+  --max_iters "5" \
+  --is_leetcode \
+  --verbose
