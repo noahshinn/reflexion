@@ -1,10 +1,10 @@
 # Reflexion: Language Agents with Verbal Reinforcement Learning
 
-![Reflexion RL diagram](./figures/reflexion_rl.pdf)
+![Reflexion RL diagram](./figures/reflexion_rl.png)
 
 This repo holds the code, demos, and logs for: [Reflexion: Language Agents with Verbal Reinforcement Learning. Noah Shinn, Federico Cassano, Beck Labash, Ashwin Gopinath, Karthik Narasimhan, Shunyu Yao. _Preprint_, 2023](https://arxiv.org/abs/2303.11366)
 
-![Reflexion tasks](./figures/reflexion_tasks.pdf)
+![Reflexion tasks](./figures/reflexion_tasks.png)
 
 We release the LeetcodeHardGym [here](https://github.com/GammaTauAI/leetcode-hard-gym)
 
