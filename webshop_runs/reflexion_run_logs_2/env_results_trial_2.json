@@ -1,0 +1,636 @@
+[
+    {
+        "name": "env_0",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was more than my budget of $20. The initial search results were not good. I searched for \"long clip-in hair extension natural looking\". Next time, I will search for \"clip-in hair extension\" and then check if the results meet the long and natural looking constraints. I will also check that the results are within my budget of $20."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_1",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_2",
+        "memory": [
+            " In this attempt, I was unsuccessful. I clicked on the wrong item and ended up with a product that was not what I was looking for. My search query was \"hair treatment sulfate paraben free high quality 60 capsules\". Next time, I will search for \"hair treatment sulfate paraben free high quality\" and then check if the results meet the 60 capsules and the $50 budget constraints. I will also make sure to double check the item before clicking on the \"Buy Now\" button."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_3",
+        "memory": [
+            " In this attempt, I was unsuccessful. The initial search results were not the products that I was looking for. My search query was \"gluten free vegetarian smoked peppered bacon 4 ounce pack of 2\". Next time, I will refine my search query by adding more keywords such as \"vegetarian bacon\" and \"smoked peppered bacon\". I will also check the reviews and ratings of the products to make sure that they meet my criteria. Additionally, I will check the prices of the products to make sure that they are within my budget of $40."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_4",
+        "memory": [
+            " In this attempt, I was unsuccessful. I did not click on the correct option before clicking the \"Buy Now\" button. I searched for \"high speed dual style package with 12\" power amplifier car subwoofer\" and the third item, B06XW8PL68, was the one I wanted. Next time, I will click on the \"12\" power amplifier car subwoofer\" option before clicking the \"Buy Now\" button to make sure I am buying the correct item."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_5",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally clicked on the wrong item and was not able to purchase the item I wanted. My search query was \"space-saving ottoman bench blue living room 100x45x45cm\". Next time, I will search for \"space-saving ottoman bench blue living room\" and then check if the results meet the 100x45x45cm and the $430 budget constraints. I will also make sure to double check the size and color of the item before clicking the \"Buy Now\" button."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_6",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_7",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_8",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_9",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was $100, which is too low for the quality of the product I wanted. The initial search results were not good. I searched for \"grey sectional sofa\". Next time, I will search for \"grey sectional sofa with recliner\" and then check if the results meet my budget constraints. I will also read the reviews and check the ratings of the product before buying."
+        ],
+        "is_success": true
+    },
+    {
+        "name": "env_10",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_11",
+        "memory": [
+            " In this attempt, I was unsuccessful. I clicked on the item B09Q63D79Z, which seemed to meet my criteria, but when I clicked on it, I realized that the size and color options were not what I wanted. Next time, I will search for \"woman's high heel shoe with rubber sole\" and then check if the results meet the size 5, color patent-beige, and $90 budget constraints."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_12",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_13",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_14",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was $100, which is more than my budget of $30. Either way, the initial search results were not good. I searched for \"dairy free and apple variety pack of chips\". Next time, I will search for \"dairy free chips\" and then check if the results meet the apple variety pack and the $30 budget constraints. I will also check the reviews and ratings of the product before buying it."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_15",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_16",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_17",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_18",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was more than my budget of $70. The initial search results were not good. I searched for \"double horn bluetooth wireless speakers portable easy to carry\". Next time, I will search for \"double horn bluetooth wireless speakers\" and then check if the results meet the portable and easy to carry constraints and the $70 budget. I will also read the reviews and check the ratings before buying the product."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_19",
+        "memory": [
+            " In this attempt, I was unsuccessful. I clicked the \"Buy Now\" button, but the item was not within my budget of $650. I searched for \"high power sound column subwoofer bluetooth 3d surround sound system\". Next time, I will refine my search by adding more specific keywords such as \"high power sound column subwoofer bluetooth 3d surround sound system under 650 dollars\". I will also check the price of the item before clicking the \"Buy Now\" button."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_20",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was not the one I wanted. I searched for \"6 pack manual toothbrushes sensitive teeth\" and the initial search results were not good. Next time, I will search for \"manual toothbrushes sensitive teeth\" and then check if the results meet the 6 pack and the $40 budget constraints. I will also read the description and features of the product to make sure that it is the right one."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_21",
+        "memory": [
+            " In this attempt, I was unsuccessful. I clicked on the item that seemed to meet my criteria, but it was not the correct item. I searched for \"shelf stable potato side dish\" and the first item I clicked on was \"Fullgreen, Riced Sweet Potato - 99.9% Sweet Potato, 60% Less Carbs than Rice - Perfect healthy, nutritious, holiday side dish, NON-GMO and shelf-stable - case of 6 pouches\". Next time, I will search for \"shelf stable potato side dish microwave\" and then check if the results meet the $40 budget constraint. I will also read the description and features of the item to make sure it is the correct item before clicking on the \"Buy Now\" button."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_22",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was not purple. I searched for \"highspeed hdmi cable purple\". Next time, I will search for \"purple hdmi cable\" and then check if the results meet the highspeed and the $70 budget constraints. I will also read the description and features of the product to make sure that it is the right product before I buy it."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_23",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_24",
+        "memory": [
+            " In this attempt, I was unsuccessful. I was unable to click the 3 foot option. The initial search results were not good. I searched for \"high speed 3 foot red usb cable\". Next time, I will search for \"red usb cable\" and then check if the results meet the high speed and 3 foot constraints. I will also check the price to make sure it is lower than $50."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_25",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was not the great river organic milling flour I wanted. I searched for \"great river organic milling flour\" and the first item B0049YMA9W was the great river organic milling flour I wanted, but I did not check the size and style options. Next time, I will search for \"great river organic milling flour\" and then check if the results meet the size and style constraints. I will also check the price to make sure it is lower than $70."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_26",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_27",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was not the color I wanted. I searched for \"high quality pillow covers fade resistant color a-8\". Next time, I will search for \"pillow covers color a-8\" and then check if the results meet the high quality and fade resistant constraints. I will also check the color options and size options to make sure that I am buying the correct product."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_28",
+        "memory": [
+            " In this attempt, I was unsuccessful. The initial search results were not the product that I was looking for. My search query was \"oral hygiene toothbrush\". Next time, I will search for \"portable toothbrush\" and then check if the results meet the oral hygiene and the $50 budget constraints. I will also read the reviews and description of the product to make sure that it is easy to carry."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_29",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_30",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was more than my budget of $130. The initial search results were not good. I searched for \"gluten free popcorn\". Next time, I will search for \"gluten free popcorn 4.4oz(Pack of 12)\" and then check if the results meet the $130 budget constraint. I will also check the reviews and ratings of the product before buying it."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_31",
+        "memory": [
+            " In this attempt, I was unsuccessful. I was unable to click on the item I wanted because it was not an option. My search query was \"gluten free black rock salt made by himalayan\". Next time, I will search for \"Himalayan black rock salt\" and then check if the results meet the gluten free and 2.8 ounce pack with himalayan pink salt coarse grind constraints. I will also look for the option to select the size and type of salt I want."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_32",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was $52, which is more than my budget of $50. Either way, the initial search results were not good. I searched for \"black fast wireless universal charging stand\". Next time, I will search for \"wireless charging stand\" and then check if the results meet the black and the $50 budget constraints. I will also read the description and features of the product to make sure that it is the right product."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_33",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_34",
+        "memory": [
+            " In this attempt, I was unsuccessful. I clicked on the first item, which was the Happy Birthday Fortune Cookies, but it was not the product I was looking for. Next time, I will refine my search query to include more specific keywords such as \"birthday party cookies\" or \"birthday cookies\". I will also check the product description and features to make sure that it is the right product before clicking on the Buy Now button."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_35",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was more than my budget of $20. The initial search results were good. I searched for \"gold color smart watch bands compatible for apple and any one of the sizes 38mm | 40mm | 41mm\". Next time, I will refine my search by adding more specific keywords such as \"gold color smart watch bands compatible for apple 38mm\" or \"gold color smart watch bands compatible for apple 40mm\" or \"gold color smart watch bands compatible for apple 41mm\". This will help me find the exact product I am looking for and also check if the results meet the $20 budget constraint."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_36",
+        "memory": [
+            " In this attempt, I was unsuccessful. I clicked on the product that I wanted, but it was not a single pack. I searched for \"old style brown hair dye\" and the initial search results were not good. Next time, I will search for \"old style brown hair dye single pack\" and check if the results meet the $30 budget constraint. I will also read the description and features of the product to make sure that it is a single pack before clicking on the Buy Now button."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_37",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_38",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was not high gloss. I searched for \"high gloss tv stand with additional storage space ob color\". Next time, I will search for \"high gloss tv stand with additional storage space\" and then check if the results meet the ob color and the $190 budget constraints. I will also pay more attention to the color options and make sure to select the high gloss option."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_39",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was more than my budget of $20. The initial search results were not good. I searched for \"but lifting grey skinny jean shorts\". Next time, I will search for \"skinny jean shorts\" and then check if the results meet the but lifting and the $20 budget constraints. I will also check the size and color options to make sure that the product I am buying is the one I want."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_40",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_41",
+        "memory": [
+            " In this attempt, I was unsuccessful. I was unable to find the item I was looking for. My search query was \"white bluetooth speaker water resistant stereo sound\". Next time, I will search for \"water resistant bluetooth speaker\" and then check if the results meet the white and stereo sound constraints. I will also check the price to make sure it is lower than $70."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_42",
+        "memory": [
+            " In this attempt, I was unsuccessful. I did not realize that the item I clicked on was not the 8 fluid ounce bottle of tea tree lotion I was looking for. Next time, I will search for \"tea tree lotion\" and then check if the results meet the 8 fluid ounce and the $40 budget constraints. I will also read the description and features of the item to make sure it is the right product before clicking on the Buy Now button."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_43",
+        "memory": [
+            " In this attempt, I was unsuccessful. I clicked on the wrong item and ended up with a sandal that was not the right size for my mom. Next time, I will search for \"black high heeled sandals for mom size 5.5\" and then check if the results meet the $70 budget constraint. I will also make sure to click on the correct item before clicking on the \"Buy Now\" button."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_44",
+        "memory": [
+            " In this attempt, I was unsuccessful. I was unable to click on the option for the item I wanted. My search query was \"silicon exfoliating body scrubber\". Next time, I will search for \"silicon exfoliating body scrubber 4 pieces in total\" and check if the results meet the easy to use and the $40 budget constraints."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_45",
+        "memory": [
+            " In this attempt, I was unsuccessful. I was unable to click on the 8PCS option. Next time, I will search for \"gold plated banana plugs for speaker wire\" and then check if the results meet the easy to install and the $40 budget constraints. I will also make sure to read the description and features of the product to ensure that it is the right product for me."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_46",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was more than my budget of $50. The initial search results were not good. I searched for \"hair extensions natural hair straight hair\". Next time, I will search for \"hair extensions\" and then check if the results meet the natural hair and straight hair constraints. I will also check that the results are within my budget of $50."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_47",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_48",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_49",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_50",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was $24.81, which is less than my budget of $110. Either way, the initial search results were not good. I searched for \"women's gift set long-lasting edt spray body cream\". Next time, I will search for \"women's gift set\" and then check if the results meet the long-lasting edt spray and body cream constraints and the $110 budget. I will also read the description and features of the product to make sure that it is the right product before I buy it."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_51",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_52",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was more than my budget of $40. I searched for \"body wash dermatologist tested cucumber aloe scent\". Next time, I will search for \"body wash dermatologist tested\" and then check if the results meet the cucumber and aloe scent and the $40 budget constraints. I will also read the reviews and ratings of the product before buying it."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_53",
+        "memory": [
+            " In this attempt, I was unsuccessful. I clicked on the item that I thought was the right one, but it was not the right one. I searched for \"beige or green shower brush with long handle\" and the initial search results were not good. Next time, I will search for \"shower brush with long handle\" and then check if the results meet the beige or green and the $50 budget constraints. I will also read the description and features of the item to make sure it is the right one."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_54",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was 10 ounces, which is not the size I wanted. The initial search results were not good. I searched for \"16.9 fluid ounce amber bottle hair salon\". Next time, I will search for \"amber bottle hair salon\" and then check if the results meet the 16.9 fluid ounce and the $40 budget constraints. I will also read the description and features of the product to make sure it is suitable for use in a hair salon."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_55",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was $100, which is more than my budget of $100. Either way, the initial search results were not good. I searched for \"black alarm clock radio temperature usb port\". Next time, I will search for \"black alarm clock radio usb port\" and then check if the results meet the temperature and the $100 budget constraints. I will also check the reviews and ratings of the product before buying."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_56",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_57",
+        "memory": [
+            " In this attempt, I was unsuccessful. I did not take into account the size of the product I was looking for. My search query was \"kosher sea salt\". Next time, I will search for \"kosher sea salt\" and then check if the results meet the size and the $40 budget constraints. I will also make sure to read the description and features of the product to make sure it is the right size and type of salt I am looking for."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_58",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was $39.99, which is more than my budget of $150. Either way, the initial search results were not good. I searched for \"2 light bath vanity lighting set nickel finish\". Next time, I will search for \"2 light bath vanity lighting set\" and then check if the results meet the nickel finish and the $150 budget constraints. I will also check the reviews and ratings of the product before buying."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_59",
+        "memory": [
+            " In this attempt, I was unsuccessful. I did not click on the correct options to purchase the product. I searched for \"non gmo sesame pretzels 12 pack\" and found two items that met my criteria. Next time, I will click on the \"4 Pack\" option for the item and then click on the \"Everything\" option to select the flavor. After that, I will click on the \"Buy Now\" button to purchase the product."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_60",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_61",
+        "memory": [
+            " In this attempt, I was unsuccessful. I clicked on the item that seemed to meet my criteria, but it did not have the options I was looking for. My search query was \"press on nails\". Next time, I will search for \"babalal cat eye press on nails\" and then check if the results meet the non-toxic and purple constraints. I will also check that the results are within my budget of $20."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_62",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was more expensive than my budget of $220. The initial search results were not good. I searched for \"dell ultra small desktop computer core i5 16gb ram 256gb ssd windows 10 pro\". Next time, I will search for \"dell ultra small desktop computer\" and then check if the results meet the core i5, 16gb ram, 256gb ssd, and windows 10 pro constraints. I will also check that the price is lower than $220."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_63",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_64",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_65",
+        "memory": [
+            " In this attempt, I was unsuccessful. I did not find a product that met all of my criteria. My search query was \"all natural savory and spicy sauce sweet kick mustard flavor\". Next time, I will search for \"all natural savory and spicy sauce\" and then check if the results meet the sweet kick mustard flavor and the $130 budget constraints. I will also read the product descriptions and features to make sure that the product does not contain any artificial ingredients."
+        ],
+        "is_success": true
+    },
+    {
+        "name": "env_66",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was more than my budget of $80. The initial search results were good. I searched for \"alcohol free skin care\". Next time, I will check the price of the product before clicking on the \"Buy Now\" button. I will also read the description and features of the product to make sure that it is the right product for me. Additionally, I will read the reviews of the product to make sure that it is of good quality."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_67",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_68",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_69",
+        "memory": [
+            " In this attempt, I was unsuccessful. I clicked on the item that seemed to meet my criteria, but it was not the right item. I searched for \"30 pair skin care masks eyes wrinkles\" and the first two items were the ones I wanted. I clicked on the first item, B093HB8RSZ, and it had two options, '30 pairs' and '30 pairs bowl'. I clicked on '30 pairs', but it was not the right item. Next time, I will click on the second item, B09NN8QQB4, and check if it meets the criteria. If it does, I will click on 'Buy Now'."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_70",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was not easy to carry. I searched for \"purple braces brush easy to carry\". Next time, I will search for \"purple braces brush\" and then check if the results meet the easy to carry and the $50 budget constraints. I will also read the description and features of the product to make sure that it is easy to carry."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_71",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_72",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_73",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was $20.39, which is more than my budget of $60.00. The initial search results were not good. I searched for \"4pcs silicone travel bottles\". Next time, I will search for \"FOMIYES 4pcs silicone travel bottles\" and then check if the results meet the $60 budget constraint. I will also read the description and features of the product to make sure that it is easy to carry."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_74",
+        "memory": [
+            " In this attempt, I was unsuccessful. I clicked on the item B07KLR21K8, which was a pink ottoman with a solid wooden frame and was within my budget of $360. However, I did not check the features and reviews of the item before buying it. Next time, I will check the features and reviews of the item before clicking the buy now button. I will also check the other items in the search results to make sure that I am getting the best deal."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_75",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was $28.24, which is more than my budget of $60.00. The initial search results were not good. I searched for \"three pack of 4 fluid ounce green envy hair dye\". Next time, I will search for \"green envy hair dye\" and then check if the results meet the three pack and the $60 budget constraints. I will also check the size and color options to make sure that I am getting the right product."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_76",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was $145, which is more than my budget of $60. The initial search results were not good. I searched for \"mid century console sofa table\". Next time, I will search for \"mid century console table\" and then check if the results meet the $60 budget constraint. I will also read the description and features of the product to make sure that it is a sofa table."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_77",
+        "memory": [
+            " In this attempt, I was unsuccessful. I did not check if the product was easy to clean. I searched for \"pink cosmetic bag easy to clean\" and the first two items were not what I wanted. The third item was the closest one, but I did not check if it was easy to clean. Next time, I will search for \"pink cosmetic bag\" and then check if the results meet the easy to clean and the $40 budget constraints. I will also read the description and features of the product to make sure it is easy to clean."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_78",
+        "memory": [
+            " In this attempt, I was unsuccessful. I did not check the price range of the product before clicking on it. Next time, I will check the price range of the product before selecting the size and color. I will also check the reviews of the product to make sure that it is suitable for day comfert."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_79",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was not the non-gmo classic tonic I wanted. The initial search results were not good. I searched for \"24 pack 7.5 ounce non-gmo classic tonic\". Next time, I will search for \"non-gmo classic tonic\" and then check if the results meet the 24 pack and the $40 budget constraints. I will also read the description and features of the product to make sure it is the right product before I buy it."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_80",
+        "memory": [
+            " In this attempt, I was unsuccessful. I did not take into account the size of the shoe and ended up buying a product that was not the right size. Next time, I will search for \"9.5 rubber soled hiking shoe made of light weight vinyl acetate\" and then check if the results meet the size and the $140 budget constraints. I will also check the size options available for the product before clicking the buy now button."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_81",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was not the french vanilla soy wax candle I wanted. I searched for \"french vanilla soy wax candle\" and the initial search results were not good. Next time, I will search for \"french vanilla soy wax candle\" and then check if the results meet the $40 budget constraint. I will also read the description and features of the product to make sure it is the french vanilla soy wax candle I am looking for."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_82",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was not what I wanted. I searched for \"black brown to tan hairpiece made from synthetic hair\" and the initial search results were not good. Next time, I will search for \"synthetic hairpiece\" and then check if the results meet the black brown to tan and the $30 budget constraints. I will also read the description and features of the product to make sure it is the right product before buying."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_83",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was $55.59, which is more than my budget of $40. Either way, the initial search results were not good. I searched for \"slim fit gray colored coat long sleeves x-large size\". Next time, I will search for \"gray coat\" and then check if the results meet the slim fit, long sleeves, and x-large size constraints. I will also check the price to make sure it is lower than $40."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_84",
+        "memory": [
+            " In this attempt, I was unsuccessful. I did not take into account the quantity of the product I wanted to buy. My search query was \"plug and play high speed usb flash drive blue black 3 of 32g or 2 of 64g\". Next time, I will search for \"plug and play high speed usb flash drive blue black\" and then check if the results meet the 3 of 32g or 2 of 64g and the $40 budget constraints. I will also make sure to check the quantity of the product before clicking the buy now button."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_85",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was $100, which is more than my budget of $80. Either way, the initial search results were not good. I searched for \"chocolate coated wafers 4.41 ounce size caramel flavor\". Next time, I will search for \"chocolate coated wafers 4.41 ounce size\" and then check if the results meet the caramel flavor and the $80 budget constraints. I will also check the reviews and ratings of the product before buying it."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_86",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_87",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_88",
+        "memory": [
+            " In this attempt, I was unsuccessful. I searched for \"women's bootcut pants tapata\" and the initial search results were not what I was looking for. Next time, I will refine my search by adding more keywords such as \"women's bootcut dress pants\" and \"women's bootcut office pants\". I will also check the price and brand of the results to make sure they meet my budget and brand constraints."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_89",
+        "memory": [
+            " In this attempt, I was unsuccessful. The initial search results were not the products that I was looking for. My search query was \"khaki steel toe shoes size 11 women\". Next time, I will search for \"steel toe shoes\" and then check if the results meet the khaki and size 11 women constraints. I will also check the price to make sure it is lower than $70."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_90",
+        "memory": [
+            " In this attempt, I was unsuccessful. I clicked on the item that seemed to meet my criteria, but it was still more expensive than my budget of $80. Next time, I will search for \"7 piece king comforter set machine washable\" and then check if the results meet the flowers and the $80 budget constraints. I will also check the reviews of the product to make sure that it is of good quality."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_91",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_92",
+        "memory": [
+            " In this attempt, I was unsuccessful. I clicked on the wrong item and it did not meet my criteria. I searched for \"blue 2.95 foot wire pendent light living room\" and the initial search results were not good. Next time, I will search for \"blue wire pendent light\" and then check if the results meet the 2.95 foot and the $200 budget constraints. I will also read the description and features of the product to make sure it is the right item before clicking the buy now button."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_93",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was more than my budget of $130. I searched for \"wireless bluetooth speakers in the color a\". Next time, I will search for \"wireless bluetooth speakers\" and then check if the results meet the color a and the $130 budget constraints. I will also read the product description and reviews to make sure that the product is the one I want."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_94",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_95",
+        "memory": [
+            " In this attempt, I was unsuccessful. I realized that the item I clicked on was not actually gelato, but rather a stabilizer for gelato. Next time, I will search for \"kosher gelato\" and then check if the results meet the kosher and the $120 budget constraints. I will also read the description of the item to make sure that it is actually gelato and not a stabilizer."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_96",
+        "memory": [
+            " In this attempt, I was unsuccessful. I clicked on the item that seemed to meet my criteria, but it was not a quilted puffy vest. Next time, I will refine my search query to include the words \"quilted\" and \"puffy\" and check that the results meet the pink, machine wash, and extra large constraints."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_97",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was more than my budget of $50. The initial search results were not good. I searched for \"light weight fitbit versa bands for men women size large\". Next time, I will search for \"fitbit versa bands\" and then check if the results meet the light weight, men/women, size large, and $50 budget constraints. I will also read the product description and reviews to make sure that the product is what I am looking for."
+        ],
+        "is_success": false
+    },
+    {
+        "name": "env_98",
+        "memory": [],
+        "is_success": true
+    },
+    {
+        "name": "env_99",
+        "memory": [
+            " In this attempt, I was unsuccessful. I accidentally bought a product that was not the size I wanted. I searched for \"14 inch rose gold throw pillow cover\" and the initial search results were not good. Next time, I will search for \"rose gold throw pillow cover\" and then check if the results meet the 14 inch and the $40 budget constraints. I will also make sure to double check the size of the product before I buy it."
+        ],
+        "is_success": false
+    }
+]
