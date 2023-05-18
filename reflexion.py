@@ -30,8 +30,10 @@ def run_reflexion(
         test_feedback = []
         cur_func_impl = ""
         while cur_pass < pass_at_k and not is_solved:
-            # tests_i = gen.internal_tests(item["prompt"], model, 1)
-            tests_i = item['visible_tests']
+            if is_leetcode:
+                tests_i = item['visible_tests']
+            else:
+                tests_i = gen.internal_tests(item["prompt"], model, 1)
 
             # first attempt
             cur_func_impl = gen.func_impl(item["prompt"], model, "simple")

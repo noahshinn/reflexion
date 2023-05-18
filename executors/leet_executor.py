@@ -1,16 +1,18 @@
+from __future__ import annotations
+
 from typing import List
 
 from .executor_types import ExecuteResult, Executor
 from .executor_utils import to_jsonl
 from datetime import datetime
 
-from .leetcode_env.leetcode_env.utils import SubmissionFormatter
-from .leetcode_env.leetcode_env.leetcode_types import ProgrammingLanguage
-
 class LeetExecutor(Executor):
-    
-    def __init__(self, lang: ProgrammingLanguage, executor: Executor, formatter: SubmissionFormatter):
+    def __init__(self, lang, executor: Executor, formatter):
+        from .leetcode_env.leetcode_env.utils import SubmissionFormatter
+        from .leetcode_env.leetcode_env.leetcode_types import ProgrammingLanguage
         from .leetcode_env.leetcode_env.environment import LeetCodeEnv
+        assert isinstance(formatter, SubmissionFormatter)
+        assert isinstance(lang, ProgrammingLanguage)
         self.lang = lang
         self.executor = executor
         self.formatter = formatter
