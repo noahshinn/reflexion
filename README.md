@@ -1,41 +1,32 @@
-# Mastering HumanEval with Reflexion
+# Reflexion: Language Agents with Verbal Reinforcement Learning
 
-This is a spin-off project inspired by the paper: [Reflexion: an autonomous agent with dynamic memory and self-reflection. Noah Shinn, Beck Labash, Ashwin Gopinath. _Preprint_, 2023](https://arxiv.org/abs/2303.11366)
+![Reflexion RL diagram](./figures/reflexion_rl.pdf)
 
-Read more about this project in this [post](https://nanothoughts.substack.com/p/reflecting-on-reflexion)
+This repo holds the code, demos, and logs for: [Reflexion: Language Agents with Verbal Reinforcement Learning. Noah Shinn, Federico Cassano, Beck Labash, Ashwin Gopinath, Karthik Narasimhan, Shunyu Yao. _Preprint_, 2023](https://arxiv.org/abs/2303.11366)
 
-Check out an interesting type-inference implementation here: [OpenTau](https://github.com/GammaTauAI/opentau)
+![Reflexion tasks](./figures/reflexion_tasks.pdf)
 
-Check out the code for the original paper [here](https://github.com/noahshinn024/reflexion)
-
-Check out a new superhuman programming agent gym [here](https://github.com/GammaTauAI/leetcode-hard-gym)
-
-### Note
-
-This repo contains scratch code that was used for testing. The real version of Reflexion for benchmark-agnostic, language-agnostic code generation will be released after the first version of the upcoming paper to respect the privacy of the work (and collaboration) in progress.
-
-If you have any questions, please contact [noahshinn024@gmail.com](noahshinn024@gmail.com)
-
-![architecture](./media/architecture.png)
-
-![result](./media/performance.png)
+We release the LeetcodeHardGym [here](https://github.com/GammaTauAI/leetcode-hard-gym)
 
 ### Another Note
 
-Due to the nature of these experiments, it may not be feasible for individual developers to rerun the results due to limited access to GPT-4 and significant API charges. Due to recent requests, both trials have been rerun once more and are dumped in `./root` with a script [here](https://github.com/noahshinn024/reflexion-human-eval/blob/main/validate_py_results.py) to validate the solutions with the unit tests provided by [HumanEval](https://github.com/openai/human-eval).
-
-To run the validation on your log files or the provided log files:
-```bash
-python ./validate_py_results.py <path to jsonlines file>
-```
+Due to the nature of these experiments, it may not be feasible for individual developers to rerun the results as GPT-4 has limited access and significant API charges. All runs from the paper and additional results are logged in `./programming_runs/root` for programming, `./alfworld_runs/root` for decision-making, and `./hotpotqa_runs/root` for reasoning. Programming runs can be validated with scripts [here](https://github.com/noahshinn024/reflexion/blob/main/programming/validate_py_results.py) and [here](https://github.com/noahshinn024/reflexion/blob/main/programming/validate_rs_results.py) to validate the Python and Rust solutions with the unit tests provided by their respective benchmarks.
 
 ### Warning
 
-Please do not run the Reflexion agent in an unsecure environment as the generated code is not validated before execution.
+Please do not run the Reflexion programming agent in an unsecure environment as the generated code is not validated before execution.
+
+### Other Notes
+
+Check out the code for the original draft [here](https://github.com/noahshinn024/reflexion-draft)
+
+Read the original blog [here](https://nanothoughts.substack.com/p/reflecting-on-reflexion)
+
+Check out an interesting type-inference implementation here: [OpenTau](https://github.com/GammaTauAI/opentau)
+
+If you have any questions, contact [noahshinn024@gmail.com](noahshinn024@gmail.com)
 
 ### Cite
-
-**Note**: This is a spin-off implementation that implements a relaxation on the internal success criteria proposed in the [original paper](https://arxiv.org/abs/2303.11366).
 
 ```bibtex
 @article{shinn2023reflexion,
