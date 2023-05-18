@@ -1,17 +1,17 @@
 from .generator_types import Generator
-from .generator_utils import generic_generate_func_impl, gpt_chat, gpt_completion, generic_generate_internal_tests, generic_generate_self_reflection
+from .generator_utils import generic_generate_func_impl, generic_generate_internal_tests, generic_generate_self_reflection
 
 from typing import Optional, List, Union
 import ast
 import re
 
 PY_SIMPLE_COMPLETION_INSTRUCTION = "# Write the body of this function only."
-PY_REFLEXION_COMPLETION_INSTRUCTION = "You are PythonGPT. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only.\n\n-----"
-PY_SELF_REFLECTION_COMPLETION_INSTRUCTION = "You are PythonGPT. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation.\n\n-----"
+PY_REFLEXION_COMPLETION_INSTRUCTION = "You are a Python writing assistant. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only.\n\n-----"
+PY_SELF_REFLECTION_COMPLETION_INSTRUCTION = "You are a Python writing assistant. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation.\n\n-----"
 
-PY_SIMPLE_CHAT_INSTRUCTION = "You are PythonGPT, an AI that only responds with python code, NOT ENGLISH. You will be given a function signature and its docstring by the user. Respond only in code with correct implementation of the function. Do not include provided the docstring in your response." # The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
-PY_REFLEXION_CHAT_INSTRUCTION = "You are PythonGPT. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only. You should fill in the following text of the missing function body. For example, the first line of the completion should have 4 spaces for the indendation so that it fits syntactically with the preceding signature."
-PY_SELF_REFLECTION_CHAT_INSTRUCTION = "You are PythonGPT. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation."
+PY_SIMPLE_CHAT_INSTRUCTION = "You are a Python writing assistant, an AI that only responds with python code, NOT ENGLISH. You will be given a function signature and its docstring by the user. Respond only in code with correct implementation of the function. Do not include provided the docstring in your response."
+PY_REFLEXION_CHAT_INSTRUCTION = "You are a Python writing assistant. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only. You should fill in the following text of the missing function body. For example, the first line of the completion should have 4 spaces for the indendation so that it fits syntactically with the preceding signature."
+PY_SELF_REFLECTION_CHAT_INSTRUCTION = "You are a Python writing assistant. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation."
 
 PY_TEST_GENERATION_FEW_SHOT = """For example:
 
@@ -34,11 +34,11 @@ assert has_close_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0], 0.1) == True
 assert has_close_elements([1.1, 2.2, 3.1, 4.1, 5.1], 1.0) == True
 assert has_close_elements([1.1, 2.2, 3.1, 4.1, 5.1], 0.5) == False"""
 
-PY_TEST_GENERATION_COMPLETION_INSTRUCTION = f"""You are PythonGPT, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring.
+PY_TEST_GENERATION_COMPLETION_INSTRUCTION = f"""You are a Python writing assistant, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring.
 
 {PY_TEST_GENERATION_FEW_SHOT}"""
 
-PY_TEST_GENERATION_CHAT_INSTRUCTION = """You are CodexGPT, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring."""
+PY_TEST_GENERATION_CHAT_INSTRUCTION = """You are a Python writing assistant, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring."""
 
 class PyGenerator(Generator):
     def self_reflection(self, func: str, feedback: str, model: str) -> str:

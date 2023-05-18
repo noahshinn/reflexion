@@ -4,11 +4,11 @@ from .generator_utils import gpt_chat, gpt_completion, generic_generate_func_imp
 from typing import List, Optional, Union
 
 RS_SIMPLE_COMPLETION_INSTRUCTION = "// Write the body of this function only."
-RS_REFLEXION_COMPLETION_INSTRUCTION = "You are RustGPT. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only.\n\n-----"
-RS_SELF_REFLECTION_COMPLETION_INSTRUCTION = "You are RustGPT. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation.\n\n-----"
-RS_SIMPLE_CHAT_INSTRUCTION = "You are RustGPT. You will be given a function signature and docstring. You should fill in the following text of the missing function body. For example, the first line of the completion should have 4 spaces for the indendation so that it fits syntactically with the preceding signature."
-RS_REFLEXION_CHAT_INSTRUCTION = "You are RustGPT. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only. You should fill in the following text of the missing function body. For example, the first line of the completion should have 4 spaces for the indendation so that it fits syntactically with the preceding signature."
-RS_SELF_REFLECTION_CHAT_INSTRUCTION = "You are RustGPT. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation."
+RS_REFLEXION_COMPLETION_INSTRUCTION = "You are a Rust programming assistant. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only.\n\n-----"
+RS_SELF_REFLECTION_COMPLETION_INSTRUCTION = "You are a Rust programming assistant. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation.\n\n-----"
+RS_SIMPLE_CHAT_INSTRUCTION = "You are a Rust programming assistant. You will be given a function signature and docstring. You should fill in the following text of the missing function body. For example, the first line of the completion should have 4 spaces for the indendation so that it fits syntactically with the preceding signature."
+RS_REFLEXION_CHAT_INSTRUCTION = "You are a Rust programming assistant. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only. You should fill in the following text of the missing function body. For example, the first line of the completion should have 4 spaces for the indendation so that it fits syntactically with the preceding signature."
+RS_SELF_REFLECTION_CHAT_INSTRUCTION = "You are a Rust programming assistant. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation."
 
 
 RS_TEST_GENERATION_FEW_SHOT = """For example:
@@ -35,11 +35,11 @@ assert_eq!(candidate(100), 50);
 assert_eq!(candidate(49), 7);
 """
 
-RS_TEST_GENERATION_COMPLETION_INSTRUCTION = f"""You are RustGPT, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring.
+RS_TEST_GENERATION_COMPLETION_INSTRUCTION = f"""You are a Rust programming assistant, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring.
 
 {RS_TEST_GENERATION_FEW_SHOT}"""
 
-RS_TEST_GENERATION_CHAT_INSTRUCTION = """You are RustGPT, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring."""
+RS_TEST_GENERATION_CHAT_INSTRUCTION = """You are a Rust programming assistant, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring."""
 
 
 def dump_tests(tests: List[str]) -> str:
