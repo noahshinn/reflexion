@@ -26,14 +26,21 @@ def run_reflexion(
         cur_pass = 0
         is_solved = False
         reflections = []
+        implementations = []
+        test_feedback = []
         cur_func_impl = ""
         while cur_pass < pass_at_k and not is_solved:
-            tests_i = gen.internal_tests(item["prompt"], model, 1)
+            if is_leetcode:
+                tests_i = item['visible_tests']
+            else:
+                tests_i = gen.internal_tests(item["prompt"], model, 1)
 
             # first attempt
             cur_func_impl = gen.func_impl(item["prompt"], model, "simple")
+            implementations.append(cur_func_impl)
             assert isinstance(cur_func_impl, str)
             is_passing, feedback, _ = exe.execute(cur_func_impl, tests_i)
+            test_feedback.append(feedback)
 
             # if solved, exit early
             if is_passing:
@@ -59,13 +66,15 @@ def run_reflexion(
                     strategy="reflexion",
                     prev_func_impl=cur_func_impl,
                     feedback=cur_feedback,
-                    self_reflection=reflection
+                    self_reflection=reflection,
                 )
+                implementations.append(cur_func_impl)
                 assert isinstance(cur_func_impl, str)
 
                 # check if all internal unit tests pass
                 is_passing, cur_feedback, _ = exe.execute(
                     cur_func_impl, tests_i)
+                test_feedback.append(cur_feedback)
 
                 # if solved, check if it passes the real tests, exit early
                 if is_passing or cur_iter == max_iters - 1:
@@ -82,6 +91,8 @@ def run_reflexion(
 
         item["is_solved"] = is_solved
         item["reflections"] = reflections
+        item["implementations"] = implementations
+        item["test_feedback"] = test_feedback
         item["solution"] = cur_func_impl
         write_jsonl(log_path, [item], append=True)
 
