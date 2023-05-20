@@ -36,7 +36,7 @@ Run the trial
 The logs will be sent to `./root/<run_name>`.
 
 ### To Run: reasoning (HotPotQA)
-Clone this repo and move to the AlfWorld directory
+Clone this repo and move to the HotPotQA directory
 ```bash
 git clone https://github.com/noahshinn024/reflexion && cd ./hotpotqa_runs
 ```
