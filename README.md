@@ -13,28 +13,6 @@ We release the LeetcodeHardGym [here](https://github.com/GammaTauAI/leetcode-har
 `programming`: v2 not released yet, to be cleaned soon
 `reasoning`: `./hotpotqa_runs`
 
-### To Run: decision-making (AlfWorld)
-Clone this repo and move to the AlfWorld directory
-```bash
-git clone https://github.com/noahshinn024/reflexion && cd ./alfworld_runs
-```
-
-Specify the run parameters in `./run_reflexion.sh`.
-`num_trials`: number of iterative learning steps
-`num_envs`: number of task-environment pairs per trial
-`run_name`: the name for this run
-`use_memory`: use persisting memory to store self-reflections (turn off to run a baseline run)
-`is_resume`: use logging directory to resume a previous run
-`resume_dir`: the logging directory from which to resume the previous run
-`start_trial_num`: if resume run, then the trial number of which to start
-
-Run the trial
-```bash
-./run_reflexion.sh
-```
-
-The logs will be sent to `./root/<run_name>`.
-
 ### To Run: reasoning (HotPotQA)
 We provide a set of notebooks to easily run, explore, and interact with the results of the reasoning experiments. Each experiment consists of a random sample of 100 questions from the HotPotQA distractor dataset. Each question in the sample is attempted by an agent with a specific type and reflexion strategy.
 
@@ -79,6 +57,30 @@ Each notebook allows you to specify the reflexion strategy to be used by the age
  - `ReflexionStrategy.REFLEXION` - The agent is given its self-reflection on the last attempt as context. 
 
  - `ReflexionStrategy.LAST_ATTEMPT_AND_REFLEXION` -  The agent is given both its reasoning trace and self-reflection on the last attempt as context.
+
+### To Run: decision-making (AlfWorld)
+Clone this repo and move to the AlfWorld directory
+```bash
+git clone https://github.com/noahshinn024/reflexion && cd ./alfworld_runs
+```
+
+Specify the run parameters in `./run_reflexion.sh`.
+`num_trials`: number of iterative learning steps
+`num_envs`: number of task-environment pairs per trial
+`run_name`: the name for this run
+`use_memory`: use persisting memory to store self-reflections (turn off to run a baseline run)
+`is_resume`: use logging directory to resume a previous run
+`resume_dir`: the logging directory from which to resume the previous run
+`start_trial_num`: if resume run, then the trial number of which to start
+
+Run the trial
+```bash
+./run_reflexion.sh
+```
+
+The logs will be sent to `./root/<run_name>`.
+
+
 
 ### Another Note
 
