@@ -1,20 +1,49 @@
 # Reflexion: Language Agents with Verbal Reinforcement Learning
 
-![Reflexion RL diagram](./figures/reflexion_rl.png)
+This repo holds the code, demos, and logs for the Reflexion paper (v2 not out yet): [Reflexion: Language Agents with Verbal Reinforcement Learning. Noah Shinn, Federico Cassano, Beck Labash, Ashwin Gopinath, Karthik Narasimhan, Shunyu Yao. _Preprint_, 2023](https://arxiv.org/abs/2303.11366)
 
-This repo holds the code, demos, and logs for: [Reflexion: Language Agents with Verbal Reinforcement Learning. Noah Shinn, Federico Cassano, Beck Labash, Ashwin Gopinath, Karthik Narasimhan, Shunyu Yao. _Preprint_, 2023](https://arxiv.org/abs/2303.11366)
+![Reflexion RL diagram](./figures/reflexion_rl.png)
 
 ![Reflexion tasks](./figures/reflexion_tasks.png)
 
 We release the LeetcodeHardGym [here](https://github.com/GammaTauAI/leetcode-hard-gym)
 
+### Note
+`decision-making`: `./alfworld_runs` and `./webshop_runs`
+`programming`: v2 not released yet, to be cleaned soon
+`reasoning`: `./hotpotqa_runs`
+
+### To Run: decision-making (AlfWorld)
+Clone this repo and move to the AlfWorld directory
+```bash
+git clone https://github.com/noahshinn024/reflexion && cd ./alfworld_runs
+```
+
+Specify the run parameters in `./run_reflexion.sh`.
+`num_trials`: number of iterative learning steps
+`num_envs`: number of task-environment pairs per trial
+`run_name`: the name for this run
+`use_memory`: use persisting memory to store self-reflections (turn off to run a baseline run)
+`is_resume`: use logging directory to resume a previous run
+`resume_dir`: the logging directory from which to resume the previous run
+`start_trial_num`: if resume run, then the trial number of which to start
+
+Run the trial
+```bash
+./run_reflexion.sh
+```
+
+The logs will be sent to `./root/<run_name>`.
+
+### To Run: reasoning (HotPotQA)
+Clone this repo and move to the AlfWorld directory
+```bash
+git clone https://github.com/noahshinn024/reflexion && cd ./hotpotqa_runs
+```
+
 ### Another Note
 
-Due to the nature of these experiments, it may not be feasible for individual developers to rerun the results as GPT-4 has limited access and significant API charges. All runs from the paper and additional results are logged in `./programming_runs/root` for programming, `./alfworld_runs/root` for decision-making, and `./hotpotqa_runs/root` for reasoning. Programming runs can be validated with scripts [here](https://github.com/noahshinn024/reflexion/blob/main/programming/validate_py_results.py) and [here](https://github.com/noahshinn024/reflexion/blob/main/programming/validate_rs_results.py) to validate the Python and Rust solutions with the unit tests provided by their respective benchmarks.
-
-### Warning
-
-Please do not run the Reflexion programming agent in an unsecure environment as the generated code is not validated before execution.
+Due to the nature of these experiments, it may not be feasible for individual developers to rerun the results as GPT-4 has limited access and significant API charges. All runs from the paper and additional results are logged in `./alfworld_runs/root` for decision-making and `./hotpotqa_runs/root` for reasoning. 
 
 ### Other Notes
 
@@ -24,7 +53,7 @@ Read the original blog [here](https://nanothoughts.substack.com/p/reflecting-on-
 
 Check out an interesting type-inference implementation here: [OpenTau](https://github.com/GammaTauAI/opentau)
 
-If you have any questions, contact [noahshinn024@gmail.com](noahshinn024@gmail.com)
+For all questions, contact [noahshinn024@gmail.com](noahshinn024@gmail.com)
 
 ### Cite
 
