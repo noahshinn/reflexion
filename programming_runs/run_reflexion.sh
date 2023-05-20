@@ -6,5 +6,5 @@ python main.py \
   --language "py" \
   --model "gpt-4" \
   --pass_at_k "1" \
-  --max_iters "10" \
+  --max_iters "2" \
   --verbose
