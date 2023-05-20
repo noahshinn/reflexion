@@ -1,6 +1,6 @@
 import re, string, os
 from typing import List, Union, Literal
-
+from enum import Enum
 import tiktoken
 from langchain import OpenAI, Wikipedia
 from langchain.llms.base import BaseLLM
@@ -11,6 +11,19 @@ from prompts import reflect_prompt, react_agent_prompt, react_reflect_agent_prom
 from prompts import cot_agent_prompt, cot_reflect_agent_prompt, cot_reflect_prompt, COT_INSTRUCTION, COT_REFLECT_INSTRUCTION
 from fewshots import WEBTHINK_SIMPLE6, REFLECTIONS, COT, COT_REFLECT
 
+class ReflexionStrategy(Enum):
+    """
+    NONE: No reflection
+    LAST_ATTEMPT: Use last reasoning trace in context 
+    REFLEXION: Apply reflexion to the next reasoning trace 
+    LAST_ATTEMPT_AND_REFLEXION: Use last reasoning trace in context and apply reflexion to the next reasoning trace 
+    """
+    NONE = 'base'
+    LAST_ATTEMPT = 'last_trial' 
+    REFLEXION = 'reflexion'
+    LAST_ATTEMPT_AND_REFLEXION = 'last_trial_and_reflexion'
+
+
 class CoTAgent:
     def __init__(self,
                     question: str,
@@ -18,7 +31,6 @@ class CoTAgent:
                     key: str,
                     agent_prompt: PromptTemplate = cot_reflect_agent_prompt,
                     reflect_prompt: PromptTemplate = cot_reflect_prompt,
-                    reflect_header: str = REFLECTION_HEADER,
                     cot_examples: str = COT,
                     reflect_examples: str = COT_REFLECT,
                     self_reflect_llm: BaseLLM = OpenAI(
@@ -34,13 +46,11 @@ class CoTAgent:
                                             model_kwargs={"stop": "\n"},
                                             openai_api_key=os.environ['OPENAI_API_KEY']),
                     ) -> None:
-        
         self.question = question
         self.context = context
         self.key = key
         self.agent_prompt = agent_prompt
         self.reflect_prompt = reflect_prompt
-        self.reflect_header = reflect_header
         self.cot_examples = cot_examples 
         self.reflect_examples = reflect_examples
         self.self_reflect_llm = self_reflect_llm
@@ -51,12 +61,10 @@ class CoTAgent:
         self.step_n: int = 0
         self.reset()
 
-    def run(self, reflect: bool = True,
-            reflect_strategy: Union[Literal['last_attempt'],
-                                    Literal['reflexion'],
-                                    Literal['last_attempt + reflexion']] = 'reflexion') -> None:
-        if self.step_n > 0 and not self.is_correct() and reflect:
-            self.reflect(reflect_strategy)
+    def run(self,
+            reflexion_strategy: ReflexionStrategy = ReflexionStrategy.REFLEXION) -> None:
+        if self.step_n > 0 and not self.is_correct() and reflexion_strategy != ReflexionStrategy.NONE:
+            self.reflect(reflexion_strategy)
         self.reset()
         self.step()
         self.step_n += 1
@@ -87,17 +95,15 @@ class CoTAgent:
             print('Invalid action type, please try again.')
     
     def reflect(self,
-                strategy: Union[Literal['last_attempt'],
-                                Literal['reflexion'],
-                                Literal['last_attempt + reflexion']]) -> None:
-        print('Reflecting...')
-        if strategy == 'last_attempt':
+                strategy: ReflexionStrategy) -> None:
+        print('Running Reflexion strategy...')
+        if strategy == ReflexionStrategy.LAST_ATTEMPT:
             self.reflections = [self.scratchpad]
             self.reflections_str = format_last_attempt(self.question , self.reflections[0])
-        elif strategy == 'reflexion':
+        elif strategy == ReflexionStrategy.REFLEXION:
             self.reflections += [self.prompt_reflection()]
             self.reflections_str = format_reflections(self.reflections)
-        elif strategy == 'last_attempt + reflexion':
+        elif strategy == ReflexionStrategy.LAST_ATTEMPT_AND_REFLEXION:
             self.reflections_str = format_last_attempt(self.question , self.scratchpad)
             self.reflections = [self.prompt_reflection()]
             self.reflections_str += '\n'+ format_reflections(self.reflections, header = REFLECTION_AFTER_LAST_TRIAL_HEADER)
@@ -253,7 +259,6 @@ class ReactReflectAgent(ReactAgent):
                  max_steps: int = 6,
                  agent_prompt: PromptTemplate = react_reflect_agent_prompt,
                  reflect_prompt: PromptTemplate = reflect_prompt,
-                 reflect_header: str = REFLECTION_HEADER,
                  docstore: Docstore = Wikipedia(),
                  react_llm: BaseLLM = OpenAI(
                                              temperature=0,
@@ -269,29 +274,28 @@ class ReactReflectAgent(ReactAgent):
                  ) -> None:
         
         super().__init__(question, key, max_steps, agent_prompt, docstore, react_llm)
-        self.reflect_header = reflect_header
         self.reflect_llm = reflect_llm
         self.reflect_prompt = reflect_prompt
         self.reflect_examples = REFLECTIONS
         self.reflections: List[str] = []
         self.reflections_str: str = ''
     
-    def run(self, reset = True, reflect_strategy: Union[Literal['last_attempt'], Literal['reflexion'], Literal['last_attempt + reflexion']] = 'reflexion') -> None:
+    def run(self, reset = True, reflect_strategy: ReflexionStrategy = ReflexionStrategy.REFLEXION) -> None:
         if (self.is_finished() or self.is_halted()) and not self.is_correct():
             self.reflect(reflect_strategy)
 
         ReactAgent.run(self, reset)
     
     def reflect(self,
-                strategy: Union[Literal['last_attempt'], Literal['reflexion'], Literal['last_attempt + reflexion']]) -> None:
+                strategy: ReflexionStrategy) -> None:
         print('Reflecting...')
-        if strategy == 'last_attempt':
+        if strategy == ReflexionStrategy.LAST_ATTEMPT:
             self.reflections = [self.scratchpad]
             self.reflections_str = format_last_attempt(self.question, self.reflections[0])
-        elif strategy == 'reflexion':
+        elif strategy == ReflexionStrategy.REFLEXION: 
             self.reflections += [self.prompt_reflection()]
             self.reflections_str = format_reflections(self.reflections)
-        elif strategy == 'last_attempt + reflexion':
+        elif strategy == ReflexionStrategy.LAST_ATTEMPT_AND_REFLEXION: 
             self.reflections_str = format_last_attempt(self.question, self.scratchpad)
             self.reflections = [self.prompt_reflection()]
             self.reflections_str += format_reflections(self.reflections, header = REFLECTION_AFTER_LAST_TRIAL_HEADER)
