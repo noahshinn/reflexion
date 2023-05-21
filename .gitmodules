@@ -1,0 +1,6 @@
+[submodule "programming_runs/lazzzy"]
+	path = programming_runs/lazzzy
+	url = https://github.com/GammaTauAI/lazzzy
+[submodule "programming_runs/executors/leetcode_env"]
+	path = programming_runs/executors/leetcode_env
+	url = https://github.com/GammaTauAI/leetcode-hard-gym
