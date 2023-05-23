@@ -1,6 +1,6 @@
 # Reflexion: Language Agents with Verbal Reinforcement Learning
 
-This repo holds the code, demos, and logs for the Reflexion paper (v2 not out yet): [Reflexion: Language Agents with Verbal Reinforcement Learning. Noah Shinn, Federico Cassano, Beck Labash, Ashwin Gopinath, Karthik Narasimhan, Shunyu Yao. _Preprint_, 2023](https://arxiv.org/abs/2303.11366)
+This repo holds the code, demos, and logs for the Reflexion paper: [Reflexion: Language Agents with Verbal Reinforcement Learning. Noah Shinn, Federico Cassano, Beck Labash, Ashwin Gopinath, Karthik Narasimhan, Shunyu Yao. _Preprint_, 2023](https://arxiv.org/abs/2303.11366)
 
 ![Reflexion RL diagram](./figures/reflexion_rl.png)
 
@@ -9,9 +9,9 @@ This repo holds the code, demos, and logs for the Reflexion paper (v2 not out ye
 We release the LeetcodeHardGym [here](https://github.com/GammaTauAI/leetcode-hard-gym)
 
 ### Note
-`decision-making`: `./alfworld_runs` and `./webshop_runs`
-`programming`: v2 not released yet, to be cleaned soon
-`reasoning`: `./hotpotqa_runs`
+- `reasoning`: `./hotpotqa_runs` (see demos below)
+- `decision-making`: `./alfworld_runs` and `./webshop_runs` (see demos below)
+- `programming`: v2 not released yet, to be cleaned soon
 
 ### To Run: reasoning (HotPotQA)
 We provide a set of notebooks to easily run, explore, and interact with the results of the reasoning experiments. Each experiment consists of a random sample of 100 questions from the HotPotQA distractor dataset. Each question in the sample is attempted by an agent with a specific type and reflexion strategy.
@@ -84,7 +84,7 @@ The logs will be sent to `./root/<run_name>`.
 
 ### Another Note
 
-Due to the nature of these experiments, it may not be feasible for individual developers to rerun the results as GPT-4 has limited access and significant API charges. All runs from the paper and additional results are logged in `./alfworld_runs/root` for decision-making and `./hotpotqa_runs/root` for reasoning. 
+Due to the nature of these experiments, it may not be feasible for individual developers to rerun the results as GPT-4 has limited access and significant API charges. All runs from the paper and additional results are logged in `./alfworld_runs/root` for decision-making, `./hotpotqa_runs/root` for reasoning, and `./programming_runs/root` for programming
 
 ### Other Notes
 
@@ -99,10 +99,12 @@ For all questions, contact [noahshinn024@gmail.com](noahshinn024@gmail.com)
 ### Cite
 
 ```bibtex
-@article{shinn2023reflexion,
-  title={Reflexion: an autonomous agent with dynamic memory and self-reflection},
-  author={Shinn, Noah and Labash, Beck and Gopinath, Ashwin},
-  journal={arXiv preprint arXiv:2303.11366},
-  year={2023}
+@misc{shinn2023reflexion,
+      title={Reflexion: Language Agents with Verbal Reinforcement Learning}, 
+      author={Noah Shinn and Federico Cassano and Beck Labash and Ashwin Gopinath and Karthik Narasimhan and Shunyu Yao},
+      year={2023},
+      eprint={2303.11366},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI}
 }
 ```
