@@ -1,9 +1,9 @@
 python main.py \
-  --run_name "for_diagram" \
+  --run_name "reflexion_run_logs" \
   --root_dir "root" \
-  --dataset_path ./benchmarks/humaneval-py_hardest50.jsonl \
+  --dataset_path ./benchmarks/humaneval-rs.jsonl \
   --strategy "reflexion" \
-  --language "py" \
+  --language "rs" \
   --model "gpt-4" \
   --pass_at_k "1" \
   --max_iters "2" \
