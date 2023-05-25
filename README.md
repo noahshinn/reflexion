@@ -8,11 +8,6 @@ This repo holds the code, demos, and logs for the Reflexion paper: [Reflexion: L
 
 We release the LeetcodeHardGym [here](https://github.com/GammaTauAI/leetcode-hard-gym)
 
-### Note
-- `reasoning`: `./hotpotqa_runs` (see demos below)
-- `decision-making`: `./alfworld_runs` and `./webshop_runs` (see demos below)
-- `programming`: v2 not released yet, to be cleaned soon
-
 ### To Run: reasoning (HotPotQA)
 We provide a set of notebooks to easily run, explore, and interact with the results of the reasoning experiments. Each experiment consists of a random sample of 100 questions from the HotPotQA distractor dataset. Each question in the sample is attempted by an agent with a specific type and reflexion strategy.
 
@@ -79,7 +74,6 @@ Run the trial
 ```
 
 The logs will be sent to `./root/<run_name>`.
-
 
 
 ### Another Note
