@@ -1,6 +1,6 @@
 # Reflexion: Language Agents with Verbal Reinforcement Learning
 
-This repo holds the code, demos, and logs for the Reflexion paper: [Reflexion: Language Agents with Verbal Reinforcement Learning. Noah Shinn, Federico Cassano, Beck Labash, Ashwin Gopinath, Karthik Narasimhan, Shunyu Yao. _Preprint_, 2023](https://arxiv.org/abs/2303.11366)
+This repo holds the code, demos, and logs for [Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366) by Noah Shinn, Federico Cassano, Beck Labash, Ashwin Gopinath, Karthik Narasimhan, Shunyu Yao. 
 
 ![Reflexion RL diagram](./figures/reflexion_rl.png)
 
