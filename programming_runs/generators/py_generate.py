@@ -232,7 +232,7 @@ PY_TEST_GENERATION_COMPLETION_INSTRUCTION = f"""You are PythonGPT, an AI coding 
 PY_TEST_GENERATION_CHAT_INSTRUCTION = """You are CodexGPT, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring."""
 
 class PyGenerator(Generator):
-    def self_reflection(self, func: str, feedback: str, model: str) -> str:
+    def self_reflection(self, func: str, feedback: str, model: str, ) -> str:
         x = generic_generate_self_reflection(
             func=func,
             feedback=feedback,
@@ -268,7 +268,7 @@ class PyGenerator(Generator):
             SIMPLE_CHAT_INSTRUCTION=PY_SIMPLE_CHAT_INSTRUCTION,
             REFLEXION_COMPLETION_INSTRUCTION=PY_REFLEXION_COMPLETION_INSTRUCTION,
             SIMPLE_COMPLETION_INSTRUCTION=PY_SIMPLE_COMPLETION_INSTRUCTION,
-            fix_body=fix_turbo_response if strategy == "simple" else py_fix_indentation
+            fix_body=fix_turbo_response if strategy == "simple" else py_fix_indentation,
         )
         return x
 

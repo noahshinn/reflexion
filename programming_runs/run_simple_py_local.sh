@@ -1,0 +1,11 @@
+python main.py \
+  --run_name "simple_humaneval_py_hardest50" \
+  --root_dir "root" \
+  --dataset_path ./benchmarks/humaneval-py_hardest50.jsonl \
+  --strategy "simple" \
+  --language "py" \
+  --model "Salesforce/codet5p-770m-py" \
+  --pass_at_k "1" \
+  --max_iters "1" \
+  --api_endpoint "http://127.0.0.1:8081/generate" \
+  --verbose

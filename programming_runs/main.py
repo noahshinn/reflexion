@@ -34,6 +34,9 @@ def get_args():
 
     parser.add_argument("--verbose", action='store_true',
                         help="To print live logs")
+    
+    parser.add_argument("--api_endpoint",type=str, help="Endpoint of Generation endpoint if not using OpenAI models",default=None)
+
     # TODO: implement this
     # parser.add_argument("--is_resume", action='store_true', help="To resume run")
     # parser.add_argument("--resume_dir", type=str, help="If resume, the logging directory", default="")
@@ -72,6 +75,11 @@ def main(args):
 
     # get the dataset name
     dataset_name = os.path.basename(args.dataset_path).replace("jsonl", "")
+
+    #set the api endpoint
+    if(args.api_endpoint != None):
+        endpoint = endpoint.set_api_endpoint(args.api_endpoint)
+
 
     # check if log path already exists
     log_dir = os.path.join(args.root_dir, args.run_name)

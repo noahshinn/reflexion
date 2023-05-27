@@ -3,3 +3,4 @@ openai==0.27.0
 datasets==2.7.0
 tenacity==8.1.0
 astunparse==1.6.3
+responses==0.23.1

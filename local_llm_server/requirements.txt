@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+transformers
+optimum
+httpx
