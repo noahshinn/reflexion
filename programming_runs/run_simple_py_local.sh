@@ -4,8 +4,8 @@ python main.py \
   --dataset_path ./benchmarks/humaneval-py_hardest50.jsonl \
   --strategy "simple" \
   --language "py" \
-  --model "Salesforce/codet5p-770m-py" \
+  --model "WizardLM/WizardCoder-15B-V1.0" \
   --pass_at_k "1" \
   --max_iters "1" \
-  --api_endpoint "http://127.0.0.1:8081/generate" \
+  --api_endpoint "http://0.0.0.0:8081/generate" \
   --verbose
