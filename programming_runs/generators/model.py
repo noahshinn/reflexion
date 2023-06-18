@@ -107,10 +107,11 @@ class GPTDavinci(ModelBase):
 
 class StarChat(ModelBase):
     def __init__(self):
+        import torch
         from transformers import pipeline
         self.name = "star-chat"
         self.pipe = pipeline(
-            "text-generation", model="HuggingFaceH4/starchat-beta")
+            "text-generation", model="HuggingFaceH4/starchat-beta", torch_dtype=torch.bfloat16, device_map="auto")
         self.template = "<|system|>\n{system}<|end|>\n<|user|>\n{query}<|end|>\n<|assistant|>"
         self.is_chat = True
 
