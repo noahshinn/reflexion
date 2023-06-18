@@ -33,6 +33,7 @@ def generate_response(request_data: dict):
     expected_model = data["model"]
     top_k = data.get("topk",3)
     max_tokens = data.get("max_tokens", 512)
+    max_tokens = int(max_tokens)
     # Todo will need to write an implementation of this  since this not currently supported by Transformers
     # may ask in huggingface forums
     # stop_strings = data.get("stop_strs")
