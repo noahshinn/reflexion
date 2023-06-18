@@ -116,6 +116,10 @@ class StarChat(ModelBase):
         self.is_chat = True
 
     def generate_chat(self, system_message: str, user_message: str, max_tokens=1024, temperature=0.2, num_comps=1) -> Union[List[str], str]:
+        # NOTE: HF does not like temp of 0.0. 
+        if temperature < 0.0001:
+            temperature = 0.0001
+
         prompt = self.template.format(
             system=system_message, query=user_message)
         outputs = self.pipe(
