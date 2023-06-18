@@ -1,13 +1,15 @@
 import unittest
 from unittest import mock
 
-from programming_runs.generators.factory import generator_factory, llm_factory
-from programming_runs.generators.local_request import LocalRequest
-from programming_runs.generators.openai_request import OpenAIRequest
-from programming_runs.generators.py_generate import PyGenerator
-from programming_runs.generators.rs_generate import RsGenerator
+from generators.factory import generator_factory, llm_factory
+from generators.local_request import LocalRequest
+from generators.openai_request import OpenAIRequest
+from generators.py_generate import PyGenerator
+from generators.rs_generate import RsGenerator
+from generators.api_endpoint import endpoint
 
-class MyModuleTests(unittest.TestCase):
+
+class GeneratorsFactoryTests(unittest.TestCase):
     def test_generator_factory_with_python_language(self):
         # Test generator_factory with python language
         generator = generator_factory("python")
@@ -25,16 +27,14 @@ class MyModuleTests(unittest.TestCase):
 
     def test_llm_factory_with_local_endpoint(self):
         # Test llm_factory with local endpoint
-        with mock.patch("mymodule.endpoint") as mock_endpoint:
-            mock_endpoint.get_api_endpoint.return_value = "http://127.0.0.1:8081/generate"
-            llm_request = llm_factory()
+        endpoint.set_api_endpoint("http://127.0.0.1:8081/generate")
+        llm_request = llm_factory()
         self.assertIsInstance(llm_request, LocalRequest)
 
     def test_llm_factory_with_openai_endpoint(self):
         # Test llm_factory with OpenAI endpoint
-        with mock.patch("mymodule.endpoint") as mock_endpoint:
-            mock_endpoint.get_api_endpoint.return_value = None
-            llm_request = llm_factory()
+        endpoint.set_api_endpoint(None)
+        llm_request = llm_factory()
         self.assertIsInstance(llm_request, OpenAIRequest)
 
 

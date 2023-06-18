@@ -1,6 +1,7 @@
 
+import importlib
 import random
-from programming_runs.generators import factory
+from types import ModuleType
 from tenacity import (
     retry,
     stop_after_attempt,  # type: ignore
@@ -10,6 +11,8 @@ from tenacity import (
 from typing import Union, List, Optional, Callable
 
 # openai.api_key = os.getenv("OPENAI_API_KEY")
+def get_factory_module() -> ModuleType:
+    return importlib.import_module("programming_runs.generators.factory")
 
 def generic_generate_func_impl(
     func_sig: str,
@@ -154,7 +157,7 @@ def completion(
         num_comps=1,
 
 ) -> Union[List[str], str]:
-    api= factory.llm_factory()
+    api= get_factory_module().llm_factory()
     return api.completion(model,prompt,max_tokens,stop_strs,temperature,num_comps)
 
 
@@ -167,7 +170,7 @@ def chat(
     temperature: float = 0.0,
     num_comps=1,
 ) -> Union[List[str], str]:
-    api= factory.llm_factory()
+    api= get_factory_module().llm_factory()
     return api.chat(model,system_message,user_message,max_tokens,temperature,num_comps)
 
 

@@ -4,3 +4,4 @@ datasets==2.7.0
 tenacity==8.1.0
 astunparse==1.6.3
 responses==0.23.1
+jsonlines==3.1.0
