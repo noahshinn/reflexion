@@ -1,13 +1,13 @@
 from utils import enumerate_resume, make_printv, write_jsonl
 from executors import executor_factory
-from generators import generator_factory
+from generators import generator_factory, model_factory
 
 from typing import List
 
 
 def run_immediate_reflexion(
     dataset: List[dict],
-    model: str,
+    model_name: str,
     language: str,
     max_iters: int,
     pass_at_k: int,
@@ -17,6 +17,7 @@ def run_immediate_reflexion(
 ) -> None:
     exe = executor_factory(language)
     gen = generator_factory(language)
+    model = model_factory(model_name)
 
     print_v = make_printv(verbose)
 

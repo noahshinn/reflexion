@@ -1,16 +1,19 @@
 from typing import List, Optional, Union
 from abc import abstractmethod, ABC
 
+from generators.model import ModelBase
+
+
 class Generator:
     @abstractmethod
-    def self_reflection(self, func: str, feedback: str, model: str) -> str:
+    def self_reflection(self, func: str, feedback: str, model: ModelBase) -> str:
         ...
 
     @abstractmethod
     def func_impl(
         self,
         func_sig: str,
-        model: str,
+        model: ModelBase,
         strategy: str,
         prev_func_impl: Optional[str] = None,
         feedback: Optional[str] = None,
@@ -24,7 +27,7 @@ class Generator:
     def internal_tests(
             self,
             func_sig: str,
-            model: str,
+            model: ModelBase,
             committee_size: int = 1,
             max_num_tests: int = 5
     ) -> List[str]:

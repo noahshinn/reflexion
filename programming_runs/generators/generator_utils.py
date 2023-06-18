@@ -1,4 +1,5 @@
 import os
+from generators.model import ModelBase
 import openai
 import random
 from tenacity import (
@@ -11,9 +12,10 @@ from typing import Union, List, Optional, Callable
 
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 
+
 def generic_generate_func_impl(
     func_sig: str,
-    model: str,
+    model: ModelBase,
     strategy: str,
     prev_func_impl,
     feedback,
@@ -34,7 +36,7 @@ def generic_generate_func_impl(
         raise ValueError(
             f"Invalid arguments: given `strategy=reflexion` but `prev_func_impl`, `feedback`, or `self_reflection` is None")
 
-    if model == "gpt-4" or model == "gpt-3.5-turbo":
+    if model.name == "gpt-4" or model.name == "gpt-3.5-turbo":
         if strategy == "reflexion":
             message = f"{REFLEXION_FEW_SHOT}\n[previous impl]:\n{prev_func_impl}\n\n[unit test results from previous impl]:\n{feedback}\n\n[reflection on previous impl]:\n{self_reflection}\n\n[improved impl]:\n{func_sig}"
             # func_bodies is a really bad name, as it can also be just 1 string
@@ -44,7 +46,7 @@ def generic_generate_func_impl(
             print(' ----------------------- USER MESSAGE -----------------------')
             print(message, flush=True)
             print('----------------------------------------------')
-            func_bodies = gpt_chat(model, REFLEXION_CHAT_INSTRUCTION,
+            func_bodies = gpt_chat(model.name, REFLEXION_CHAT_INSTRUCTION,
                                    message, num_comps=num_comps, temperature=temperature)
         else:
             print('----------------------- SYSTEM MESSAGE -----------------------')
@@ -53,17 +55,17 @@ def generic_generate_func_impl(
             print(' ----------------------- USER MESSAGE -----------------------')
             print(func_sig, flush=True)
             print('----------------------------------------------')
-            func_bodies = gpt_chat(model, SIMPLE_CHAT_INSTRUCTION if strategy ==
+            func_bodies = gpt_chat(model.name, SIMPLE_CHAT_INSTRUCTION if strategy ==
                                    "simple" else REFLEXION_CHAT_INSTRUCTION, func_sig, num_comps=num_comps, temperature=temperature)
     else:
         if strategy == "reflexion":
             prompt = f"{REFLEXION_COMPLETION_INSTRUCTION}\n{prev_func_impl}\n\nunit tests:\n{feedback}\n\nhint:\n{self_reflection}\n\n# improved implementation\n{func_sig}"
             func_bodies = gpt_completion(
-                model, prompt, num_comps=num_comps, temperature=temperature)
+                model.name, prompt, num_comps=num_comps, temperature=temperature)
         else:
             prompt = f"{SIMPLE_COMPLETION_INSTRUCTION}\n{func_sig}"
             func_bodies = gpt_completion(
-                model, prompt, num_comps=num_comps, temperature=temperature)
+                model.name, prompt, num_comps=num_comps, temperature=temperature)
 
     if num_comps == 1:
         assert isinstance(func_bodies, str)
@@ -71,7 +73,7 @@ def generic_generate_func_impl(
         print(func_sig + fix_body(func_bodies))
         print('------------------------------------------')
         return func_sig + fix_body(func_bodies)
-        
+
     else:
         print('--------------------- GENERATED FUNC BODY ---------------------')
         print([func_sig + fix_body(func_body) for func_body in func_bodies])
@@ -81,7 +83,7 @@ def generic_generate_func_impl(
 
 def generic_generate_internal_tests(
         func_sig: str,
-        model: str,
+        model: ModelBase,
         committee_size: int,
         max_num_tests: int,
         TEST_GENERATION_FEW_SHOT: str,
@@ -95,19 +97,19 @@ def generic_generate_internal_tests(
     Generates tests for a function using a refinement technique with the number
     of specified commmittee members.
     """
-    if model == "gpt-4" or model == "gpt-3.5-turbo":
+    if model.name == "gpt-4" or model.name == "gpt-3.5-turbo":
         if is_react:
             message = f'{TEST_GENERATION_FEW_SHOT}\n\n[func signature]:\n{func_sig}\n\n[think]:'
             output = gpt_chat(
-                model, TEST_GENERATION_CHAT_INSTRUCTION, message, max_tokens=1024)
+                model.name, TEST_GENERATION_CHAT_INSTRUCTION, message, max_tokens=1024)
             print(f'React test generation output: {output}')
         else:
             message = f'{TEST_GENERATION_FEW_SHOT}\n\nfunc signature:\n{func_sig}\nunit tests:'
             output = gpt_chat(
-                model, TEST_GENERATION_CHAT_INSTRUCTION, message, max_tokens=1024)
+                model.name, TEST_GENERATION_CHAT_INSTRUCTION, message, max_tokens=1024)
     else:
         prompt = f'{TEST_GENERATION_COMPLETION_INSTRUCTION}\n\nfunc signature:\n{func_sig}\nunit tests:'
-        output = gpt_completion(model, prompt, max_tokens=1024)
+        output = gpt_completion(model.name, prompt, max_tokens=1024)
     all_tests = parse_tests(output)  # type: ignore
     valid_tests = [test for test in all_tests if is_syntax_valid(test)]
 
@@ -121,7 +123,7 @@ def generic_generate_internal_tests(
 def generic_generate_self_reflection(
         func: str,
         feedback: str,
-        model: str,
+        model: ModelBase,
         SELF_REFLECTION_CHAT_INSTRUCTION: str,
         SELF_REFLECTION_COMPLETION_INSTRUCTION: str,
         SELF_REFLECTION_FEW_SHOT: Optional[str] = None
@@ -129,18 +131,18 @@ def generic_generate_self_reflection(
     if model == "gpt-4" or model == "gpt-3.5-turbo":
         if SELF_REFLECTION_FEW_SHOT is not None:
             reflection = gpt_chat(
-                model,
+                model.name,
                 SELF_REFLECTION_CHAT_INSTRUCTION,
                 f'{SELF_REFLECTION_FEW_SHOT}\n\n[function impl]:\n{func}\n\n[unit test results]:\n{feedback}\n\n[self-reflection]:')
             print(f'Self reflection output: {reflection}')
         else:
             reflection = gpt_chat(
-                model,
+                model.name,
                 SELF_REFLECTION_CHAT_INSTRUCTION,
                 f'Function implementation:\n{func}\n\nUnit test results:\n{feedback}\n\nSelf-reflection:')
     else:
         reflection = gpt_completion(
-            model, f'{SELF_REFLECTION_COMPLETION_INSTRUCTION}\n{func}\n\n{feedback}\n\nExplanation:')
+            model.name, f'{SELF_REFLECTION_COMPLETION_INSTRUCTION}\n{func}\n\n{feedback}\n\nExplanation:')
     return reflection  # type: ignore
 
 
@@ -196,7 +198,6 @@ def gpt_chat(
         return response.choices[0].message.content  # type: ignore
 
     return [choice.message.content for choice in response.choices]  # type: ignore
-
 
 
 def sample_n_random(items: List[str], n: int) -> List[str]:

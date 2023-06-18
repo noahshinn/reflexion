@@ -1,3 +1,4 @@
+from generators.model import ModelBase
 from .generator_types import Generator
 from .generator_utils import generic_generate_func_impl, generic_generate_internal_tests, generic_generate_self_reflection
 
@@ -9,8 +10,10 @@ PY_SIMPLE_COMPLETION_INSTRUCTION = "# Write the body of this function only."
 PY_REFLEXION_COMPLETION_INSTRUCTION = "You are a Python writing assistant. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only.\n\n-----"
 PY_SELF_REFLECTION_COMPLETION_INSTRUCTION = "You are a Python writing assistant. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation.\n\n-----"
 
-PY_SIMPLE_CHAT_INSTRUCTION = "You are PythonGPT, an AI that only responds with python code, NOT ENGLISH. You will be given a function signature and its docstring by the user. Respond only in code with correct implementation of the function. Do not include provided the docstring in your response." # The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
-PY_SIMPLE_CHAT_INSTRUCTION_V2 = "You are PythonGPT, an AI that only responds with only python code. You will be given a function signature and its docstring by the user. Respond only in code with a correct, efficient implementation of the function. Do not include provided the docstring in your response." # The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
+# The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
+PY_SIMPLE_CHAT_INSTRUCTION = "You are PythonGPT, an AI that only responds with python code, NOT ENGLISH. You will be given a function signature and its docstring by the user. Respond only in code with correct implementation of the function. Do not include provided the docstring in your response."
+# The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
+PY_SIMPLE_CHAT_INSTRUCTION_V2 = "You are PythonGPT, an AI that only responds with only python code. You will be given a function signature and its docstring by the user. Respond only in code with a correct, efficient implementation of the function. Do not include provided the docstring in your response."
 PY_REFLEXION_CHAT_INSTRUCTION = "You are PythonGPT. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only. You should fill in the following text of the missing function body. For example, the first line of the completion should have 4 spaces for the indendation so that it fits syntactically with the preceding signature."
 PY_REFLEXION_CHAT_INSTRUCTION_V2 = "You are PythonGPT. You will be given your previous implementation of a function, a series of unit tests results, and your self-reflection on your previous implementation. Apply the necessary changes below by responding only with the improved body of the function. Do not include the signature in your response. The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature. You will be given a few examples by the user."
 PY_REFLEXION_FEW_SHOT_ADD = '''Example 1:
@@ -231,8 +234,9 @@ PY_TEST_GENERATION_COMPLETION_INSTRUCTION = f"""You are PythonGPT, an AI coding 
 
 PY_TEST_GENERATION_CHAT_INSTRUCTION = """You are CodexGPT, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring."""
 
+
 class PyGenerator(Generator):
-    def self_reflection(self, func: str, feedback: str, model: str) -> str:
+    def self_reflection(self, func: str, feedback: str, model: ModelBase) -> str:
         x = generic_generate_self_reflection(
             func=func,
             feedback=feedback,
@@ -246,7 +250,7 @@ class PyGenerator(Generator):
     def func_impl(
         self,
         func_sig: str,
-        model: str,
+        model: ModelBase,
         strategy: str,
         prev_func_impl: Optional[str] = None,
         feedback: Optional[str] = None,
@@ -264,7 +268,7 @@ class PyGenerator(Generator):
             num_comps=num_comps,
             temperature=temperature,
             REFLEXION_CHAT_INSTRUCTION=PY_REFLEXION_CHAT_INSTRUCTION,
-            REFLEXION_FEW_SHOT = PY_REFLEXION_FEW_SHOT_ADD,
+            REFLEXION_FEW_SHOT=PY_REFLEXION_FEW_SHOT_ADD,
             SIMPLE_CHAT_INSTRUCTION=PY_SIMPLE_CHAT_INSTRUCTION,
             REFLEXION_COMPLETION_INSTRUCTION=PY_REFLEXION_COMPLETION_INSTRUCTION,
             SIMPLE_COMPLETION_INSTRUCTION=PY_SIMPLE_COMPLETION_INSTRUCTION,
@@ -272,8 +276,7 @@ class PyGenerator(Generator):
         )
         return x
 
-
-    def internal_tests(self, func_sig: str, model: str, committee_size: int = 1, max_num_tests: int = 5) -> List[str]:
+    def internal_tests(self, func_sig: str, model: ModelBase, committee_size: int = 1, max_num_tests: int = 5) -> List[str]:
         def parse_tests(tests: str) -> List[str]:
             return [test.strip() for test in tests.splitlines() if "assert" in test]
         """
@@ -310,11 +313,14 @@ def handle_entire_body_indent(func_body: str) -> str:
     res = "\n".join(["    " + line for line in split])
     return res
 
+
 def fix_turbo_response(func_body: str) -> str:
     return fix_markdown(remove_unindented_signatures(func_body))
 
+
 def fix_markdown(func_body: str) -> str:
     return re.sub("`{3}", "", func_body)
+
 
 def remove_unindented_signatures(code: str) -> str:
     regex = r"^def\s+\w+\s*\("
@@ -327,7 +333,7 @@ def remove_unindented_signatures(code: str) -> str:
         if re.match(regex, line):
             signature_found = True
             continue
-        
+
         if signature_found:
             after_signature.append(line)
         else:

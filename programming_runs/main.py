@@ -108,7 +108,7 @@ pass@k: {args.pass_at_k}
     # evaluate with pass@k
     run_strategy(
         dataset=dataset,
-        model=args.model,
+        model_name=args.model,
         language=args.language,
         max_iters=args.max_iters,
         pass_at_k=args.pass_at_k,
