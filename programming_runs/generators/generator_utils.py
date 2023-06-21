@@ -1,11 +1,23 @@
-import os
 from generators.model import ModelBase
 import random
+import re
 
 from typing import Union, List, Optional, Callable
 
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 
+USE_PYTHON_CODEBLOCK_INSTRUCTION = "Use a Python code block to write your response. For example:\n```python\nprint('Hello world!')\n```"
+
+def parse_python_code(string: str) -> Optional[str]:
+    code_pattern = r"```python\n(.*?)\n```"
+    match = re.search(code_pattern, string, re.DOTALL)
+    if match:
+        return match.group(1)
+    else:
+        return None
+
+def add_code_block(string: str) -> str:
+    return f"```python\n{string}\n```"
 
 def generic_generate_func_impl(
     func_sig: str,
@@ -32,7 +44,7 @@ def generic_generate_func_impl(
 
     if model.is_chat:
         if strategy == "reflexion":
-            message = f"{REFLEXION_FEW_SHOT}\n[previous impl]:\n{prev_func_impl}\n\n[unit test results from previous impl]:\n{feedback}\n\n[reflection on previous impl]:\n{self_reflection}\n\n[improved impl]:\n{func_sig}"
+            message = f"{REFLEXION_FEW_SHOT}\n[previous impl]:\n{add_code_block(prev_func_impl)}\n\n[unit test results from previous impl]:\n{feedback}\n\n[reflection on previous impl]:\n{self_reflection}\n\n[improved impl]:\n{func_sig}"
             # func_bodies is a really bad name, as it can also be just 1 string
             print('----------------------- SYSTEM MESSAGE -----------------------')
             print(REFLEXION_CHAT_INSTRUCTION)
@@ -40,7 +52,8 @@ def generic_generate_func_impl(
             print(' ----------------------- USER MESSAGE -----------------------')
             print(message, flush=True)
             print('----------------------------------------------')
-            func_bodies = model.generate_chat(REFLEXION_CHAT_INSTRUCTION,
+            prompt = f"{REFLEXION_CHAT_INSTRUCTION}\n{USE_PYTHON_CODEBLOCK_INSTRUCTION}"
+            func_bodies = model.generate_chat(prompt,
                                               message, num_comps=num_comps, temperature=temperature)
         else:
             print('----------------------- SYSTEM MESSAGE -----------------------')
@@ -49,30 +62,37 @@ def generic_generate_func_impl(
             print(' ----------------------- USER MESSAGE -----------------------')
             print(func_sig, flush=True)
             print('----------------------------------------------')
-            func_bodies = model.generate_chat(SIMPLE_CHAT_INSTRUCTION if strategy ==
-                                              "simple" else REFLEXION_CHAT_INSTRUCTION, func_sig, num_comps=num_comps, temperature=temperature)
+            simple_prompt = f"{SIMPLE_CHAT_INSTRUCTION}\n{USE_PYTHON_CODEBLOCK_INSTRUCTION}"
+            reflexion_prompt = f"{REFLEXION_CHAT_INSTRUCTION}\n{USE_PYTHON_CODEBLOCK_INSTRUCTION}"
+            func_bodies = model.generate_chat(simple_prompt if strategy ==
+                                              "simple" else reflexion_prompt, func_sig, num_comps=num_comps, temperature=temperature)
     else:
         if strategy == "reflexion":
-            prompt = f"{REFLEXION_COMPLETION_INSTRUCTION}\n{prev_func_impl}\n\nunit tests:\n{feedback}\n\nhint:\n{self_reflection}\n\n# improved implementation\n{func_sig}"
+            prompt = f"{REFLEXION_COMPLETION_INSTRUCTION}\n{add_code_block(prev_func_impl)}\n\nunit tests:\n{feedback}\n\nhint:\n{self_reflection}\n\n# improved implementation\n{func_sig}\n{USE_PYTHON_CODEBLOCK_INSTRUCTION}"
             func_bodies = model.generate(
                 prompt, num_comps=num_comps, temperature=temperature)
         else:
-            prompt = f"{SIMPLE_COMPLETION_INSTRUCTION}\n{func_sig}"
+            prompt = f"{SIMPLE_COMPLETION_INSTRUCTION}\n{func_sig}\n{USE_PYTHON_CODEBLOCK_INSTRUCTION}"
             func_bodies = model.generate(
                 prompt, num_comps=num_comps, temperature=temperature)
 
     if num_comps == 1:
         assert isinstance(func_bodies, str)
         print('--------------------- GENERATED FUNC BODY ---------------------')
-        print(func_sig + fix_body(func_bodies))
+        # print(func_sig + fix_body(func_bodies))
+        print(func_bodies)
+        print(parse_python_code(func_bodies))
         print('------------------------------------------')
-        return func_sig + fix_body(func_bodies)
+        return parse_python_code(func_bodies)
+        # return func_sig + fix_body(func_bodies)
 
     else:
         print('--------------------- GENERATED FUNC BODY ---------------------')
-        print([func_sig + fix_body(func_body) for func_body in func_bodies])
+        # print([func_sig + fix_body(func_body) for func_body in func_bodies])
+        print([parse_python_code(func_body) for func_body in func_bodies])
         print('------------------------------------------')
-        return [func_sig + fix_body(func_body) for func_body in func_bodies]
+        # return [func_sig + fix_body(func_body) for func_body in func_bodies]
+        return [parse_python_code(func_body) for func_body in func_bodies]
 
 
 def generic_generate_internal_tests(
@@ -126,15 +146,15 @@ def generic_generate_self_reflection(
         if SELF_REFLECTION_FEW_SHOT is not None:
             reflection = model.generate_chat(
                 SELF_REFLECTION_CHAT_INSTRUCTION,
-                f'{SELF_REFLECTION_FEW_SHOT}\n\n[function impl]:\n{func}\n\n[unit test results]:\n{feedback}\n\n[self-reflection]:')
+                f'{SELF_REFLECTION_FEW_SHOT}\n\n[function impl]:\n{add_code_block(func)}\n\n[unit test results]:\n{feedback}\n\n[self-reflection]:')
             print(f'Self reflection output: {reflection}')
         else:
             reflection = model.generate_chat(
                 SELF_REFLECTION_CHAT_INSTRUCTION,
-                f'Function implementation:\n{func}\n\nUnit test results:\n{feedback}\n\nSelf-reflection:')
+                f'Function implementation:\n{add_code_block(func)}\n\nUnit test results:\n{feedback}\n\nSelf-reflection:')
     else:
         reflection = model.generate(
-            f'{SELF_REFLECTION_COMPLETION_INSTRUCTION}\n{func}\n\n{feedback}\n\nExplanation:')
+            f'{SELF_REFLECTION_COMPLETION_INSTRUCTION}\n{add_code_block(func)}\n\n{feedback}\n\nExplanation:')
     return reflection  # type: ignore
 
 
