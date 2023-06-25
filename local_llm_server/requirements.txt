@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+bitsandbytes
+transformers
+optimum
+httpx
+accelerate

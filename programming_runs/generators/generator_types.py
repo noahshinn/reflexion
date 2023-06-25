@@ -29,3 +29,28 @@ class Generator:
             max_num_tests: int = 5
     ) -> List[str]:
         ...
+
+
+
+class LLMRequest(ABC):
+    @abstractmethod
+    def completion(
+        model: str,
+        prompt: str,
+        max_tokens: int = 1024,
+        stop_strs: Optional[List[str]] = None,
+        temperature: float = 0.0,
+        num_comps=1,
+        ) -> Union[List[str], str]:
+        ...
+    
+    @abstractmethod
+    def chat(
+        model: str,
+        system_message: str,
+        user_message: str,
+        max_tokens: int = 1024,
+        temperature: float = 0.0,
+        num_comps=1,
+    ) -> Union[List[str], str]: 
+        ...
