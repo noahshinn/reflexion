@@ -3,8 +3,9 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 codet5 = "Salesforce/codet5p-770m-py"
 model_hermione = "WizardLM/WizardCoder-15B-V1.0"
 model_name = model_hermione
+load_in_8bit = True
 model = AutoModelForCausalLM.from_pretrained(
-    model_name, device_map="auto"
+    model_name, device_map="auto", load_in_8bit=load_in_8bit
 ).eval()
 prompt = "write a python function to add two numbers  Response:"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
