@@ -1,5 +1,6 @@
+from generators.model import ModelBase
 from .generator_types import Generator
-from .generator_utils import gpt_chat, gpt_completion, generic_generate_func_impl, generic_generate_internal_tests, generic_generate_self_reflection
+from .generator_utils import generic_generate_func_impl, generic_generate_internal_tests, generic_generate_self_reflection
 
 from typing import List, Optional, Union
 
@@ -137,7 +138,7 @@ def parse_tests(tests: str) -> List[str]:
 
 
 class RsGenerator(Generator):
-    def self_reflection(self, func: str, feedback: str, model: str) -> str:
+    def self_reflection(self, func: str, feedback: str, model: ModelBase) -> str:
         return generic_generate_self_reflection(
             func=func,
             feedback=feedback,
@@ -150,7 +151,7 @@ class RsGenerator(Generator):
     def func_impl(
         self,
         func_sig: str,
-        model: str,
+        model: ModelBase,
         strategy: str,
         prev_func_impl: Optional[str] = None,
         feedback: Optional[str] = None,
@@ -178,7 +179,7 @@ class RsGenerator(Generator):
     def internal_tests(
             self,
             func_sig: str,
-            model: str,
+            model: ModelBase,
             committee_size: int = 1,
             max_num_tests: int = 5
     ) -> List[str]:

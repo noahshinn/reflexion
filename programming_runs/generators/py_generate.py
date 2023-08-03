@@ -1,3 +1,4 @@
+from generators.model import ModelBase
 from .generator_types import Generator
 from .generator_utils import generic_generate_func_impl, generic_generate_internal_tests, generic_generate_self_reflection
 
@@ -6,20 +7,24 @@ import ast
 import re
 
 PY_SIMPLE_COMPLETION_INSTRUCTION = "# Write the body of this function only."
-PY_REFLEXION_COMPLETION_INSTRUCTION = "You are a Python writing assistant. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only.\n\n-----"
+PY_REFLEXION_COMPLETION_INSTRUCTION = "You are a Python writing assistant. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Write your full implementation (restate the function signature).\n\n-----"
 PY_SELF_REFLECTION_COMPLETION_INSTRUCTION = "You are a Python writing assistant. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation.\n\n-----"
 
-PY_SIMPLE_CHAT_INSTRUCTION = "You are PythonGPT, an AI that only responds with python code, NOT ENGLISH. You will be given a function signature and its docstring by the user. Respond only in code with correct implementation of the function. Do not include provided the docstring in your response." # The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
-PY_SIMPLE_CHAT_INSTRUCTION_V2 = "You are PythonGPT, an AI that only responds with only python code. You will be given a function signature and its docstring by the user. Respond only in code with a correct, efficient implementation of the function. Do not include provided the docstring in your response." # The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
-PY_REFLEXION_CHAT_INSTRUCTION = "You are PythonGPT. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Apply the changes below by writing the body of this function only. You should fill in the following text of the missing function body. For example, the first line of the completion should have 4 spaces for the indendation so that it fits syntactically with the preceding signature."
-PY_REFLEXION_CHAT_INSTRUCTION_V2 = "You are PythonGPT. You will be given your previous implementation of a function, a series of unit tests results, and your self-reflection on your previous implementation. Apply the necessary changes below by responding only with the improved body of the function. Do not include the signature in your response. The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature. You will be given a few examples by the user."
+# The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
+PY_SIMPLE_CHAT_INSTRUCTION = "You are an AI that only responds with python code, NOT ENGLISH. You will be given a function signature and its docstring by the user. Write your full implementation (restate the function signature)."
+# The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
+PY_SIMPLE_CHAT_INSTRUCTION_V2 = "You are an AI that only responds with only python code. You will be given a function signature and its docstring by the user. Write your full implementation (restate the function signature)."
+PY_REFLEXION_CHAT_INSTRUCTION = "You are an AI Python assistant. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Write your full implementation (restate the function signature)."
+PY_REFLEXION_CHAT_INSTRUCTION_V2 = "You are an AI Python assistant. You will be given your previous implementation of a function, a series of unit tests results, and your self-reflection on your previous implementation. Write your full implementation (restate the function signature)."
 PY_REFLEXION_FEW_SHOT_ADD = '''Example 1:
 [previous impl]:
+```python
 def add(a: int, b: int) -> int:
     """
     Given integers a and b, return the total value of a and b.
     """
     return a - b
+```
 
 [unit test results from previous impl]:
 Tested passed:
@@ -32,15 +37,18 @@ assert add(1, 2) == 4 # output: -1
 The implementation failed the test cases where the input integers are 1 and 2. The issue arises because the code does not add the two integers together, but instead subtracts the second integer from the first. To fix this issue, we should change the operator from `-` to `+` in the return statement. This will ensure that the function returns the correct output for the given input.
 
 [improved impl]:
+```python
 def add(a: int, b: int) -> int:
     """
     Given integers a and b, return the total value of a and b.
     """
     return a + b
+```
 '''
 
 PY_REFLEXION_FEW_SHOT = '''Example 1:
 [previous impl]:
+```python
 from typing import *
 def fullJustify(words: List[str], maxWidth: int) -> List[str]:
     """
@@ -80,6 +88,7 @@ def fullJustify(words: List[str], maxWidth: int) -> List[str]:
     res.append(last_line)
 
     return res
+```
 
 [unit test results from previous impl]:
 Tested passed:
@@ -92,6 +101,7 @@ assert fullJustify([], 0) == [] # output: ['']
 The implementation failed the test cases where the input list of words is empty. The issue arises because the code does not handle the case where there are no words to process. As a result, it still appends a line with spaces to the result list, even when there are no words. To fix this issue, we should add a condition at the beginning of the function to check if the input list is empty, and return an empty list if it is. This will ensure that the function returns the correct output for empty input lists.
 
 [improved impl]:
+```python
 from typing import *
 def fullJustify(words: List[str], maxWidth: int) -> List[str]:
     """
@@ -134,13 +144,15 @@ def fullJustify(words: List[str], maxWidth: int) -> List[str]:
     res.append(last_line)
 
     return res
+```
 END EXAMPLES
 
 '''
-PY_SELF_REFLECTION_CHAT_INSTRUCTION = "You are PythonGPT. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation."
-PY_SELF_REFLECTION_CHAT_INSTRUCTION_V2 = "You are PythonGPT. You will be given a function implementation and a series of unit test results. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as guidance when you try again later. Only provide the few sentence description in your answer, not the implementation. You will be given a few examples by the user."
+PY_SELF_REFLECTION_CHAT_INSTRUCTION = "You are a Python programming assistant. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation."
+PY_SELF_REFLECTION_CHAT_INSTRUCTION_V2 = "You are a Python programming assistant. You will be given a function implementation and a series of unit test results. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as guidance when you try again later. Only provide the few sentence description in your answer, not the implementation. You will be given a few examples by the user."
 PY_SELF_REFLECTION_FEW_SHOT = """Example 1:
 [function impl]:
+```python
 def longest_subarray_with_sum_limit(nums: List[int], target: int) -> List[int]:
     n = len(nums)
     left, right = 0, 0
@@ -157,6 +169,7 @@ def longest_subarray_with_sum_limit(nums: List[int], target: int) -> List[int]:
             result = nums[left:right+1]
         right += 1
     return result
+```
 [unit test results]:
 Tests passing:
 assert longest_subarray_with_sum_limit([1, 2, 3, 4, 5], 8) == [1, 2, 3]
@@ -172,6 +185,7 @@ The implementation failed the where no subarray fulfills the condition. The issu
 
 Example 2:
 [function impl]:
+```python
 def longest_subarray_with_sum_limit(nums: List[int], target: int) -> List[int]:
     n = len(nums)
     left, right = 0, 0
@@ -191,6 +205,7 @@ def longest_subarray_with_sum_limit(nums: List[int], target: int) -> List[int]:
             result = nums[left:right+1]
         right += 1
     return result
+```
 [unit test results]:
 Tests passing:
 assert longest_subarray_with_sum_limit([], 10) == []
@@ -225,14 +240,16 @@ assert has_close_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0], 0.1) == True
 assert has_close_elements([1.1, 2.2, 3.1, 4.1, 5.1], 1.0) == True
 assert has_close_elements([1.1, 2.2, 3.1, 4.1, 5.1], 0.5) == False"""
 
-PY_TEST_GENERATION_COMPLETION_INSTRUCTION = f"""You are PythonGPT, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring.
+PY_TEST_GENERATION_COMPLETION_INSTRUCTION = f"""You are an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring.
 
 {PY_TEST_GENERATION_FEW_SHOT}"""
 
-PY_TEST_GENERATION_CHAT_INSTRUCTION = """You are CodexGPT, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring."""
+PY_TEST_GENERATION_CHAT_INSTRUCTION = """You are an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring."""
+
+
 
 class PyGenerator(Generator):
-    def self_reflection(self, func: str, feedback: str, model: str) -> str:
+    def self_reflection(self, func: str, feedback: str, model: ModelBase) -> str:
         x = generic_generate_self_reflection(
             func=func,
             feedback=feedback,
@@ -246,7 +263,7 @@ class PyGenerator(Generator):
     def func_impl(
         self,
         func_sig: str,
-        model: str,
+        model: ModelBase,
         strategy: str,
         prev_func_impl: Optional[str] = None,
         feedback: Optional[str] = None,
@@ -264,7 +281,7 @@ class PyGenerator(Generator):
             num_comps=num_comps,
             temperature=temperature,
             REFLEXION_CHAT_INSTRUCTION=PY_REFLEXION_CHAT_INSTRUCTION,
-            REFLEXION_FEW_SHOT = PY_REFLEXION_FEW_SHOT_ADD,
+            REFLEXION_FEW_SHOT=PY_REFLEXION_FEW_SHOT_ADD,
             SIMPLE_CHAT_INSTRUCTION=PY_SIMPLE_CHAT_INSTRUCTION,
             REFLEXION_COMPLETION_INSTRUCTION=PY_REFLEXION_COMPLETION_INSTRUCTION,
             SIMPLE_COMPLETION_INSTRUCTION=PY_SIMPLE_COMPLETION_INSTRUCTION,
@@ -272,8 +289,7 @@ class PyGenerator(Generator):
         )
         return x
 
-
-    def internal_tests(self, func_sig: str, model: str, committee_size: int = 1, max_num_tests: int = 5) -> List[str]:
+    def internal_tests(self, func_sig: str, model: ModelBase, committee_size: int = 1, max_num_tests: int = 5) -> List[str]:
         def parse_tests(tests: str) -> List[str]:
             return [test.strip() for test in tests.splitlines() if "assert" in test]
         """
@@ -310,11 +326,14 @@ def handle_entire_body_indent(func_body: str) -> str:
     res = "\n".join(["    " + line for line in split])
     return res
 
+
 def fix_turbo_response(func_body: str) -> str:
     return fix_markdown(remove_unindented_signatures(func_body))
 
+
 def fix_markdown(func_body: str) -> str:
     return re.sub("`{3}", "", func_body)
+
 
 def remove_unindented_signatures(code: str) -> str:
     regex = r"^def\s+\w+\s*\("
@@ -327,7 +346,7 @@ def remove_unindented_signatures(code: str) -> str:
         if re.match(regex, line):
             signature_found = True
             continue
-        
+
         if signature_found:
             after_signature.append(line)
         else:

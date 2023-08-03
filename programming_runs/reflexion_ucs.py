@@ -2,16 +2,18 @@ import warnings
 from lazzzy.ucs import ucs
 from utils import enumerate_resume, write_jsonl
 from executors import executor_factory
-from generators import generator_factory
+from generators import generator_factory, model_factory
 
 from typing import List, Set, Tuple
 
 
 DEBUG = True
 
+
 def debug_print(*args):
     if DEBUG:
         print(*args, flush=True)
+
 
 class State:
     def __init__(self, code: str, feedback: str, reflection: str, state: Tuple[bool]):
@@ -39,7 +41,7 @@ class State:
 
 def run_reflexion_ucs(
     dataset: List[dict],
-    model: str,
+    model_name: str,
     language: str,
     max_iters: int,
     pass_at_k: int,
@@ -50,6 +52,7 @@ def run_reflexion_ucs(
 ) -> None:
     exe = executor_factory(language, is_leet=is_leetcode)
     gen = generator_factory(language)
+    model = model_factory(model_name)
 
     num_items = len(dataset)
     num_success = 0
@@ -70,12 +73,14 @@ def run_reflexion_ucs(
             assert isinstance(cur_func_impl, str)  # num_comps of 1
             is_passing, feedback, state = exe.execute(cur_func_impl, tests_i)
 
-            debug_print(f"first attempt: \n{cur_func_impl}\n{feedback}\n{state}")
+            debug_print(
+                f"first attempt: \n{cur_func_impl}\n{feedback}\n{state}")
 
             # if solved, exit--pass_at_k 1 early
             if is_passing:
                 debug_print("solved at first attempt")
-                is_solved = exe.evaluate(item["entry_point"], cur_func_impl, item["test"])
+                is_solved = exe.evaluate(
+                    item["entry_point"], cur_func_impl, item["test"])
                 num_success += 1 if is_solved else 0
                 break
 
@@ -118,20 +123,22 @@ def run_reflexion_ucs(
 
                     already_seen.add(new_func)
 
-                    is_passing, feedback, new_state = exe.execute(new_func, tests_i)
-                    debug_print(f"expanding: \n{new_func}\n{feedback}\n{new_state}")
+                    is_passing, feedback, new_state = exe.execute(
+                        new_func, tests_i)
+                    debug_print(
+                        f"expanding: \n{new_func}\n{feedback}\n{new_state}")
 
                     if is_passing:
                         # return immediately if solved
                         return set([(State(new_func, feedback, "", new_state), 0)])
 
-                    new_reflection = gen.self_reflection(new_func, feedback, model)
+                    new_reflection = gen.self_reflection(
+                        new_func, feedback, model)
                     reflections.append(new_reflection)
 
                     num_failing = len([x for x in new_state if not x])
                     new_states.add(
                         (State(new_func, feedback, new_reflection, new_state), num_failing))
-
 
                 debug_print(f"returning new states: {new_states}")
 
