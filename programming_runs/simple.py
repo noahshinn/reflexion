@@ -1,6 +1,6 @@
 from utils import enumerate_resume, make_printv, write_jsonl
 from executors import executor_factory
-from generators import generator_factory
+from generators import generator_factory, model_factory
 
 from typing import List
 
@@ -9,7 +9,7 @@ SIMPLE_CHAT_INSTRUCTION = "You are CodexGPT. You will be given a function signat
 
 def run_simple(
         dataset: List[dict],
-        model: str,
+        model_name: str,
         language: str,
         pass_at_k: int,
         log_path: str,
@@ -18,6 +18,7 @@ def run_simple(
     ) -> None:
     exe = executor_factory(language, is_leet=is_leetcode)
     gen = generator_factory(language)
+    model = model_factory(model_name)
 
     print_v = make_printv(verbose)
     
