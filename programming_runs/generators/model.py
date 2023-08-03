@@ -113,6 +113,8 @@ class StarChat(ModelBase):
         self.pipe = pipeline(
             "text-generation", model="HuggingFaceH4/starchat-beta", torch_dtype=torch.bfloat16, device_map="auto")
         self.template = "<|system|>\n{system}<|end|>\n<|user|>\n{query}<|end|>\n<|assistant|>"
+        # FEWSHOT EXAMPLE:
+        # "<|system|>System here.<|end|>\n<|user|>Few shot input here.<|end|>\n<|assistant|>Few shot output here.<|end|>\n<|user|>Real input here<|end|>\n<|assistant|>"
         self.is_chat = True
 
     def generate_chat(self, system_message: str, user_message: str, max_tokens=1024, temperature=0.2, num_comps=1) -> Union[List[str], str]:
