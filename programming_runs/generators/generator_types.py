@@ -28,7 +28,6 @@ class Generator:
             self,
             func_sig: str,
             model: ModelBase,
-            committee_size: int = 1,
             max_num_tests: int = 5
     ) -> List[str]:
         ...

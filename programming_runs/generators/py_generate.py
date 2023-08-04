@@ -10,9 +10,7 @@ PY_SIMPLE_COMPLETION_INSTRUCTION = "# Write the body of this function only."
 PY_REFLEXION_COMPLETION_INSTRUCTION = "You are a Python writing assistant. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Write your full implementation (restate the function signature).\n\n-----"
 PY_SELF_REFLECTION_COMPLETION_INSTRUCTION = "You are a Python writing assistant. You will be given a function implementation and a series of unit tests. Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as a hint when you try again later. Only provide the few sentence description in your answer, not the implementation.\n\n-----"
 
-# The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
 PY_SIMPLE_CHAT_INSTRUCTION = "You are an AI that only responds with python code, NOT ENGLISH. You will be given a function signature and its docstring by the user. Write your full implementation (restate the function signature)."
-# The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
 PY_SIMPLE_CHAT_INSTRUCTION_V2 = "You are an AI that only responds with only python code. You will be given a function signature and its docstring by the user. Write your full implementation (restate the function signature)."
 PY_REFLEXION_CHAT_INSTRUCTION = "You are an AI Python assistant. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Write your full implementation (restate the function signature)."
 PY_REFLEXION_CHAT_INSTRUCTION_V2 = "You are an AI Python assistant. You will be given your previous implementation of a function, a series of unit tests results, and your self-reflection on your previous implementation. Write your full implementation (restate the function signature)."
@@ -250,15 +248,14 @@ PY_TEST_GENERATION_CHAT_INSTRUCTION = """You are an AI coding assistant that can
 
 class PyGenerator(Generator):
     def self_reflection(self, func: str, feedback: str, model: ModelBase) -> str:
-        x = generic_generate_self_reflection(
+        return generic_generate_self_reflection(
             func=func,
             feedback=feedback,
             model=model,
-            SELF_REFLECTION_CHAT_INSTRUCTION=PY_SELF_REFLECTION_CHAT_INSTRUCTION,
-            SELF_REFLECTION_COMPLETION_INSTRUCTION=PY_SELF_REFLECTION_COMPLETION_INSTRUCTION,
-            SELF_REFLECTION_FEW_SHOT=PY_SELF_REFLECTION_FEW_SHOT
+            self_reflection_chat_instruction=PY_SELF_REFLECTION_CHAT_INSTRUCTION,
+            self_reflection_completion_instruction=PY_SELF_REFLECTION_COMPLETION_INSTRUCTION,
+            self_reflection_few_shot=PY_SELF_REFLECTION_FEW_SHOT
         )
-        return x
 
     def func_impl(
         self,
@@ -271,7 +268,7 @@ class PyGenerator(Generator):
         num_comps: int = 1,
         temperature: float = 0.0,
     ) -> Union[str, List[str]]:
-        x = generic_generate_func_impl(
+        return generic_generate_func_impl(
             func_sig=func_sig,
             model=model,
             strategy=strategy,
@@ -280,34 +277,30 @@ class PyGenerator(Generator):
             self_reflection=self_reflection,
             num_comps=num_comps,
             temperature=temperature,
-            REFLEXION_CHAT_INSTRUCTION=PY_REFLEXION_CHAT_INSTRUCTION,
-            REFLEXION_FEW_SHOT=PY_REFLEXION_FEW_SHOT_ADD,
-            SIMPLE_CHAT_INSTRUCTION=PY_SIMPLE_CHAT_INSTRUCTION,
-            REFLEXION_COMPLETION_INSTRUCTION=PY_REFLEXION_COMPLETION_INSTRUCTION,
-            SIMPLE_COMPLETION_INSTRUCTION=PY_SIMPLE_COMPLETION_INSTRUCTION,
+            reflexion_chat_instruction=PY_REFLEXION_CHAT_INSTRUCTION,
+            reflexion_few_shot=PY_REFLEXION_FEW_SHOT_ADD,
+            simple_chat_instruction=PY_SIMPLE_CHAT_INSTRUCTION,
+            reflexion_completion_instruction=PY_REFLEXION_COMPLETION_INSTRUCTION,
+            simple_completion_instruction=PY_SIMPLE_COMPLETION_INSTRUCTION,
             fix_body=fix_turbo_response if strategy == "simple" else py_fix_indentation
         )
-        return x
 
-    def internal_tests(self, func_sig: str, model: ModelBase, committee_size: int = 1, max_num_tests: int = 5) -> List[str]:
+    def internal_tests(self, func_sig: str, model: ModelBase, max_num_tests: int = 5) -> List[str]:
         def parse_tests(tests: str) -> List[str]:
             return [test.strip() for test in tests.splitlines() if "assert" in test]
         """
-        Generates tests for a function using a refinement technique with the number
-        of specified commmittee members.
+        Generates tests for a function.
         """
-        x = generic_generate_internal_tests(
+        return generic_generate_internal_tests(
             func_sig=func_sig,
             model=model,
-            committee_size=committee_size,
             max_num_tests=max_num_tests,
-            TEST_GENERATION_FEW_SHOT=PY_TEST_GENERATION_FEW_SHOT,
-            TEST_GENERATION_CHAT_INSTRUCTION=PY_TEST_GENERATION_CHAT_INSTRUCTION,
-            TEST_GENERATION_COMPLETION_INSTRUCTION=PY_TEST_GENERATION_COMPLETION_INSTRUCTION,
+            test_generation_few_shot=PY_TEST_GENERATION_FEW_SHOT,
+            test_generation_chat_instruction=PY_TEST_GENERATION_CHAT_INSTRUCTION,
+            test_generation_completion_instruction=PY_TEST_GENERATION_COMPLETION_INSTRUCTION,
             parse_tests=parse_tests,
             is_syntax_valid=py_is_syntax_valid,
         )
-        return x
 
 
 DUMMY_FUNC_SIG = "def func():"

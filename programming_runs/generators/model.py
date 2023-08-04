@@ -1,4 +1,5 @@
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Literal
+import dataclasses
 
 from tenacity import (
     retry,
@@ -6,6 +7,12 @@ from tenacity import (
     wait_random_exponential,  # type: ignore
 )
 import openai
+
+MessageRole = Literal["system", "user", "assistant"]
+@dataclasses.dataclass()
+class Message():
+    role: MessageRole
+    content: str
 
 
 @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(6))
@@ -37,18 +44,14 @@ def gpt_completion(
 @retry(wait=wait_random_exponential(min=1, max=180), stop=stop_after_attempt(6))
 def gpt_chat(
     model: str,
-    system_message: str,
-    user_message: str,
+    messages: List[Message],
     max_tokens: int = 1024,
     temperature: float = 0.0,
     num_comps=1,
 ) -> Union[List[str], str]:
     response = openai.ChatCompletion.create(
         model=model,
-        messages=[
-            {"role": "system", "content": system_message},
-            {"role": "user", "content": user_message}
-        ],
+        messages=[dataclasses.asdict(message) for message in messages],
         max_tokens=max_tokens,
         temperature=temperature,
         top_p=1,
@@ -61,7 +64,6 @@ def gpt_chat(
 
     return [choice.message.content for choice in response.choices]  # type: ignore
 
-
 class ModelBase():
     def __init__(self, name: str):
         self.name = name
@@ -70,7 +72,7 @@ class ModelBase():
     def __repr__(self) -> str:
         return f'{self.name}'
 
-    def generate_chat(self, system_message: str, user_message: str, max_tokens=1024, temperature=0.2, num_comps=1) -> Union[List[str], str]:
+    def generate_chat(self, messages: List[Message], max_tokens: int = 1024, temperature: float = 0.2, num_comps: int = 1) -> Union[List[str], str]:
         raise NotImplementedError
 
     def generate(self, prompt: str, max_tokens: int = 1024, stop_strs: Optional[List[str]] = None, temperature: float = 0.0, num_comps=1) -> Union[List[str], str]:
@@ -82,9 +84,8 @@ class GPTChat(ModelBase):
         self.name = model_name
         self.is_chat = True
 
-    def generate_chat(self, system_message: str, user_message: str, max_tokens=1024, temperature=0.2, num_comps=1) -> Union[List[str], str]:
-        return gpt_chat(self.name, system_message, user_message,
-                        max_tokens, temperature, num_comps)
+    def generate_chat(self, messages: List[Message], max_tokens: int = 1024, temperature: float = 0.2, num_comps: int = 1) -> Union[List[str], str]:
+        return gpt_chat(self.name, messages, max_tokens, temperature, num_comps)
 
 
 class GPT4(GPTChat):
@@ -112,16 +113,19 @@ class StarChat(ModelBase):
         self.name = "star-chat"
         self.pipe = pipeline(
             "text-generation", model="HuggingFaceH4/starchat-beta", torch_dtype=torch.bfloat16, device_map="auto")
-        self.template = "<|system|>\n{system}<|end|>\n<|user|>\n{query}<|end|>\n<|assistant|>"
         self.is_chat = True
 
-    def generate_chat(self, system_message: str, user_message: str, max_tokens=1024, temperature=0.2, num_comps=1) -> Union[List[str], str]:
+    def generate_chat(self, messages: List[Message], max_tokens: int = 1024, temperature: float = 0.2, num_comps: int = 1) -> Union[List[str], str]:
         # NOTE: HF does not like temp of 0.0. 
         if temperature < 0.0001:
             temperature = 0.0001
+        
+        prompt = ""
+        for i, message in enumerate(messages):
+            prompt += f"<|{message.role}|>\n{message.content}<|end|>\n"
+            if i != len(messages) - 1:
+                prompt += "\n<|assistant|>"
 
-        prompt = self.template.format(
-            system=system_message, query=user_message)
         outputs = self.pipe(
             prompt,
             max_new_tokens=max_tokens,
