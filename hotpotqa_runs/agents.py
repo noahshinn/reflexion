@@ -4,12 +4,21 @@ from enum import Enum
 import tiktoken
 from langchain import OpenAI, Wikipedia
 from langchain.llms.base import BaseLLM
+from langchain.chat_models import ChatOpenAI
+from langchain.chat_models.base import BaseChatModel
+from langchain.schema import (
+    SystemMessage,
+    HumanMessage,
+    AIMessage,
+)
 from langchain.agents.react.base import DocstoreExplorer
 from langchain.docstore.base import Docstore
 from langchain.prompts import PromptTemplate
+from llm import AnyOpenAILLM
 from prompts import reflect_prompt, react_agent_prompt, react_reflect_agent_prompt, REFLECTION_HEADER, LAST_TRIAL_HEADER, REFLECTION_AFTER_LAST_TRIAL_HEADER
 from prompts import cot_agent_prompt, cot_reflect_agent_prompt, cot_reflect_prompt, COT_INSTRUCTION, COT_REFLECT_INSTRUCTION
 from fewshots import WEBTHINK_SIMPLE6, REFLECTIONS, COT, COT_REFLECT
+
 
 class ReflexionStrategy(Enum):
     """
@@ -33,16 +42,16 @@ class CoTAgent:
                     reflect_prompt: PromptTemplate = cot_reflect_prompt,
                     cot_examples: str = COT,
                     reflect_examples: str = COT_REFLECT,
-                    self_reflect_llm: BaseLLM = OpenAI(
+                    self_reflect_llm: AnyOpenAILLM = AnyOpenAILLM(
                                             temperature=0,
                                             max_tokens=250,
-                                            model_name="text-davinci-003",
+                                            model_name="gpt-3.5-turbo",
                                             model_kwargs={"stop": "\n"},
                                             openai_api_key=os.environ['OPENAI_API_KEY']),
-                    action_llm: BaseLLM = OpenAI(
+                    action_llm: AnyOpenAILLM = AnyOpenAILLM(
                                             temperature=0,
                                             max_tokens=250,
-                                            model_name="text-davinci-003",
+                                            model_name="gpt-3.5-turbo",
                                             model_kwargs={"stop": "\n"},
                                             openai_api_key=os.environ['OPENAI_API_KEY']),
                     ) -> None:
@@ -150,10 +159,10 @@ class ReactAgent:
                  max_steps: int = 6,
                  agent_prompt: PromptTemplate = react_agent_prompt,
                  docstore: Docstore = Wikipedia(),
-                 react_llm: BaseLLM = OpenAI(
+                 react_llm: AnyOpenAILLM = AnyOpenAILLM(
                                             temperature=0,
                                             max_tokens=100,
-                                            model_name="text-davinci-003",
+                                            model_name="gpt-3.5-turbo",
                                             model_kwargs={"stop": "\n"},
                                             openai_api_key=os.environ['OPENAI_API_KEY']),
                  ) -> None:
@@ -260,16 +269,16 @@ class ReactReflectAgent(ReactAgent):
                  agent_prompt: PromptTemplate = react_reflect_agent_prompt,
                  reflect_prompt: PromptTemplate = reflect_prompt,
                  docstore: Docstore = Wikipedia(),
-                 react_llm: BaseLLM = OpenAI(
+                 react_llm: AnyOpenAILLM = AnyOpenAILLM(
                                              temperature=0,
                                              max_tokens=100,
-                                             model_name="text-davinci-003",
+                                             model_name="gpt-3.5-turbo",
                                              model_kwargs={"stop": "\n"},
                                              openai_api_key=os.environ['OPENAI_API_KEY']),
-                 reflect_llm: BaseLLM = OpenAI(
+                 reflect_llm: AnyOpenAILLM = AnyOpenAILLM(
                                                temperature=0,
                                                max_tokens=250,
-                                               model_name="text-davinci-003",
+                                               model_name="gpt-3.5-turbo",
                                                openai_api_key=os.environ['OPENAI_API_KEY']),
                  ) -> None:
         
@@ -305,6 +314,7 @@ class ReactReflectAgent(ReactAgent):
     
     def prompt_reflection(self) -> str:
         return format_step(self.reflect_llm(self._build_reflection_prompt()))
+
 
     def _build_reflection_prompt(self) -> str:
         return self.reflect_prompt.format(
