@@ -18,8 +18,6 @@ FOLDER = './prompts'
 PROMPT_FILE = 'alfworld_3prompts.json'
 with open(os.path.join(FOLDER, PROMPT_FILE), 'r') as f:
     d = json.load(f)
-with open('./challenge_few_shot_examples.txt', 'r') as f:
-    challenge_examples = f.read()
 
 def llm(prompt: str, model: Model, stop: List[str] = ["\n"]):
     try:
