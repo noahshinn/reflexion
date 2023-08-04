@@ -1,6 +1,5 @@
 from generators.model import ModelBase, Message
 import random
-from parse import parse_code_block, add_code_block
 
 from typing import Union, List, Optional, Callable
 
@@ -155,7 +154,8 @@ def generic_generate_self_reflection(
         model: ModelBase,
         self_reflection_chat_instruction: str,
         self_reflection_completion_instruction: str,
-        self_reflection_few_shot: Optional[str] = None
+        add_code_block: Callable[[str], str],
+        self_reflection_few_shot: Optional[str] = None,
 ) -> str:
     if model.is_chat:
         if self_reflection_few_shot is not None:

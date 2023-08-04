@@ -5,7 +5,7 @@ from .generator_utils import generic_generate_func_impl, generic_generate_intern
 from typing import Optional, List, Union
 import ast
 import re
-from parse import parse_code_block, add_code_block
+from .parse import parse_code_block, add_code_block
 
 PY_SIMPLE_COMPLETION_INSTRUCTION = "# Write the body of this function only."
 PY_REFLEXION_COMPLETION_INSTRUCTION = "You are a Python writing assistant. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Write your full implementation (restate the function signature).\n\n-----"
@@ -255,6 +255,7 @@ class PyGenerator(Generator):
             model=model,
             self_reflection_chat_instruction=PY_SELF_REFLECTION_CHAT_INSTRUCTION,
             self_reflection_completion_instruction=PY_SELF_REFLECTION_COMPLETION_INSTRUCTION,
+            add_code_block=lambda x: add_code_block(x, "python"),
             self_reflection_few_shot=PY_SELF_REFLECTION_FEW_SHOT
         )
 

@@ -1,7 +1,7 @@
 from generators.model import ModelBase
 from .generator_types import Generator
 from .generator_utils import generic_generate_func_impl, generic_generate_internal_tests, generic_generate_self_reflection
-from parse import parse_code_block, add_code_block
+from .parse import parse_code_block, add_code_block
 
 from typing import List, Optional, Union
 
@@ -149,6 +149,7 @@ class RsGenerator(Generator):
             model=model,
             self_reflection_chat_instruction=RS_SELF_REFLECTION_CHAT_INSTRUCTION,
             self_reflection_completion_instruction=RS_SELF_REFLECTION_COMPLETION_INSTRUCTION,
+            add_code_block=lambda x: add_code_block(x, "rust"),
             self_reflection_few_shot=RS_SELF_REFLECTION_FEW_SHOT,
         )
 
