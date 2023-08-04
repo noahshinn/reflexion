@@ -1,6 +1,7 @@
 from generators.model import ModelBase
 from .generator_types import Generator
 from .generator_utils import generic_generate_func_impl, generic_generate_internal_tests, generic_generate_self_reflection
+from parse import parse_code_block, add_code_block
 
 from typing import List, Optional, Union
 
@@ -176,7 +177,8 @@ class RsGenerator(Generator):
             reflexion_completion_instruction=RS_REFLEXION_COMPLETION_INSTRUCTION,
             simple_completion_instruction=RS_SIMPLE_COMPLETION_INSTRUCTION,
             reflexion_few_shot=RS_REFLEXION_FEW_SHOT_ADD,
-            fix_body=(lambda x: x)
+            parse_code_block=lambda x: parse_code_block(x, "rust"),
+            add_code_block=lambda x: add_code_block(x, "rust"),
         )
 
     def internal_tests(

@@ -1,6 +1,6 @@
 from generators.model import ModelBase, Message
 import random
-import re
+from parse import parse_code_block, add_code_block
 
 from typing import Union, List, Optional, Callable
 
@@ -8,16 +8,6 @@ from typing import Union, List, Optional, Callable
 
 USE_PYTHON_CODEBLOCK_INSTRUCTION = "Use a Python code block to write your response. For example:\n```python\nprint('Hello world!')\n```"
 
-def parse_python_code(string: str) -> Optional[str]:
-    code_pattern = r"```python\n(.*?)\n```"
-    match = re.search(code_pattern, string, re.DOTALL)
-    if match:
-        return match.group(1)
-    else:
-        return None
-
-def add_code_block(string: str) -> str:
-    return f"```python\n{string}\n```"
 
 def generic_generate_func_impl(
     func_sig: str,
@@ -33,7 +23,8 @@ def generic_generate_func_impl(
     simple_chat_instruction: str,
     reflexion_completion_instruction: str,
     simple_completion_instruction: str,
-    fix_body: Callable[[str], str]
+    parse_code_block: Callable[[str], str],
+    add_code_block: Callable[[str], str]
 ) -> Union[str, List[str]]:
     if strategy != "reflexion" and strategy != "simple":
         raise ValueError(
@@ -101,12 +92,12 @@ def generic_generate_func_impl(
 
     if num_comps == 1:
         assert isinstance(func_bodies, str)
-        func_body_str = parse_python_code(func_bodies)
+        func_body_str = parse_code_block(func_bodies)
         print_generated_func_body(func_body_str)
         return func_body_str
 
     else:
-        func_bodies = [parse_python_code(func_body) for func_body in func_bodies]
+        func_bodies = [parse_code_block(func_body) for func_body in func_bodies]
         print_generated_func_body("\n\n".join(func_bodies))
         return func_bodies
 
