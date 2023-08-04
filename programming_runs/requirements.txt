@@ -6,3 +6,4 @@ astunparse==1.6.3
 torch
 xformers
 transformers
+accelerate

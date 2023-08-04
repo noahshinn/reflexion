@@ -1,4 +1,5 @@
 import os
+import sys
 import openai
 from tenacity import (
     retry,
@@ -6,7 +7,12 @@ from tenacity import (
     wait_random_exponential, # type: ignore
 )
 
-from typing import Optional, List, Union, Literal
+from typing import Optional, List
+if sys.version_info >= (3, 7):
+    from typing import Literal
+else:
+    from typing_extensions import Literal
+
 
 Model = Literal["gpt-4", "gpt-3.5-turbo", "text-davinci-003"]
 
