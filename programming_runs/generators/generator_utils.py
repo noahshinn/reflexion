@@ -5,7 +5,6 @@ from typing import Union, List, Optional, Callable
 
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 
-USE_PYTHON_CODEBLOCK_INSTRUCTION = "Use a Python code block to write your response. For example:\n```python\nprint('Hello world!')\n```"
 
 
 def generic_generate_func_impl(
@@ -22,6 +21,7 @@ def generic_generate_func_impl(
     simple_chat_instruction: str,
     reflexion_completion_instruction: str,
     simple_completion_instruction: str,
+    code_block_instruction: str,
     parse_code_block: Callable[[str], str],
     add_code_block: Callable[[str], str]
 ) -> Union[str, List[str]]:
@@ -35,7 +35,7 @@ def generic_generate_func_impl(
     if model.is_chat:
         if strategy == "reflexion":
             message = f"{reflexion_few_shot}\n[previous impl]:\n{add_code_block(prev_func_impl)}\n\n[unit test results from previous impl]:\n{feedback}\n\n[reflection on previous impl]:\n{self_reflection}\n\n[improved impl]:\n{func_sig}"
-            prompt = f"{reflexion_chat_instruction}\n{USE_PYTHON_CODEBLOCK_INSTRUCTION}"
+            prompt = f"{reflexion_chat_instruction}\n{code_block_instruction}"
             # func_bodies is a really bad name, as it can also be just 1 string
             print_messages(prompt, message)
             messages = [
@@ -66,12 +66,12 @@ def generic_generate_func_impl(
             ]
             func_bodies = model.generate_chat(messages=messages, num_comps=num_comps, temperature=temperature)
         else:
-            system_prompt = f"{simple_chat_instruction}\n{USE_PYTHON_CODEBLOCK_INSTRUCTION}"
+            system_prompt = f"{simple_chat_instruction}\n{code_block_instruction}"
             print_messages(system_prompt, func_sig)
             messages = [
                 Message(
                     role="system",
-                    content=f"{simple_chat_instruction}\n{USE_PYTHON_CODEBLOCK_INSTRUCTION}",
+                    content=f"{simple_chat_instruction}\n{code_block_instruction}",
                 ),
                 Message(
                     role="user",
@@ -81,11 +81,11 @@ def generic_generate_func_impl(
             func_bodies = model.generate_chat(messages=messages, num_comps=num_comps, temperature=temperature)
     else:
         if strategy == "reflexion":
-            prompt = f"{reflexion_completion_instruction}\n{add_code_block(prev_func_impl)}\n\nunit tests:\n{feedback}\n\nhint:\n{self_reflection}\n\n# improved implementation\n{func_sig}\n{USE_PYTHON_CODEBLOCK_INSTRUCTION}"
+            prompt = f"{reflexion_completion_instruction}\n{add_code_block(prev_func_impl)}\n\nunit tests:\n{feedback}\n\nhint:\n{self_reflection}\n\n# improved implementation\n{func_sig}\n{code_block_instruction}"
             func_bodies = model.generate(
                 prompt, num_comps=num_comps, temperature=temperature)
         else:
-            prompt = f"{simple_completion_instruction}\n{func_sig}\n{USE_PYTHON_CODEBLOCK_INSTRUCTION}"
+            prompt = f"{simple_completion_instruction}\n{func_sig}\n{code_block_instruction}"
             func_bodies = model.generate(
                 prompt, num_comps=num_comps, temperature=temperature)
 

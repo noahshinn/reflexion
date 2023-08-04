@@ -125,7 +125,7 @@ class StarChat(ModelBase):
             prompt += f"<|{message.role}|>\n{message.content}<|end|>\n"
             if i != len(messages) - 1:
                 prompt += "\n<|assistant|>"
-
+        
         outputs = self.pipe(
             prompt,
             max_new_tokens=max_tokens,
