@@ -57,8 +57,7 @@ def alfworld_run(env, base_prompt, memory: List[str], to_print=True, ob='', mode
         print(ob)
         sys.stdout.flush()
     cur_step = 0
-    while cur_step < 50:
-        # action = llm(init_prompt + prompt, stop=['\n']).strip()
+    while cur_step < 49:
         action = llm(str(env_history) + ">", stop=['\n']).strip()
         env_history.add("action", action)
         observation, reward, done, info = env.step([action])
@@ -69,7 +68,6 @@ def alfworld_run(env, base_prompt, memory: List[str], to_print=True, ob='', mode
         if to_print:
             print(f'> {action}\n{observation}')
             sys.stdout.flush()
-        # prompt += f' {action}\n{observation}\n>'
         if done:
             return env_history, True
         elif env_history.check_is_exhausted():
