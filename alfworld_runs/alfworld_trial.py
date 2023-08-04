@@ -8,6 +8,7 @@ import openai
 import importlib
 import alfworld
 import alfworld.agents.environment
+from utils import Model, get_chat, get_completion
 from env_history import EnvironmentHistory
 
 from typing import List, Dict, Any, Tuple
@@ -20,24 +21,17 @@ with open(os.path.join(FOLDER, PROMPT_FILE), 'r') as f:
 with open('./challenge_few_shot_examples.txt', 'r') as f:
     challenge_examples = f.read()
 
-def llm(prompt, stop=["\n"]):
+def llm(prompt: str, model: Model, stop: List[str] = ["\n"]):
     try:
         cur_try = 0
         while cur_try < 6:
-            response = openai.Completion.create(
-              model="text-davinci-002",
-              prompt=prompt,
-              temperature=cur_try * 0.2,
-              max_tokens=100,
-              top_p=1,
-              frequency_penalty=0.0,
-              presence_penalty=0.0,
-              stop=stop
-            )
-            text = response["choices"][0]["text"]
+            if model == "text-davinci-003":
+                text = get_completion(prompt=prompt, temperature=cur_try * 0.2)
+            else:
+                text = get_chat(prompt=prompt, model=model, temperature=cur_try * 0.2)
             # dumb way to do this
             if len(text.strip()) >= 5:
-                return response["choices"][0]["text"]
+                return text
             cur_try += 1
         return ""
     except Exception as e:
@@ -51,7 +45,7 @@ def process_ob(ob):
         ob = ob[ob.find('. ')+2:]    
     return ob
 
-def alfworld_run(env, base_prompt, memory: List[str], to_print=True, ob='') -> Tuple[EnvironmentHistory, bool]:
+def alfworld_run(env, base_prompt, memory: List[str], to_print=True, ob='', model: Model = "text-davinci-003") -> Tuple[EnvironmentHistory, bool]:
     if len(memory) > 3:
         env_history = EnvironmentHistory(base_prompt, ob, memory[-3:], [])
     else:
@@ -97,7 +91,8 @@ def run_trial(
         world_log_path: str,
         trial_idx: int,
         env_configs: List[Dict[str, Any]],
-        use_memory: bool
+        use_memory: bool,
+        model: Model,
     ) -> List[Dict[str, Any]]:
     importlib.reload(alfworld)
     importlib.reload(alfworld.agents.environment)
@@ -133,7 +128,7 @@ def run_trial(
         for i, (k, v) in enumerate(PREFIXES.items()):
             if name.startswith(k):
                 base_prompt = 'Interact with a household to solve a task. Here are two examples.\n' + d[f'react_{v}_1'] + d[f'react_{v}_0']
-                final_env_history, is_success = alfworld_run(env, base_prompt, env_config["memory"] if use_memory else [], to_print=True, ob=ob)
+                final_env_history, is_success = alfworld_run(env, base_prompt, env_config["memory"] if use_memory else [], to_print=True, ob=ob, model=model)
 
                 # update env config
                 if is_success:

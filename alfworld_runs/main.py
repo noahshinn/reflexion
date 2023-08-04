@@ -16,6 +16,7 @@ def get_args():
     parser.add_argument("--is_resume", action='store_true', help="To resume run")
     parser.add_argument("--resume_dir", type=str, help="If resume, the logging directory", default="")
     parser.add_argument("--start_trial_num", type=int, help="If resume, the start trial num", default=0)
+    parser.add_argument("--model", type=str, help="The model to use. One of `gpt-4`, `gpt-3.5-turbo`, or `text-davinci-003")
 
     args = parser.parse_args()
 
@@ -96,7 +97,7 @@ def main(args) -> None:
             open(trial_env_configs_log_path, 'w').close()
 
         # run trial
-        run_trial(trial_log_path, world_log_path, trial_idx, env_configs, args.use_memory)
+        run_trial(trial_log_path, world_log_path, trial_idx, env_configs, args.use_memory, args.model)
 
         # update memory if needed
         if args.use_memory:
