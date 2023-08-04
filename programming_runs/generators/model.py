@@ -123,7 +123,7 @@ class StarChat(ModelBase):
         prompt = ""
         for i, message in enumerate(messages):
             prompt += f"<|{message.role}|>\n{message.content}<|end|>\n"
-            if i != len(messages) - 1:
+            if i == len(messages) - 1:
                 prompt += "\n<|assistant|>"
         
         outputs = self.pipe(

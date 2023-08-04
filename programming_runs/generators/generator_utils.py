@@ -3,9 +3,6 @@ import random
 
 from typing import Union, List, Optional, Callable
 
-# openai.api_key = os.getenv("OPENAI_API_KEY")
-
-
 
 def generic_generate_func_impl(
     func_sig: str,
