@@ -26,7 +26,10 @@ def parse_first_func(code: str, lang: str) -> Optional[str]:
             last_i = i
             break
 
-    if def_i == 0 or last_i == 0:
+    if last_i == 0:
+        last_i = len(code_lines) - 1
+
+    if def_i == 0:
         return None
 
     return "\n".join(code_lines[def_i:last_i+1])
