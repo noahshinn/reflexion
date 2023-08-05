@@ -63,3 +63,10 @@ def enumerate_resume(dataset, results_path):
             if i < count:
                 continue
             yield i, item
+
+def resume_success_count(dataset) -> int:
+    count = 0
+    for item in dataset:
+        if item["is_solved"]:
+            count += 1
+    return count
