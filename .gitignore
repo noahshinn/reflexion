@@ -1,3 +1,4 @@
+agents/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -133,4 +134,4 @@ scratch/
 scratch/
 .vscode/
 
-.DS_Store/
+.DS_Store

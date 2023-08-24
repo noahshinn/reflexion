@@ -7,6 +7,8 @@ from langchain.llms.base import BaseLLM
 from langchain.agents.react.base import DocstoreExplorer
 from langchain.docstore.base import Docstore
 from langchain.prompts import PromptTemplate
+from llm import AnyOpenAILLM
+import logging
 from prompts import reflect_prompt, react_agent_prompt, react_reflect_agent_prompt, REFLECTION_HEADER, LAST_TRIAL_HEADER, REFLECTION_AFTER_LAST_TRIAL_HEADER
 from prompts import cot_agent_prompt, cot_reflect_agent_prompt, cot_reflect_prompt, COT_INSTRUCTION, COT_REFLECT_INSTRUCTION
 from fewshots import WEBTHINK_SIMPLE6, REFLECTIONS, COT, COT_REFLECT
@@ -59,6 +61,7 @@ class CoTAgent:
         self.reflections_str = ''
         self.answer = ''
         self.step_n: int = 0
+        self.enc = tiktoken.encoding_for_model(self.self_reflect_llm.model_name)
         self.reset()
 
     def run(self,
@@ -73,14 +76,14 @@ class CoTAgent:
         # Think
         self.scratchpad += f'\nThought:'
         self.scratchpad += ' ' + self.prompt_agent()
-        print(self.scratchpad.split('\n')[-1])
+        logging.info(self.scratchpad.split('\n')[-1])
 
         # Act
         self.scratchpad += f'\nAction:'
         action = self.prompt_agent()
         self.scratchpad += ' ' + action
         action_type, argument = parse_action(action)
-        print(self.scratchpad.split('\n')[-1])  
+        logging.info(self.scratchpad.split('\n')[-1])  
 
         self.scratchpad += f'\nObservation: '
         if action_type == 'Finish':
@@ -92,24 +95,24 @@ class CoTAgent:
             self.finished = True
             return
         else:
-            print('Invalid action type, please try again.')
+            self.scratchpad += 'Invalid Action. Valid Actions are Finish[<answer>].'
     
     def reflect(self,
                 strategy: ReflexionStrategy) -> None:
-        print('Running Reflexion strategy...')
+        logging.info('Running Reflexion strategy...')
         if strategy == ReflexionStrategy.LAST_ATTEMPT:
             self.reflections = [self.scratchpad]
-            self.reflections_str = format_last_attempt(self.question , self.reflections[0])
+            self.reflections_str = format_last_attempt(self.question, self.reflections[0], self.enc)
         elif strategy == ReflexionStrategy.REFLEXION:
             self.reflections += [self.prompt_reflection()]
             self.reflections_str = format_reflections(self.reflections)
         elif strategy == ReflexionStrategy.LAST_ATTEMPT_AND_REFLEXION:
-            self.reflections_str = format_last_attempt(self.question , self.scratchpad)
+            self.reflections_str = format_last_attempt(self.question , self.scratchpad, self.enc)
             self.reflections = [self.prompt_reflection()]
             self.reflections_str += '\n'+ format_reflections(self.reflections, header = REFLECTION_AFTER_LAST_TRIAL_HEADER)
         else:
             raise NotImplementedError(f'Unknown reflection strategy: {strategy}')
-        print(self.reflections_str)
+        logging.info('Reflections: ' + self.reflections_str)
     
     def prompt_reflection(self) -> str:
         return format_step(self.self_reflect_llm(self._build_reflection_prompt()))
@@ -168,7 +171,7 @@ class ReactAgent:
         self.docstore = DocstoreExplorer(docstore) # Search, Lookup
         self.llm = react_llm
         
-        self.enc = tiktoken.encoding_for_model("text-davinci-003")
+        self.enc = tiktoken.encoding_for_model(react_llm.model_name)
 
         self.__reset_agent()
 
@@ -183,14 +186,14 @@ class ReactAgent:
         # Think
         self.scratchpad += f'\nThought {self.step_n}:'
         self.scratchpad += ' ' + self.prompt_agent()
-        print(self.scratchpad.split('\n')[-1])
+        logging.info(self.scratchpad.split('\n')[-1])
 
         # Act
         self.scratchpad += f'\nAction {self.step_n}:'
         action = self.prompt_agent()
         self.scratchpad += ' ' + action
         action_type, argument = parse_action(action)
-        print(self.scratchpad.split('\n')[-1])
+        logging.info(self.scratchpad.split('\n')[-1])
 
         # Observe
         self.scratchpad += f'\nObservation {self.step_n}: '
@@ -209,7 +212,7 @@ class ReactAgent:
             try:
                 self.scratchpad += format_step(self.docstore.search(argument))
             except Exception as e:
-                print(e)
+                logging.info('Wikipedia error: ' + e)
                 self.scratchpad += f'Could not find that page, please try again.'
             
         elif action_type == 'Lookup':
@@ -221,7 +224,7 @@ class ReactAgent:
         else:
             self.scratchpad += 'Invalid Action. Valid Actions are Lookup[<topic>] Search[<topic>] and Finish[<answer>].'
 
-        print(self.scratchpad.split('\n')[-1])
+        logging.info(self.scratchpad.split('\n')[-1])
 
         self.step_n += 1
 
@@ -288,20 +291,20 @@ class ReactReflectAgent(ReactAgent):
     
     def reflect(self,
                 strategy: ReflexionStrategy) -> None:
-        print('Reflecting...')
+        logging.info('Reflecting...')
         if strategy == ReflexionStrategy.LAST_ATTEMPT:
             self.reflections = [self.scratchpad]
-            self.reflections_str = format_last_attempt(self.question, self.reflections[0])
+            self.reflections_str = format_last_attempt(self.question, self.reflections[0], self.enc)
         elif strategy == ReflexionStrategy.REFLEXION: 
             self.reflections += [self.prompt_reflection()]
             self.reflections_str = format_reflections(self.reflections)
         elif strategy == ReflexionStrategy.LAST_ATTEMPT_AND_REFLEXION: 
-            self.reflections_str = format_last_attempt(self.question, self.scratchpad)
+            self.reflections_str = format_last_attempt(self.question, self.scratchpad, self.enc)
             self.reflections = [self.prompt_reflection()]
             self.reflections_str += format_reflections(self.reflections, header = REFLECTION_AFTER_LAST_TRIAL_HEADER)
         else:
             raise NotImplementedError(f'Unknown reflection strategy: {strategy}')
-        print(self.reflections_str)
+        logging.info(self.reflections_str)
     
     def prompt_reflection(self) -> str:
         return format_step(self.reflect_llm(self._build_reflection_prompt()))
@@ -333,7 +336,8 @@ def parse_action(string):
         return action_type, argument
     
     else:
-        return None
+        logging.error(f'Invalid action: {string}')
+        return None, string
 
 def format_step(step: str) -> str:
     return step.strip('\n').strip().replace('\n', '')
@@ -347,10 +351,11 @@ def format_reflections(reflections: List[str],
 
 def format_last_attempt(question: str,
                         scratchpad: str,
-                        header: str = LAST_TRIAL_HEADER):
-    return header + f'Question: {question}\n' + truncate_scratchpad(scratchpad, tokenizer=gpt2_enc).strip('\n').strip() + '\n(END PREVIOUS TRIAL)\n'
+                        header: str = LAST_TRIAL_HEADER,
+                        tokenizer = gpt2_enc):
+    return header + f'Question: {question}\n' + truncate_scratchpad(scratchpad, tokenizer=tokenizer).strip('\n').strip() + '\n(END PREVIOUS TRIAL)\n'
 
-def truncate_scratchpad(scratchpad: str, n_tokens: int = 1600, tokenizer = gpt2_enc) -> str:
+def truncate_scratchpad(scratchpad: str, n_tokens: int = 1350, tokenizer = gpt2_enc) -> str:
     lines = scratchpad.split('\n')
     observations = filter(lambda x: x.startswith('Observation'), lines)
     observations_by_tokens = sorted(observations, key=lambda x: len(tokenizer.encode(x)))

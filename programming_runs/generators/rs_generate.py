@@ -50,10 +50,10 @@ END EXAMPLES
 RS_TEST_GENERATION_FEW_SHOT = """For example:
 
 func signature:
-/// For a given number n, find the largest number that divides n evenly, smaller than n
-/// >>> largest_divisor(15)
-/// 5
 fn largest_divisor(n: isize) -> isize {
+    /// For a given number n, find the largest number that divides n evenly, smaller than n
+    /// >>> largest_divisor(15)
+    /// 5
     for i in (1..n).rev() {
         if n % i == 0 {
             return i;

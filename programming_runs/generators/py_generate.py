@@ -13,8 +13,10 @@ PY_SELF_REFLECTION_COMPLETION_INSTRUCTION = "You are a Python writing assistant.
 # The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
 PY_SIMPLE_CHAT_INSTRUCTION = "You are an AI that only responds with python code, NOT ENGLISH. You will be given a function signature and its docstring by the user. Write your full implementation (restate the function signature)."
 # The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature.
+
 PY_SIMPLE_CHAT_INSTRUCTION_V2 = "You are an AI that only responds with only python code. You will be given a function signature and its docstring by the user. Write your full implementation (restate the function signature)."
 PY_REFLEXION_CHAT_INSTRUCTION = "You are an AI Python assistant. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Write your full implementation (restate the function signature)."
+
 PY_REFLEXION_CHAT_INSTRUCTION_V2 = "You are an AI Python assistant. You will be given your previous implementation of a function, a series of unit tests results, and your self-reflection on your previous implementation. Write your full implementation (restate the function signature)."
 PY_REFLEXION_FEW_SHOT_ADD = '''Example 1:
 [previous impl]:
