@@ -132,6 +132,7 @@ class HFModelBase(ModelBase):
             prompt,
             max_new_tokens=min(
                 max_tokens, self.model.config.max_position_embeddings),
+            use_cache=True,
             do_sample=True,
             temperature=temperature,
             top_p=0.95,
