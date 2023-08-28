@@ -115,10 +115,11 @@ class HFModelBase(ModelBase):
     Base for huggingface chat models
     """
 
-    def __init__(self, model_name: str, model, tokenizer):
+    def __init__(self, model_name: str, model, tokenizer, eos_token_id=None):
         self.name = model_name
         self.model = model
         self.tokenizer = tokenizer
+        self.eos_token_id = eos_token_id if eos_token_id is not None else self.tokenizer.eos_token_id
         self.is_chat = True
 
     def generate_chat(self, messages: List[Message], max_tokens: int = 1024, temperature: float = 0.2, num_comps: int = 1) -> Union[List[str], str]:
@@ -136,7 +137,7 @@ class HFModelBase(ModelBase):
             do_sample=True,
             temperature=temperature,
             top_p=0.95,
-            eos_token_id=self.tokenizer.eos_token_id,
+            eos_token_id=self.eos_token_id,
             num_return_sequences=num_comps,
         )
 
@@ -169,7 +170,7 @@ class StarChat(HFModelBase):
         tokenizer = AutoTokenizer.from_pretrained(
             "HuggingFaceH4/starchat-beta",
         )
-        super().__init__("star-chat", model, tokenizer)
+        super().__init__("star-chat", model, tokenizer, eos_token_id=49155)
 
     def prepare_prompt(self, messages: List[Message]) -> List[int]:
         prompt = ""
