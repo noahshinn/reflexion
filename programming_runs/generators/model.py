@@ -221,7 +221,7 @@ If a question does not make any sense, or is not factually coherent, explain why
             ] + messages
         messages = [
             Message(role=messages[1].role, content=self.B_SYS +
-                    messages[0].content + self.E_SYS + messages[1].role)
+                    messages[0].content + self.E_SYS + messages[1].content)
         ] + messages[2:]
         assert all([msg.role == "user" for msg in messages[::2]]) and all(
             [msg.role == "assistant" for msg in messages[1::2]]
