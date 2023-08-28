@@ -1,7 +1,7 @@
 from .py_generate import PyGenerator
 from .rs_generate import RsGenerator
 from .generator_types import Generator
-from .model import ModelBase, GPT4, GPT35, StarChat, GPTDavinci
+from .model import CodeLlama, ModelBase, GPT4, GPT35, StarChat, GPTDavinci
 
 
 def generator_factory(lang: str) -> Generator:
@@ -20,6 +20,8 @@ def model_factory(model_name: str) -> ModelBase:
         return GPT35()
     elif model_name == "starchat":
         return StarChat()
+    elif model_name == "codellama":
+        return CodeLlama()
     elif model_name.startswith("text-davinci"):
         return GPTDavinci(model_name)
     else:

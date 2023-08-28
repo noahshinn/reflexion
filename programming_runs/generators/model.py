@@ -170,7 +170,7 @@ class StarChat(HFModelBase):
         tokenizer = AutoTokenizer.from_pretrained(
             "HuggingFaceH4/starchat-beta",
         )
-        super().__init__("star-chat", model, tokenizer, eos_token_id=49155)
+        super().__init__("starchat", model, tokenizer, eos_token_id=49155)
 
     def prepare_prompt(self, messages: List[Message]) -> List[int]:
         prompt = ""
@@ -212,7 +212,7 @@ If a question does not make any sense, or is not factually coherent, explain why
             torch_dtype=torch.bfloat16,
             device_map="auto",
         )
-        super().__init__("code-llama", model, tokenizer)
+        super().__init__("codellama", model, tokenizer)
 
     def prepare_prompt(self, messages: List[Message]) -> str:
         if messages[0].role != "system":
