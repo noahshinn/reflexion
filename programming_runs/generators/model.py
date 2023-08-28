@@ -202,13 +202,13 @@ If a question does not make any sense, or is not factually coherent, explain why
         import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
         tokenizer = AutoTokenizer.from_pretrained(
-            "codellama/CodeLlama-7b-Instruct-hf",
+            "codellama/CodeLlama-34b-Instruct-hf",
             add_eos_token=True,
             add_bos_token=True,
             padding_side='left'
         )
         model = AutoModelForCausalLM.from_pretrained(
-            "codellama/CodeLlama-7b-Instruct-hf",
+            "codellama/CodeLlama-34b-Instruct-hf",
             torch_dtype=torch.bfloat16,
             device_map="auto",
         )
