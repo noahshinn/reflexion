@@ -198,17 +198,17 @@ You are a helpful, respectful and honest assistant. Always answer as helpfully a
 
 If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information."""
 
-    def __init__(self):
+    def __init__(self, version: Literal["34b", "13b", "7b"] = "34b"):
         import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
         tokenizer = AutoTokenizer.from_pretrained(
-            "codellama/CodeLlama-34b-Instruct-hf",
+            f"codellama/CodeLlama-{version}-Instruct-hf",
             add_eos_token=True,
             add_bos_token=True,
             padding_side='left'
         )
         model = AutoModelForCausalLM.from_pretrained(
-            "codellama/CodeLlama-34b-Instruct-hf",
+            f"codellama/CodeLlama-{version}-Instruct-hf",
             torch_dtype=torch.bfloat16,
             device_map="auto",
         )

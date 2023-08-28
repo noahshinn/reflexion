@@ -20,8 +20,12 @@ def model_factory(model_name: str) -> ModelBase:
         return GPT35()
     elif model_name == "starchat":
         return StarChat()
-    elif model_name == "codellama":
-        return CodeLlama()
+    elif model_name.startswith("codellama"):
+        # if it has `-` in the name, version was specified
+        kwargs = {}
+        if "-" in model_name:
+            kwargs["version"] = model_name.split("-")[1]
+        return CodeLlama(**kwargs)
     elif model_name.startswith("text-davinci"):
         return GPTDavinci(model_name)
     else:
