@@ -42,7 +42,7 @@ def parse_first_func(code: str, lang: str) -> Optional[str]:
     if def_i == -1:
         return None
 
-    return "\n".join(code_lines[def_i:last_i+1])
+    return "\n".join(code_lines[def_i:last_i+1]).rstrip("[/PYTHON]")
 
 
 def add_code_block(string: str, lang: str) -> str:
