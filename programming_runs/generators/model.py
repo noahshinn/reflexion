@@ -7,7 +7,6 @@ from tenacity import (
     wait_random_exponential,  # type: ignore
 )
 import openai
-from transformers import AutoModelForCausalLM, AutoTokenizer
 
 MessageRole = Literal["system", "user", "assistant"]
 
@@ -162,6 +161,7 @@ class HFModelBase(ModelBase):
 class StarChat(HFModelBase):
     def __init__(self):
         import torch
+        from transformers import AutoModelForCausalLM, AutoTokenizer
         model = AutoModelForCausalLM.from_pretrained(
             "HuggingFaceH4/starchat-beta",
             torch_dtype=torch.bfloat16,
@@ -199,26 +199,56 @@ You are a helpful, respectful and honest assistant. Always answer as helpfully a
 If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information."""
 
     def __init__(self):
-        super().__init__("code-llama", "codellama/CodeLlama-34b-Instruct-hf", 2)
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            self.hf_model_name,
+        import torch
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+        tokenizer = AutoTokenizer.from_pretrained(
+            "codellama/CodeLlama-7b-Instruct-hf",
             add_eos_token=True,
             add_bos_token=True,
             padding_side='left'
         )
+        model = AutoModelForCausalLM.from_pretrained(
+            "codellama/CodeLlama-7b-Instruct-hf",
+            torch_dtype=torch.bfloat16,
+            device_map="auto",
+        )
+        super().__init__("code-llama", model, tokenizer)
 
     def prepare_prompt(self, messages: List[Message]) -> str:
-        prompt = ""
-        for i, message in enumerate(messages):
-            prompt += f"<|{message.role}|>\n{message.content}\n<|end|>\n"
-            if i == len(messages) - 1:
-                prompt += "<|assistant|>\n"
-
-        return prompt
+        if messages[0].role != "system":
+            messages = [
+                Message(role="system", content=self.DEFAULT_SYSTEM_PROMPT)
+            ] + messages
+        messages = [
+            Message(role=messages[1].role, content=self.B_SYS +
+                    messages[0].content + self.E_SYS + messages[1].role)
+        ] + messages[2:]
+        assert all([msg.role == "user" for msg in messages[::2]]) and all(
+            [msg.role == "assistant" for msg in messages[1::2]]
+        ), (
+            "model only supports 'system', 'user' and 'assistant' roles, "
+            "starting with 'system', then 'user' and alternating (u/a/u/a/u...)"
+        )
+        messages_tokens: List[int] = sum(
+            [
+                self.tokenizer.encode(
+                    f"{self.B_INST} {(prompt.content).strip()} {self.E_INST} {(answer.content).strip()} ",
+                )
+                for prompt, answer in zip(
+                    messages[::2],
+                    messages[1::2],
+                )
+            ],
+            [],
+        )
+        assert messages[-1].role == "user", f"Last message must be from user, got {messages[-1].role}"
+        messages_tokens += self.tokenizer.encode(
+            f"{self.B_INST} {(messages[-1].content).strip()} {self.E_INST}",
+        )
+        # remove eos token from last message
+        messages_tokens = messages_tokens[:-1]
+        return messages_tokens
 
     def extract_output(self, output: str) -> str:
-        out = output.split("<|assistant|>")[1]
-        if out.endswith("<|end|>"):
-            out = out[:-len("<|end|>")]
-
-        return out
+        print(output)
+        assert False, "TODO: implement"
