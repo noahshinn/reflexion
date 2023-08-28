@@ -74,9 +74,9 @@ def bleh():
     \"\"\"
     Write a function that accepts two lists of strings and returns the list that has
     total number of chars in the all strings of the list less than the other list.
-
+    
     if the two lists have the same number of chars, return the first list.
-
+    
     Examples
     >>> total_match([], [])
     []
@@ -91,7 +91,7 @@ def bleh():
     \"\"\"
     total_chars_lst1 = sum(len(word) for word in lst1)
     total_chars_lst2 = sum(len(word) for word in lst2)
-
+    
     if total_chars_lst1 < total_chars_lst2:
         return lst1
     elif total_chars_lst1 > total_chars_lst2:
