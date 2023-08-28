@@ -251,5 +251,5 @@ If a question does not make any sense, or is not factually coherent, explain why
         return torch.tensor([messages_tokens]).to(self.model.device)
 
     def extract_output(self, output: str) -> str:
-        print(output)
-        assert False, "TODO: implement"
+        out = output.split("[/INST]")[-1].split("</s>")[0].strip()
+        return out
