@@ -141,7 +141,7 @@ class HFModelBase(ModelBase):
             num_return_sequences=num_comps,
         )
 
-        outs = self.tokenizer.batch_decode(outputs, skip_special_tokens=True)
+        outs = self.tokenizer.batch_decode(outputs, skip_special_tokens=False)
         assert isinstance(outs, list)
         for i, out in enumerate(outs):
             assert isinstance(out, str)
