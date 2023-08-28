@@ -5,13 +5,13 @@ from typing import Optional
 def parse_code_block(string: str, lang: str) -> Optional[str]:
     code_pattern = fr"```{lang}\n(.*?)\n```"
     match = re.search(code_pattern, string, re.DOTALL)
-    
+
     if match:
         return match.group(1)
 
     generic_code_pattern = r"```\n(.*?)\n```"
     match = re.search(generic_code_pattern, string, re.DOTALL)
-    
+
     if match:
         return match.group(1)
 
@@ -23,13 +23,16 @@ def parse_first_func(code: str, lang: str) -> Optional[str]:
     code_lines = code.split("\n")
     def_i = -1
     last_i = 0
+    got_return = False
     for i, line in enumerate(code_lines):
         if line.startswith("def "):
             if def_i == -1:
                 def_i = i
             else:
                 break
-        if line == "" and def_i != -1:
+        elif "return" in line and def_i != -1:
+            got_return = True
+        if line == "" and def_i != -1 and got_return:
             last_i = i
             break
 
@@ -40,6 +43,7 @@ def parse_first_func(code: str, lang: str) -> Optional[str]:
         return None
 
     return "\n".join(code_lines[def_i:last_i+1])
+
 
 def add_code_block(string: str, lang: str) -> str:
     return f"```{lang}\n{string}\n```"
@@ -70,7 +74,7 @@ def bleh():
     return aaa
 """
     print(parse_code_block(CODE, "python"))
-    CODE="""def total_match(lst1: List[str], lst2: List[str]) -> List[str]:
+    CODE = """def total_match(lst1: List[str], lst2: List[str]) -> List[str]:
     \"\"\"
     Write a function that accepts two lists of strings and returns the list that has
     total number of chars in the all strings of the list less than the other list.
