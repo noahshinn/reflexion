@@ -1,4 +1,4 @@
-from generators.model import ModelBase
+from generators.model import Message, ModelBase, messages_to_str
 from .generator_types import Generator
 from .generator_utils import generic_generate_func_impl, generic_generate_internal_tests, generic_generate_self_reflection
 from .parse import parse_code_block, add_code_block
@@ -47,32 +47,18 @@ fn add(a: i32, b: i32) -> i32 {
 END EXAMPLES
 '''
 
-
-RS_TEST_GENERATION_FEW_SHOT = """For example:
-
-func signature:
-```rust
-/// For a given number n, find the largest number that divides n evenly, smaller than n
-/// >>> largest_divisor(15)
-/// 5
-fn largest_divisor(n: isize) -> isize {
-    for i in (1..n).rev() {
-        if n % i == 0 {
-            return i;
-        }
-    }
-    // if no divisor is found, return 1
-    1
-}
-```
-
-unit tests:
-assert_eq!(candidate(3), 1);
-assert_eq!(candidate(7), 1);
-assert_eq!(candidate(10), 5);
-assert_eq!(candidate(100), 50);
-assert_eq!(candidate(49), 7);
-"""
+RS_TEST_GENERATION_FEW_SHOT = [
+    Message(role="user", content="""/// Add three numbers together.
+/// This function takes three numbers as input and returns the sum of the three numbers.
+fn add3Numbers(x: i32, y: i32, z: i32) -> i32 {
+"""),
+    Message(role="assistant", content="""assert_eq!(add3Numbers(1, 2, 3), 6);
+assert_eq!(add3Numbers(-1, 2, 3), 4);
+assert_eq!(add3Numbers(1, -2, 3), 2);
+assert_eq!(add3Numbers(1, 2, -3), 0);
+assert_eq!(add3Numbers(-3, -2, -1), -6);
+assert_eq!(add3Numbers(0, 0, 0), 0);""")
+]
 
 RS_SELF_REFLECTION_FEW_SHOT = '''Example 1:
 [function impl]:

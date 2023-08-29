@@ -1,4 +1,4 @@
-from generators.model import ModelBase
+from generators.model import Message, ModelBase, messages_to_str
 from .generator_types import Generator
 from .generator_utils import generic_generate_func_impl, generic_generate_internal_tests, generic_generate_self_reflection
 
@@ -221,31 +221,24 @@ The implementation failed 4 out of the 7 test cases due to an IndexError. The is
 END OF EXAMPLES
 """
 
-PY_TEST_GENERATION_FEW_SHOT = """Examples:
-func signature:
-def has_close_elements(numbers: List[float], threshold: float) -> bool:
-    \"\"\" Check if in given list of numbers, are any two numbers closer to each other than
-    given threshold.
-    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)
-    False
-    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
-    True
-    \"\"\"
-unit tests:
-assert has_close_elements([1.0, 2.0, 3.9, 4.0, 5.0, 2.2], 0.3) == True
-assert has_close_elements([1.0, 2.0, 3.9, 4.0, 5.0, 2.2], 0.05) == False
-assert has_close_elements([1.0, 2.0, 5.9, 4.0, 5.0], 0.95) == True
-assert has_close_elements([1.0, 2.0, 5.9, 4.0, 5.0], 0.8) == False
-assert has_close_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0], 0.1) == True
-assert has_close_elements([1.1, 2.2, 3.1, 4.1, 5.1], 1.0) == True
-assert has_close_elements([1.1, 2.2, 3.1, 4.1, 5.1], 0.5) == False"""
+PY_TEST_GENERATION_FEW_SHOT = [
+    Message(role="user", content="""def add3Numbers(x, y, z):
+    \"\"\" Add three numbers together.
+    This function takes three numbers as input and returns the sum of the three numbers.
+    \"\"\""""),
+    Message(role="assistant", content="""assert add3Numbers(1, 2, 3) == 6
+assert add3Numbers(-1, 2, 3) == 4
+assert add3Numbers(1, -2, 3) == 2
+assert add3Numbers(1, 2, -3) == 0
+assert add3Numbers(-3, -2, -1) == -6
+assert add3Numbers(0, 0, 0) == 0""")
+]
 
 PY_TEST_GENERATION_COMPLETION_INSTRUCTION = f"""You are an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring.
 
-{PY_TEST_GENERATION_FEW_SHOT}"""
+{messages_to_str(PY_TEST_GENERATION_FEW_SHOT)}"""
 
 PY_TEST_GENERATION_CHAT_INSTRUCTION = """You are an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring."""
-
 
 
 class PyGenerator(Generator):

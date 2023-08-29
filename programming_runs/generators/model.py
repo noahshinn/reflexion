@@ -17,6 +17,14 @@ class Message():
     content: str
 
 
+def message_to_str(message: Message) -> str:
+    return f"{message.role}: {message.content}"
+
+
+def messages_to_str(messages: List[Message]) -> str:
+    return "\n".join([message_to_str(message) for message in messages])
+
+
 @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(6))
 def gpt_completion(
         model: str,
