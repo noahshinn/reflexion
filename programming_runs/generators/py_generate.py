@@ -1,4 +1,4 @@
-from generators.model import Message, ModelBase, messages_to_str
+from generators.model import ModelBase, message_to_str
 from .generator_types import Generator
 from .generator_utils import generic_generate_func_impl, generic_generate_internal_tests, generic_generate_self_reflection
 
@@ -221,22 +221,24 @@ The implementation failed 4 out of the 7 test cases due to an IndexError. The is
 END OF EXAMPLES
 """
 
-PY_TEST_GENERATION_FEW_SHOT = [
-    Message(role="user", content="""def add3Numbers(x, y, z):
+PY_TEST_GENERATION_FEW_SHOT = """Examples:
+func signature:
+def add3Numbers(x, y, z):
     \"\"\" Add three numbers together.
     This function takes three numbers as input and returns the sum of the three numbers.
-    \"\"\""""),
-    Message(role="assistant", content="""assert add3Numbers(1, 2, 3) == 6
+    \"\"\"
+unit tests:
+assert add3Numbers(1, 2, 3) == 6
 assert add3Numbers(-1, 2, 3) == 4
 assert add3Numbers(1, -2, 3) == 2
 assert add3Numbers(1, 2, -3) == 0
 assert add3Numbers(-3, -2, -1) == -6
-assert add3Numbers(0, 0, 0) == 0""")
-]
+assert add3Numbers(0, 0, 0) == 0
+"""
 
 PY_TEST_GENERATION_COMPLETION_INSTRUCTION = f"""You are an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring.
 
-{messages_to_str(PY_TEST_GENERATION_FEW_SHOT)}"""
+{PY_TEST_GENERATION_FEW_SHOT}"""
 
 PY_TEST_GENERATION_CHAT_INSTRUCTION = """You are an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring."""
 

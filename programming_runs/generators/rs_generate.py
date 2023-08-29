@@ -1,4 +1,4 @@
-from generators.model import Message, ModelBase, messages_to_str
+from generators.model import ModelBase
 from .generator_types import Generator
 from .generator_utils import generic_generate_func_impl, generic_generate_internal_tests, generic_generate_self_reflection
 from .parse import parse_code_block, add_code_block
@@ -47,18 +47,21 @@ fn add(a: i32, b: i32) -> i32 {
 END EXAMPLES
 '''
 
-RS_TEST_GENERATION_FEW_SHOT = [
-    Message(role="user", content="""/// Add three numbers together.
+RS_TEST_GENERATION_FEW_SHOT = """For example:
+
+func signature:
+/// Add three numbers together.
 /// This function takes three numbers as input and returns the sum of the three numbers.
 fn add3Numbers(x: i32, y: i32, z: i32) -> i32 {
-"""),
-    Message(role="assistant", content="""assert_eq!(add3Numbers(1, 2, 3), 6);
+
+unit tests:
+assert_eq!(add3Numbers(1, 2, 3), 6);
 assert_eq!(add3Numbers(-1, 2, 3), 4);
 assert_eq!(add3Numbers(1, -2, 3), 2);
 assert_eq!(add3Numbers(1, 2, -3), 0);
 assert_eq!(add3Numbers(-3, -2, -1), -6);
-assert_eq!(add3Numbers(0, 0, 0), 0);""")
-]
+assert_eq!(add3Numbers(0, 0, 0), 0);
+"""
 
 RS_SELF_REFLECTION_FEW_SHOT = '''Example 1:
 [function impl]:
