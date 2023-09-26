@@ -1,4 +1,4 @@
-# Reflexion: Language Agents with Verbal Reinforcement Learning
+# Reflexion: Language Agents with Verbal Reinforcement Learning [NeurIPS 2023]
 
 This repo holds the code, demos, and logs for [Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366) by Noah Shinn, Federico Cassano, Beck Labash, Ashwin Gopinath, Karthik Narasimhan, Shunyu Yao. 
 
