@@ -1,15 +1,15 @@
-# Reflexion: Language Agents with Verbal Reinforcement Learning [NeurIPS 2023]
+# [NeurIPS 2023] Reflexion: Language Agents with Verbal Reinforcement Learning
 
-This repo holds the code, demos, and logs for [Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366) by Noah Shinn, Federico Cassano, Edward Berman, Beck Labash, Ashwin Gopinath, Karthik Narasimhan, Shunyu Yao. 
+This repo holds the code, demos, and log files for [Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366) by Noah Shinn, Federico Cassano, Edward Berman, Ashwin Gopinath, Karthik Narasimhan, Shunyu Yao. 
 
 ![Reflexion RL diagram](./figures/reflexion_rl.png)
 
 ![Reflexion tasks](./figures/reflexion_tasks.png)
 
-We release the LeetcodeHardGym [here](https://github.com/GammaTauAI/leetcode-hard-gym)
+We have released the LeetcodeHardGym [here](https://github.com/GammaTauAI/leetcode-hard-gym)
 
 ### To Run: reasoning (HotPotQA)
-We provide a set of notebooks to easily run, explore, and interact with the results of the reasoning experiments. Each experiment consists of a random sample of 100 questions from the HotPotQA distractor dataset. Each question in the sample is attempted by an agent with a specific type and reflexion strategy.
+We have provided a set of notebooks to easily run, explore, and interact with the results of the reasoning experiments. Each experiment consists of a random sample of 100 questions from the HotPotQA distractor dataset. Each question in the sample is attempted by an agent with a specific type and reflexion strategy.
 
 #### Setup
 
@@ -75,18 +75,17 @@ Run the trial
 
 The logs will be sent to `./root/<run_name>`.
 
-
 ### Another Note
 
 Due to the nature of these experiments, it may not be feasible for individual developers to rerun the results as GPT-4 has limited access and significant API charges. All runs from the paper and additional results are logged in `./alfworld_runs/root` for decision-making, `./hotpotqa_runs/root` for reasoning, and `./programming_runs/root` for programming
 
 ### Other Notes
 
-Check out the code for the original draft [here](https://github.com/noahshinn024/reflexion-draft)
+Check out the code for the original code [here](https://github.com/noahshinn024/reflexion-draft)
 
-Read the original blog [here](https://nanothoughts.substack.com/p/reflecting-on-reflexion)
+Read a blog post [here](https://nanothoughts.substack.com/p/reflecting-on-reflexion)
 
-Check out an interesting type-inference implementation here: [OpenTau](https://github.com/GammaTauAI/opentau)
+Check out an interesting type-prediction implementation here: [OpenTau](https://github.com/GammaTauAI/opentau)
 
 For all questions, contact [noahshinn024@gmail.com](noahshinn024@gmail.com)
 
@@ -95,7 +94,7 @@ For all questions, contact [noahshinn024@gmail.com](noahshinn024@gmail.com)
 ```bibtex
 @misc{shinn2023reflexion,
       title={Reflexion: Language Agents with Verbal Reinforcement Learning}, 
-      author={Noah Shinn and Federico Cassano and Beck Labash and Ashwin Gopinath and Karthik Narasimhan and Shunyu Yao},
+      author={Noah Shinn and Federico Cassano and Edward Berman and Ashwin Gopinath and Karthik Narasimhan and Shunyu Yao},
       year={2023},
       eprint={2303.11366},
       archivePrefix={arXiv},
