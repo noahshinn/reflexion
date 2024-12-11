@@ -8,24 +8,28 @@ This repo holds the code, demos, and log files for [Reflexion: Language Agents w
 
 We have released the LeetcodeHardGym [here](https://github.com/GammaTauAI/leetcode-hard-gym)
 
-### To Run: reasoning (HotPotQA)
+## To Run: reasoning (HotPotQA)
+
 We have provided a set of notebooks to easily run, explore, and interact with the results of the reasoning experiments. Each experiment consists of a random sample of 100 questions from the HotPotQA distractor dataset. Each question in the sample is attempted by an agent with a specific type and reflexion strategy.
 
-#### Setup
+### Setup
 
 To get started:
 
 1. Clone this repo and move to the HotPotQA directory:
+
 ```bash
 git clone https://github.com/noahshinn/reflexion && cd ./hotpotqa_runs
 ```
 
 2. Install the module dependencies into your environment:
+
 ```bash
 pip install -r requirements.txt
 ```
 
 3. Set `OPENAI_API_KEY` environment variable to your OpenAI API key:
+
 ```bash
 export OPENAI_API_KEY=<your key>
 ```
@@ -33,11 +37,12 @@ export OPENAI_API_KEY=<your key>
 #### Agent Types
 
 Agent type is determined by the notebook you choose to run. The available agent types include:
- - `ReAct` - ReAct Agent
 
- - `CoT_context` - CoT Agent given supporting context about the question 
+- `ReAct` - ReAct Agent
 
- - `CoT_no_context` - CoT Agent given no supporting context about the question
+- `CoT_context` - CoT Agent given supporting context about the question 
+
+- `CoT_no_context` - CoT Agent given no supporting context about the question
 
 The notebook for each agent type is located in the `./hotpot_runs/notebooks` directory.
 
@@ -45,16 +50,18 @@ The notebook for each agent type is located in the `./hotpot_runs/notebooks` dir
 
 Each notebook allows you to specify the reflexion strategy to be used by the agents. The available reflexion strategies, which are defined in an `Enum`, include:
 
- - `ReflexionStrategy.NONE` - The agent is not given any information about its last attempt. 
+- `ReflexionStrategy.NONE` - The agent is not given any information about its last attempt. 
 
- - `ReflexionStrategy.LAST_ATTEMPT` - The agent is given its reasoning trace from its last attempt on the question as context.
+- `ReflexionStrategy.LAST_ATTEMPT` - The agent is given its reasoning trace from its last attempt on the question as context.
 
- - `ReflexionStrategy.REFLEXION` - The agent is given its self-reflection on the last attempt as context. 
+- `ReflexionStrategy.REFLEXION` - The agent is given its self-reflection on the last attempt as context. 
 
- - `ReflexionStrategy.LAST_ATTEMPT_AND_REFLEXION` -  The agent is given both its reasoning trace and self-reflection on the last attempt as context.
+- `ReflexionStrategy.LAST_ATTEMPT_AND_REFLEXION` -  The agent is given both its reasoning trace and self-reflection on the last attempt as context.
 
 ### To Run: decision-making (AlfWorld)
+
 Clone this repo and move to the AlfWorld directory
+
 ```bash
 git clone https://github.com/noahshinn/reflexion && cd ./alfworld_runs
 ```
@@ -69,6 +76,7 @@ Specify the run parameters in `./run_reflexion.sh`.
 `start_trial_num`: if resume run, then the trial number of which to start
 
 Run the trial
+
 ```bash
 ./run_reflexion.sh
 ```
