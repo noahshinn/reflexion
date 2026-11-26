@@ -42,7 +42,11 @@ def parse_first_func(code: str, lang: str) -> Optional[str]:
     if def_i == -1:
         return None
 
-    return "\n".join(code_lines[def_i:last_i+1]).rstrip("[/PYTHON]")
+    code = "\n".join(code_lines[def_i:last_i+1]).rstrip()
+    # strip a trailing [/PYTHON] tag; str.rstrip() would remove any trailing characters from that set
+    if code.endswith("[/PYTHON]"):
+        code = code[:-len("[/PYTHON]")].rstrip()
+    return code
 
 
 def add_code_block(string: str, lang: str) -> str:
