@@ -34,7 +34,8 @@ def function_with_timeout(func, args, timeout):
     def wrapper():
         result_container.append(func(*args))
 
-    thread = PropagatingThread(target=wrapper)
+    # daemon=True so that a timed-out (e.g. infinitely looping) candidate cannot keep the process alive at exit
+    thread = PropagatingThread(target=wrapper, daemon=True)
     thread.start()
     thread.join(timeout)
 
